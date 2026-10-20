@@ -1,6 +1,6 @@
 import ClusterSkeleton.Seed
 import Mathlib.Algebra.BigOperators.GroupWithZero.Finset
-import Mathlib.Tactic.Omega
+import Lean.Elab.Tactic.Omega
 
 /-!
 # Independent zero sets

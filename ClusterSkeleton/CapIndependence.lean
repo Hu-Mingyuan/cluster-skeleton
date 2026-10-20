@@ -1,5 +1,5 @@
 import ClusterSkeleton.CapSet
-import Mathlib.Tactic.Omega
+import Lean.Elab.Tactic.Omega
 
 /-!
 # Independence of the disk directions in the coordinate cap

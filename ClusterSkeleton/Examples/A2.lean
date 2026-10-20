@@ -1,5 +1,5 @@
 import ClusterSkeleton.ZeroSet
-import Mathlib.Data.Matrix.Notation
+import Mathlib.LinearAlgebra.Matrix.Notation
 import Mathlib.LinearAlgebra.Matrix.Determinant.Basic
 import Mathlib.Tactic.NormNum
 

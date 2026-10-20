@@ -11,8 +11,8 @@ lake exe cache get \
   Mathlib.Topology.MetricSpace.ProperSpace \
   Mathlib.Algebra.Order.BigOperators.GroupWithZero.Finset \
   Mathlib.Algebra.BigOperators.GroupWithZero.Finset \
-  Mathlib.Tactic.FunProp Mathlib.Tactic.Linarith Mathlib.Tactic.Omega \
-  Mathlib.Data.Matrix.Notation Mathlib.Tactic.NormNum \
+  Mathlib.Tactic.FunProp Mathlib.Tactic.Linarith \
+  Mathlib.LinearAlgebra.Matrix.Notation Mathlib.Tactic.NormNum \
   Mathlib.Dynamics.Flow \
   Mathlib.Topology.Instances.Real.Lemmas \
   Mathlib.Topology.Separation.Hausdorff \

@@ -1,0 +1,56 @@
+{
+  "checked_at_utc": "2026-10-20T13:38:49.717801+00:00",
+  "build": "passed",
+  "axiom_audit": "passed",
+  "lean_version": "Lean (version 4.34.1, x86_64-unknown-linux-gnu, commit 5045d0056413266e57c625dcd7c365b10e377c52, Release)",
+  "dependency_commits": {
+    "fsfltz": "1a3d387cfacc746e25aad31e5b27b1803103e7cb",
+    "mathlib": "d13f23b723b8a846827a245b89c10fc7d3f11612"
+  },
+  "allowed_axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "audited_declarations": [
+    "ClusterSkeleton.Seed.wellFounded_iff_no_directed_cycle",
+    "ClusterSkeleton.Seed.unitPoint",
+    "ClusterSkeleton.Seed.point_nonempty",
+    "ClusterSkeleton.Seed.Point.outgoing_ne_zero",
+    "ClusterSkeleton.Seed.Point.matrix_eq_zero_of_coordinates_zero",
+    "ClusterSkeleton.Seed.Point.zeroSet_independent",
+    "ClusterSkeleton.Seed.Point.exists_independent_nonvanishing_locus",
+    "ClusterSkeleton.continuous_originalCoordinate",
+    "ClusterSkeleton.isOpen_candidateChartLocus",
+    "ClusterSkeleton.exists_independent_candidateChartLocus",
+    "ClusterSkeleton.iUnion_independent_candidateChartLocus",
+    "ClusterSkeleton.initialTorus_eq_candidateChartLocus_empty",
+    "ClusterSkeleton.isOpen_initialTorus",
+    "ClusterSkeleton.coordinateCap_norm_a_le",
+    "ClusterSkeleton.coordinateCap_b_eq_zero",
+    "ClusterSkeleton.coordinateCap_norm_b_le",
+    "ClusterSkeleton.isCompact_coordinateCap",
+    "ClusterSkeleton.coordinateCap_nonempty",
+    "ClusterSkeleton.mem_trappedSet_of_forwardOrbit_subset",
+    "ClusterSkeleton.subset_trappedSet_of_isCompact_forwardInvariant",
+    "ClusterSkeleton.initialTorus_nonempty",
+    "ClusterSkeleton.LiouvilleData.field_eq_liouvilleVector",
+    "ClusterSkeleton.LiouvilleData.toCompleteLiouvilleManifold",
+    "ClusterSkeleton.coordinateCap_strictCapIndices_independent",
+    "ClusterSkeleton.Examples.a2Seed",
+    "ClusterSkeleton.Examples.a2Seed_unimodular",
+    "ClusterSkeleton.Examples.a2_not_both_zero"
+  ],
+  "first_geometric_target": "defined; not proved",
+  "source_sha256": {
+    "ClusterSkeleton/GeometryTarget.lean": "20b2a5214e6f3abb0e2ab936c479fd386c27c160d69dee94f1d6215e79f006ac",
+    "ClusterSkeleton/Seed.lean": "edf018d11afea9195ae7853cd0b5579d59532d27338d0af068783e72402aa28c",
+    "ClusterSkeleton/ZeroSet.lean": "db273730fb6d0bbcf10e55fd8ec24b46a4a3eb035869586e2b0dea0d83676711",
+    "ClusterSkeleton/TrappedSet.lean": "b6e86304b3861e0550595e4805c43a6ca9600e39f11484159687383e69ed3dd4",
+    "ClusterSkeleton/CapIndependence.lean": "0245868ac462ef51dbac97c3bd7a59a4a8583ecbbd8ae822c9b7abefbcddef44",
+    "ClusterSkeleton/CapSet.lean": "ac479338fde18bda54d2b939cb024fa9d4441032835144634047530ce617cde0",
+    "ClusterSkeleton/CoordinateLoci.lean": "f8737f8164700560325e4db335d2b00763ca05fe1c763c3fbdfd65e11438cd74",
+    "ClusterSkeleton/Examples/A2.lean": "3e0a2c6aa2b0386eddcd536791b45698417f521e21865cf90a6679f2cd43293a",
+    "ClusterSkeleton.lean": "b5c2520d4064ee90e0ca958ea9c44807d1b48376a86ad6fcd2644a67a021855d"
+  }
+}

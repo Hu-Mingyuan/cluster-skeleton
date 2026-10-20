@@ -14,7 +14,7 @@ Lean formalization of the Liouville geometry of unimodular acyclic cluster model
 
 The first batch defines the actual exchange-equation carrier with native Mathlib topology, the coordinate cap, and the trapped set of a genuine continuous real flow. It specifies the desired Liouville existence statement using native Mathlib manifolds and the pinned FsFltz geometric interfaces.
 
-The source contains proofs of zero-set independence for arbitrary finite acyclic mutable quivers, compactness of the coordinate cap, and the generic compact-forward-invariant inclusion in the trapped set. Build and axiom-audit status is recorded in `verification/first-batch.json` when verification succeeds. Until that file exists, the source is a draft awaiting compilation.
+The first batch passed Lean compilation and a transitive axiom audit of 27 declarations at commit `14549f35dc0289b775b234a014fac2c7cefd719d`. The [private CI run](https://github.com/Hu-Mingyuan/cluster-skeleton/actions/runs/39431898775) and [source-bound receipt](verification/ci-14549f3.json) record the result. The verified results include zero-set independence for arbitrary finite acyclic mutable quivers, compactness of the coordinate cap, independence of strict cap indices, and the generic compact-forward-invariant inclusion in the trapped set. Later source changes require a fresh build and audit.
 
 **The full Liouville existence and skeleton equality theorem is not yet proved.** `FirstGeometricTarget` is a proposition definition, not a theorem. Node charts, the smooth atlas, the primitive extension, the actual complete flow, and the reverse trapped-set inclusion remain open construction obligations. Holomorphic extension, finite type, cap products and cocores have separate milestones.
 
@@ -35,11 +35,13 @@ Lean is pinned to 4.34.1. The Lake manifest pins Mathlib and fs-fltz-minimal. In
 ```sh
 cd /mnt/d/HorizonData/workspaces/cluster-skeleton
 export ELAN_HOME=/mnt/d/HorizonData/tools/elan
+export PATH="$ELAN_HOME/toolchains/leanprover--lean4---v4.34.1/bin:$PATH"
+# For a fresh dependency checkout only:
 bash scripts/fetch-cache.sh
 python3 scripts/verify.py
 ```
 
-This builds the modules and audits the transitive axioms of the listed declarations. The allowlist is `propext`, `Classical.choice` and `Quot.sound`. The source hashes and exact audited names are saved with the result. The target statement still needs mathematical review independently of successful compilation.
+Once the pinned dependency cache is installed, subsequent checks need only `python3 scripts/verify.py`. This builds the modules and audits the transitive axioms of the listed declarations. The allowlist is `propext`, `Classical.choice` and `Quot.sound`. The source hashes and exact audited names are saved with the result. The target statement still needs mathematical review independently of successful compilation.
 
 ## Reference library
 

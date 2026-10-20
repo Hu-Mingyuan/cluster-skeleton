@@ -52,8 +52,9 @@ structure SmoothPresentation (S : Seed d) where
 namespace SmoothPresentation
 
 /-- Packaging the already fixed point type and subspace topology for FsFltz.
-There is deliberately no freely chosen point type or point equivalence. -/
-def manifold {S : Seed d} (P : SmoothPresentation S) : SmoothManifold (2 * d) where
+There is deliberately no freely chosen point type or point equivalence.
+The transparent abbreviation preserves native tangent-space instances. -/
+abbrev manifold {S : Seed d} (P : SmoothPresentation S) : SmoothManifold (2 * d) where
   Point := S.Point
   topology := inferInstance
   charts := P.charts

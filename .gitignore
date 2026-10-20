@@ -1,0 +1,8 @@
+.lake/
+*.olean
+*.ilean
+verification/*.log
+
+verification/*-ready
+verification/horizon-*.json
+__pycache__/

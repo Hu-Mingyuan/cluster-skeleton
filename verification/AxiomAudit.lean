@@ -1,0 +1,34 @@
+import ClusterSkeleton
+
+#print axioms ClusterSkeleton.Seed.wellFounded_iff_no_directed_cycle
+#print axioms ClusterSkeleton.Seed.unitPoint
+#print axioms ClusterSkeleton.Seed.point_nonempty
+#print axioms ClusterSkeleton.Seed.Point.outgoing_ne_zero
+#print axioms ClusterSkeleton.Seed.Point.matrix_eq_zero_of_coordinates_zero
+#print axioms ClusterSkeleton.Seed.Point.zeroSet_independent
+#print axioms ClusterSkeleton.Seed.Point.exists_independent_nonvanishing_locus
+#print axioms ClusterSkeleton.continuous_originalCoordinate
+#print axioms ClusterSkeleton.isOpen_candidateChartLocus
+#print axioms ClusterSkeleton.exists_independent_candidateChartLocus
+#print axioms ClusterSkeleton.iUnion_independent_candidateChartLocus
+#print axioms ClusterSkeleton.initialTorus_eq_candidateChartLocus_empty
+#print axioms ClusterSkeleton.isOpen_initialTorus
+#print axioms ClusterSkeleton.coordinateCap_norm_a_le
+#print axioms ClusterSkeleton.coordinateCap_b_eq_zero
+#print axioms ClusterSkeleton.coordinateCap_norm_b_le
+#print axioms ClusterSkeleton.isCompact_coordinateCap
+#print axioms ClusterSkeleton.coordinateCap_nonempty
+#print axioms ClusterSkeleton.mem_trappedSet_of_forwardOrbit_subset
+#print axioms ClusterSkeleton.subset_trappedSet_of_isCompact_forwardInvariant
+#print axioms ClusterSkeleton.initialTorus_nonempty
+#print axioms ClusterSkeleton.LiouvilleData.field_eq_liouvilleVector
+#print axioms ClusterSkeleton.LiouvilleData.toCompleteLiouvilleManifold
+
+-- The following is a target proposition, not an established theorem.
+#check ClusterSkeleton.FirstGeometricTarget
+#check FsFltz.Geometry.CompleteLiouvilleFlow
+
+#print axioms ClusterSkeleton.coordinateCap_strictCapIndices_independent
+#print axioms ClusterSkeleton.Examples.a2Seed
+#print axioms ClusterSkeleton.Examples.a2Seed_unimodular
+#print axioms ClusterSkeleton.Examples.a2_not_both_zero

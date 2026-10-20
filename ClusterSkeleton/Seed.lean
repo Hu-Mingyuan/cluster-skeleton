@@ -85,7 +85,7 @@ def unitPoint : S.Point :=
   ⟨((fun _ => 1), (fun _ => 2)), by
     constructor
     · intro i
-      simp [positiveMonomial, negativeMonomial]
+      simp [positiveMonomial, negativeMonomial, one_add_one_eq_two]
     · intro f _
       exact one_ne_zero⟩
 

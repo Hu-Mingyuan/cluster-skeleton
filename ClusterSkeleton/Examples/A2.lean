@@ -31,7 +31,8 @@ def a2Seed : Seed 2 where
     rcases i with ⟨i, hi⟩
     rcases j with ⟨j, hj⟩
     change i.val < j.val
-    fin_cases i <;> fin_cases j <;> norm_num [a2Matrix] at hij ⊢
+    fin_cases i <;> fin_cases j <;> norm_num [a2Matrix] at hij
+    all_goals norm_num
 
 /-- Unimodularity is checked on the full concrete integer matrix. -/
 theorem a2Seed_unimodular : a2Seed.Unimodular := by

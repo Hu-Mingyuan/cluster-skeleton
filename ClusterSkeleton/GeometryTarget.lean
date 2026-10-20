@@ -63,7 +63,9 @@ def manifold {S : Seed d} (P : SmoothPresentation S) : SmoothManifold (2 * d) wh
 
 /-- The derivative of an actual ambient cluster coordinate. -/
 def coordinateDifferential {S : Seed d} (P : SmoothPresentation S)
-    (j : Fin d) (p : S.Point) : P.manifold.Tangent p →L[ℝ] ℂ := by
+    (j : Fin d) (p : S.Point) :
+    letI := P.charts
+    P.manifold.Tangent p →L[ℝ] ℂ := by
   letI := P.charts
   exact mfderiv (𝓘(ℝ, Model (2 * d))) (𝓘(ℝ, ℂ))
     (fun q : S.Point => q.a j) p

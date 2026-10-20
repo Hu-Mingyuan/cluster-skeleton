@@ -4,6 +4,11 @@ on:
   push:
   pull_request:
   workflow_dispatch:
+    inputs:
+      dependency_bundle:
+        description: 'Export compiled Linux dependencies for the matching local toolchain'
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -49,3 +54,16 @@ jobs:
             verification/*.log
             verification/first-batch.json
           if-no-files-found: ignore
+      - name: Bundle compiled dependencies for local use
+        if: ${{ !cancelled() && inputs.dependency_bundle }}
+        run: |
+          find .lake/packages -mindepth 3 -maxdepth 3 -path '*/.lake/build' -type d -print > /tmp/lean-build-paths.txt
+          tar --zstd -cf /tmp/lean-dependencies.tar.zst -T /tmp/lean-build-paths.txt
+      - name: Preserve the optional dependency bundle
+        if: ${{ !cancelled() && inputs.dependency_bundle }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: linux-lean-dependencies
+          path: /tmp/lean-dependencies.tar.zst
+          compression-level: 0
+          retention-days: 3

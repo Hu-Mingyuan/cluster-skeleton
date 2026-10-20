@@ -97,17 +97,17 @@ private def ambientCap : Set (Ambient S) :=
 private theorem isClosed_ambientCap : IsClosed (ambientCap S) := by
   have he : IsClosed {x : Ambient S | ∀ i : S.Mutable,
       x.1 i * x.2 i = S.positiveMonomial x.1 i + S.negativeMonomial x.1 i} := by
-    simp only [setOf_forall]
+    simp only [ofPred_forall]
     refine isClosed_iInter fun i => isClosed_eq (by fun_prop) ?_
     unfold Seed.positiveMonomial Seed.negativeMonomial
     fun_prop
   have hf : IsClosed {x : Ambient S | ∀ f, f ∉ S.mutable → ‖x.1 f‖ = 1} := by
-    simp only [setOf_forall]
+    simp only [ofPred_forall]
     exact isClosed_iInter fun f => isClosed_iInter fun _ =>
       isClosed_eq (by fun_prop) continuous_const
   have hm : IsClosed {x : Ambient S | ∀ i : S.Mutable,
       ‖x.1 i‖ ≤ 1 ∧ ((1 - ‖x.1 i‖ ^ 2 : ℝ) : ℂ) * x.2 i = 0} := by
-    simp only [setOf_forall]
+    simp only [ofPred_forall]
     refine isClosed_iInter fun i => ?_
     have hn : IsClosed {x : Ambient S | ‖x.1 i‖ ≤ 1} :=
       isClosed_le (by fun_prop) continuous_const
@@ -127,7 +127,7 @@ private theorem image_coordinateCap :
     have hfn : ∀ f, f ∉ S.mutable → x.1 f ≠ 0 := by
       intro f hf hzero
       have hnorm := hx.2.1 f hf
-      simpa [hzero] using hnorm
+      simp [hzero] at hnorm
     exact ⟨⟨x, hx.1, hfn⟩, hx.2, rfl⟩
 
 /-- Compactness is proved in the inherited topology of the actual point set.

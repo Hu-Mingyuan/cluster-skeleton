@@ -2,6 +2,7 @@ import ClusterSkeleton.ZeroSet
 import Mathlib.LinearAlgebra.Matrix.Notation
 import Mathlib.LinearAlgebra.Matrix.Determinant.Basic
 import Mathlib.Tactic.NormNum
+import Mathlib.Tactic.FinCases
 
 /-!
 # A nontrivial seed satisfying the full hypotheses
@@ -20,11 +21,17 @@ def a2Matrix : Matrix (Fin 2) (Fin 2) ℤ := !![0, 1; -1, 0]
 def a2Seed : Seed 2 where
   B := a2Matrix
   mutable := Finset.univ
-  skew := by decide
+  skew := by
+    intro i j
+    fin_cases i <;> fin_cases j <;> norm_num [a2Matrix]
   acyclic := by
     apply (measure (fun i : {i : Fin 2 // i ∈ (Finset.univ : Finset (Fin 2))} =>
       i.1.val)).wf.mono
-    decide
+    intro i j hij
+    rcases i with ⟨i, hi⟩
+    rcases j with ⟨j, hj⟩
+    change i.val < j.val
+    fin_cases i <;> fin_cases j <;> norm_num [a2Matrix] at hij ⊢
 
 /-- Unimodularity is checked on the full concrete integer matrix. -/
 theorem a2Seed_unimodular : a2Seed.Unimodular := by

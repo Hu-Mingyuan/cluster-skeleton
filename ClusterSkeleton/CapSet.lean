@@ -108,9 +108,13 @@ private theorem isClosed_ambientCap : IsClosed (ambientCap S) := by
   have hm : IsClosed {x : Ambient S | ∀ i : S.Mutable,
       ‖x.1 i‖ ≤ 1 ∧ ((1 - ‖x.1 i‖ ^ 2 : ℝ) : ℂ) * x.2 i = 0} := by
     simp only [setOf_forall]
-    exact isClosed_iInter fun i =>
-      (isClosed_le (by fun_prop) continuous_const).inter
-        (isClosed_eq (by fun_prop) continuous_const)
+    refine isClosed_iInter fun i => ?_
+    have hn : IsClosed {x : Ambient S | ‖x.1 i‖ ≤ 1} :=
+      isClosed_le (by fun_prop) continuous_const
+    have hz : IsClosed {x : Ambient S |
+        ((1 - ‖x.1 i‖ ^ 2 : ℝ) : ℂ) * x.2 i = 0} :=
+      isClosed_eq (by fun_prop) continuous_const
+    exact hn.inter hz
   exact he.inter (hf.inter hm)
 
 private theorem image_coordinateCap :
@@ -136,7 +140,7 @@ theorem isCompact_coordinateCap : IsCompact (coordinateCap S) := by
       Metric.closedBall (0 : Ambient S) 2 := by
     rintro x ⟨p, hp, rfl⟩
     rw [Metric.mem_closedBall, dist_zero_right]
-    change max ‖p.a‖ ‖p.b‖ ≤ 2
+    change max ‖Seed.Point.a (S := S) p‖ ‖Seed.Point.b (S := S) p‖ ≤ 2
     refine max_le ?_ ?_
     · exact (pi_norm_le_iff_of_nonneg (by norm_num : (0 : ℝ) ≤ 2)).2
         (fun j => (coordinateCap_norm_a_le hp j).trans (by norm_num))

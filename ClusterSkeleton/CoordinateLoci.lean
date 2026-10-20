@@ -30,7 +30,7 @@ def candidateChartLocus (S : Seed d) (I : Finset (Fin d)) : Set S.Point :=
 /-- Every candidate coordinate locus is open in the actual cluster space. -/
 theorem isOpen_candidateChartLocus (S : Seed d) (I : Finset (Fin d)) :
     IsOpen (candidateChartLocus S I) := by
-  simp only [candidateChartLocus, setOf_forall]
+  simp only [candidateChartLocus, ofPred_forall]
   refine isOpen_iInter_of_finite fun j => isOpen_iInter_of_finite fun _ => ?_
   exact isOpen_ne_fun (continuous_originalCoordinate S j) continuous_const
 

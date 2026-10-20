@@ -12,7 +12,7 @@ lake exe cache get \
   Mathlib.Algebra.Order.BigOperators.GroupWithZero.Finset \
   Mathlib.Algebra.BigOperators.GroupWithZero.Finset \
   Mathlib.Tactic.FunProp Mathlib.Tactic.Linarith \
-  Mathlib.LinearAlgebra.Matrix.Notation Mathlib.Tactic.NormNum \
+  Mathlib.LinearAlgebra.Matrix.Notation Mathlib.Tactic.NormNum Mathlib.Tactic.FinCases \
   Mathlib.Dynamics.Flow \
   Mathlib.Topology.Instances.Real.Lemmas \
   Mathlib.Topology.Separation.Hausdorff \

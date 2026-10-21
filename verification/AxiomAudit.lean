@@ -1,34 +1,108 @@
 import ClusterSkeleton
+import Lean.Util.CollectAxioms
 
-#print axioms ClusterSkeleton.Seed.wellFounded_iff_no_directed_cycle
-#print axioms ClusterSkeleton.Seed.unitPoint
-#print axioms ClusterSkeleton.Seed.point_nonempty
-#print axioms ClusterSkeleton.Seed.Point.outgoing_ne_zero
-#print axioms ClusterSkeleton.Seed.Point.matrix_eq_zero_of_coordinates_zero
-#print axioms ClusterSkeleton.Seed.Point.zeroSet_independent
-#print axioms ClusterSkeleton.Seed.Point.exists_independent_nonvanishing_locus
-#print axioms ClusterSkeleton.continuous_originalCoordinate
-#print axioms ClusterSkeleton.isOpen_candidateChartLocus
-#print axioms ClusterSkeleton.exists_independent_candidateChartLocus
-#print axioms ClusterSkeleton.iUnion_independent_candidateChartLocus
-#print axioms ClusterSkeleton.initialTorus_eq_candidateChartLocus_empty
-#print axioms ClusterSkeleton.isOpen_initialTorus
-#print axioms ClusterSkeleton.coordinateCap_norm_a_le
-#print axioms ClusterSkeleton.coordinateCap_b_eq_zero
-#print axioms ClusterSkeleton.coordinateCap_norm_b_le
-#print axioms ClusterSkeleton.isCompact_coordinateCap
-#print axioms ClusterSkeleton.coordinateCap_nonempty
-#print axioms ClusterSkeleton.mem_trappedSet_of_forwardOrbit_subset
-#print axioms ClusterSkeleton.subset_trappedSet_of_isCompact_forwardInvariant
-#print axioms ClusterSkeleton.initialTorus_nonempty
-#print axioms ClusterSkeleton.LiouvilleData.field_eq_liouvilleVector
-#print axioms ClusterSkeleton.LiouvilleData.toCompleteLiouvilleManifold
+/-! Reproducible publication audit. This checks the final theorem directly and
+all declarations attributed to every project module, including private and
+generated declarations. The native collector traverses transitive dependencies.
+Only Lean's standard foundational axioms are allowed. -/
 
--- The following is a target proposition, not an established theorem.
-#check ClusterSkeleton.FirstGeometricTarget
-#check FsFltz.Geometry.CompleteLiouvilleFlow
+#print axioms ClusterSkeleton.FullSkeleton.trappedSet_eq_coordinateCap
+#print axioms ClusterSkeleton.FullSkeleton.liouvilleData
+#print axioms ClusterSkeleton.FullSkeleton.liouvilleData_flow
+#print axioms ClusterSkeleton.FullSkeleton.torus_anchor
+#print axioms ClusterSkeleton.FullSkeleton.liouvilleData_trappedSet
+#print axioms ClusterSkeleton.FullSkeleton.liouvilleSkeletonTarget_of_parameters
+#print axioms ClusterSkeleton.FullSkeleton.liouvilleSkeletonTarget
+#print axioms ClusterSkeleton.FullSkeleton.firstGeometricTarget
 
-#print axioms ClusterSkeleton.coordinateCap_strictCapIndices_independent
-#print axioms ClusterSkeleton.Examples.a2Seed
-#print axioms ClusterSkeleton.Examples.a2Seed_unimodular
-#print axioms ClusterSkeleton.Examples.a2_not_both_zero
+open Lean Elab Command in
+run_cmd do
+  let env ← getEnv
+  let modules := #[`ClusterSkeleton.AllStrataGrowth,
+    `ClusterSkeleton.BoundaryTangency,
+    `ClusterSkeleton.CapAngularTangency,
+    `ClusterSkeleton.CapForwardInvariance,
+    `ClusterSkeleton.CapIndependence,
+    `ClusterSkeleton.CapSet,
+    `ClusterSkeleton.CompactInteriorRigidity,
+    `ClusterSkeleton.ConstructedFlowCapInclusion,
+    `ClusterSkeleton.ConstructedFlowReverseInclusion,
+    `ClusterSkeleton.CoordinateLoci,
+    `ClusterSkeleton.DominanceCutoff,
+    `ClusterSkeleton.Examples.A2,
+    `ClusterSkeleton.FiniteTimeConfinement,
+    `ClusterSkeleton.FormExtensionUniqueness,
+    `ClusterSkeleton.FullSkeleton,
+    `ClusterSkeleton.GeometryNativeBridge,
+    `ClusterSkeleton.GeometryTarget,
+    `ClusterSkeleton.GlobalLiouvilleField,
+    `ClusterSkeleton.GlobalPrimitive,
+    `ClusterSkeleton.GlobalSymplectic,
+    `ClusterSkeleton.GlobalTwoForm,
+    `ClusterSkeleton.IndependentLaurentCoordinates,
+    `ClusterSkeleton.IndependentNodeChart,
+    `ClusterSkeleton.IndependentNodeSmooth,
+    `ClusterSkeleton.InitialTorusDensity,
+    `ClusterSkeleton.IntegralBasisCompletion,
+    `ClusterSkeleton.InteriorPartnerPropagation,
+    `ClusterSkeleton.LaurentCoordinates,
+    `ClusterSkeleton.LocalAngularDynamics,
+    `ClusterSkeleton.LocalFormGluing,
+    `ClusterSkeleton.LocalPrimitive,
+    `ClusterSkeleton.NativeCompleteFlow,
+    `ClusterSkeleton.NativeNodePrimitive,
+    `ClusterSkeleton.NativeRadialOrbit,
+    `ClusterSkeleton.NodeCoordinates,
+    `ClusterSkeleton.NodeLogExtension,
+    `ClusterSkeleton.NodeNondegeneracy,
+    `ClusterSkeleton.NodePrimitiveCancellation,
+    `ClusterSkeleton.NodeTwoForm,
+    `ClusterSkeleton.NormalizedPartnerNormDrift,
+    `ClusterSkeleton.PrimitiveCutoffs,
+    `ClusterSkeleton.PrimitiveLocalization,
+    `ClusterSkeleton.PrimitiveResidual,
+    `ClusterSkeleton.RegularCorrection,
+    `ClusterSkeleton.ScalarOrbitDynamics,
+    `ClusterSkeleton.Seed,
+    `ClusterSkeleton.SmoothAtlas,
+    `ClusterSkeleton.TorusChart,
+    `ClusterSkeleton.TorusCorrection,
+    `ClusterSkeleton.TorusLiouvilleDynamics,
+    `ClusterSkeleton.TorusNondegeneracy,
+    `ClusterSkeleton.TorusPrimitive,
+    `ClusterSkeleton.TrappedSet,
+    `ClusterSkeleton.ZeroSet,
+    `ClusterSkeleton.ZeroStratumEscape,
+    `ClusterSkeleton.ZeroStratumInvariance,
+    `ClusterSkeleton.ZeroStratumPartnerDynamics]
+  let mut counts : Array Nat := Array.replicate modules.size 0
+  let mut total : Nat := 0
+  for (name, _) in env.constants.toList do
+    if let some idx := env.getModuleIdxFor? name then
+      if let some i := modules.toList.idxOf? env.header.moduleNames[idx]! then
+        let axioms ← collectAxioms name
+        for axiomName in axioms do
+          unless #[``propext, ``Classical.choice, ``Quot.sound].contains axiomName do
+            throwError "Forbidden axiom {axiomName} in {name}"
+        logInfo m!"AUDIT {name}: {axioms}"
+        counts := counts.modify i (· + 1)
+        total := total + 1
+  for i in [:modules.size] do
+    if counts[i]! == 0 then
+      throwError "No declarations audited in {modules[i]!}"
+    logInfo m!"AUDITED {modules[i]!}: {counts[i]!} declarations"
+  logInfo m!"TOTAL_AUDITED: {total}"
+
+-- These generated equations have had import-dependent module attribution.
+open Lean Elab Command in
+run_cmd do
+  let env ← getEnv
+  for name in #[`FsFltz.Geometry.SmoothManifold.evalTwo.eq_1,
+      `ClusterSkeleton.SmoothPresentation.logarithmicImaginaryValue.eq_1] do
+    unless env.contains name do
+      throwError "Missing generated declaration {name}"
+    let axioms ← collectAxioms name
+    for axiomName in axioms do
+      unless #[``propext, ``Classical.choice, ``Quot.sound].contains axiomName do
+        throwError "Forbidden axiom {axiomName} in {name}"
+    logInfo m!"GENERATED AUDIT {name}: {axioms}"

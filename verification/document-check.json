@@ -1,0 +1,21 @@
+{
+  "scope": "Typesetting and visual QA; mathematical validity is checked separately in Lean and statement review",
+  "compiler": "XeLaTeX, TeX Live 2024",
+  "pages": {
+    "target-theorem.pdf": 3,
+    "proof-blueprint.pdf": 13
+  },
+  "checks": [
+    "Compilation succeeded",
+    "No undefined references or overfull boxes in final logs",
+    "All 16 rendered pages visually inspected",
+    "PDF text extraction contains no unresolved reference markers"
+  ],
+  "source_and_output_sha256": {
+    "docs/tex/preamble.tex": "35aa160bd7f046803344c5b24bc1a6ef91c85d6a983dd2f96d18dc6f846d44ff",
+    "docs/tex/proof-blueprint.tex": "7e0e5417065a409e0f3d8f7c5814dc8e5fd7c093b7dd825f3104d05d635a62f2",
+    "docs/tex/target-theorem.tex": "955a11d3d1dd8540730d20025f3286780d89b07453bc50c815d07eae8d3177cf",
+    "target-theorem.pdf": "48adfc754d179d8f4e80083cc8e8e3f4f6e90b6c770ee2bfe91afae5110a4cd4",
+    "proof-blueprint.pdf": "38d9c07df08c6217e0b9659a4ef744f5be9cba734513a8df049cfec2a59e1149"
+  }
+}

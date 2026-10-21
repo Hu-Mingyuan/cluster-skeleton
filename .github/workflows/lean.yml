@@ -20,9 +20,10 @@ concurrency:
 jobs:
   verify:
     runs-on: ubuntu-24.04
-    timeout-minutes: 45
+    timeout-minutes: 60
     env:
       MATHLIB_NO_CACHE_ON_UPDATE: '1'
+      LEAN_NUM_THREADS: '2'
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - name: Install Elan
@@ -52,7 +53,7 @@ jobs:
           name: lean-verification
           path: |
             verification/*.log
-            verification/first-batch.json
+            verification/publication-check.json
           if-no-files-found: ignore
       - name: Bundle compiled dependencies for local use
         if: ${{ !cancelled() && inputs.dependency_bundle }}

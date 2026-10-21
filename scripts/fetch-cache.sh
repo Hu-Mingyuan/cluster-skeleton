@@ -2,23 +2,27 @@
 set -euo pipefail
 export MATHLIB_NO_CACHE_ON_UPDATE=1
 cd "$(dirname "$0")/.."
-lake exe cache get \
-  Mathlib.Analysis.Complex.Basic \
-  Mathlib.LinearAlgebra.Matrix.Determinant.Basic \
-  Mathlib.Order.WellFoundedSet \
-  Mathlib.Analysis.Normed.Module.FiniteDimension \
-  Mathlib.Analysis.Normed.Group.Constructions \
-  Mathlib.Topology.MetricSpace.ProperSpace \
-  Mathlib.Algebra.Order.BigOperators.GroupWithZero.Finset \
-  Mathlib.Algebra.BigOperators.GroupWithZero.Finset \
-  Mathlib.Tactic.FunProp Mathlib.Tactic.Linarith \
-  Mathlib.LinearAlgebra.Matrix.Notation Mathlib.Tactic.NormNum Mathlib.Tactic.FinCases \
-  Mathlib.Dynamics.Flow \
-  Mathlib.Topology.Instances.Real.Lemmas \
-  Mathlib.Topology.Separation.Hausdorff \
-  Mathlib.Geometry.Manifold.Diffeomorph \
-  Mathlib.Geometry.Manifold.MFDeriv.Basic \
-  Mathlib.Geometry.Manifold.VectorBundle.Tangent \
-  Mathlib.Analysis.Calculus.DifferentialForm.Basic \
-  Mathlib.Analysis.InnerProductSpace.PiL2 \
-  Mathlib.GroupTheory.Perm.Sign
+# Materialize exactly the locked dependency sources before scanning FsFltz.
+lake env true
+# Fetch the pinned Mathlib closure actually imported by this library and its
+# pinned FsFltz dependency. No dependency revisions are updated here.
+mapfile -t modules < <(python3 - <<'PY'
+from pathlib import Path
+import re
+files = list(Path('ClusterSkeleton').rglob('*.lean'))
+files += list(Path('.lake/packages/fsfltz/FsFltz').rglob('*.lean'))
+modules = set()
+for path in files:
+    for line in path.read_text().splitlines():
+        match = re.match(r'^\s*import\s+(Mathlib(?:\.\w+)*)\s*$', line)
+        if match:
+            modules.add(match.group(1))
+for name in sorted(modules):
+    print(name)
+PY
+)
+if ((${#modules[@]} == 0)); then
+  echo 'No Mathlib imports found; refusing an empty cache request.' >&2
+  exit 1
+fi
+lake exe cache get "${modules[@]}"

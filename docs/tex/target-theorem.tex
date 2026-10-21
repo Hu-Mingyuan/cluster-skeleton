@@ -1,0 +1,155 @@
+\input{preamble.tex}
+\title{The Liouville skeleton of a unimodular acyclic cluster model\\[5pt]\large Definitions, target statement, and Lean correspondence}
+\author{Cluster skeleton formalization project}
+\date{21 October 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+This document specifies the geometric theorem formalized by this repository.
+It separates the input data and newly defined predicates from the theorems
+which construct their witnesses. The accompanying proof blueprint gives the
+mathematical argument. The scope is a smooth real Liouville structure with
+complete flow and an explicit full dynamical skeleton.
+\end{abstract}
+
+\section{Input data and the underlying space}
+Let $d\geq0$ and let $B=(B_{ij})\in M_d(\Z)$ be skew-symmetric with
+$\det B=1$. Choose a set $M\subseteq\{1,\ldots,d\}$ of mutable indices;
+write $F$ for its complement. The directed graph on $M$, with an arrow
+$i\to j$ when $B_{ij}>0$, is required to be acyclic. There is no
+acyclicity assumption on the full graph. The determinant condition concerns
+the entire matrix, including frozen indices.
+
+For $a\in\C^d$ put
+\[
+ P_i(a)=\prod_{j=1}^d a_j^{[B_{ij}]_+},\qquad
+ Q_i(a)=\prod_{j=1}^d a_j^{[-B_{ij}]_+},\qquad [n]_+=\max(n,0).
+\]
+Define the actual space of complex exchange points
+\[
+ X_B=\left\{(a,b)\in\C^d\times\C^M:\
+ a_ib_i=P_i(a)+Q_i(a)\ (i\in M),\quad a_f\ne0\ (f\in F)\right\}.
+\]
+It has the subspace topology from the indicated vector space. The frozen
+coordinates are variable points of $\C^*$, not specialized coefficients.
+The point $a_j=1$, $b_i=2$ shows that this space is nonempty.
+Its initial torus is $T=\{a_1\cdots a_d\ne0\}\subseteq X_B$.
+\leanref{ClusterSkeleton/Seed.lean}{Seed, Seed.Unimodular, Seed.Point}
+
+\section{Two independent subsets}
+\begin{definition}[Coordinate cap]
+The coordinate cap is the subset
+\[
+ C_B=\left\{(a,b)\in X_B:\
+ |a_f|=1\ (f\in F),\quad
+ |a_i|\leq1,\ (1-|a_i|^2)b_i=0\ (i\in M)\right\}.
+\]
+\end{definition}
+In particular, $|a_i|<1$ forces $b_i=0$. At $|a_i|=1$ the product
+condition imposes no further restriction on $b_i$; the exchange equation
+still applies. This definition contains no vector field or flow.
+Compactness of $C_B$ is a theorem, not a field supplied with the definition.
+\leanref{ClusterSkeleton/CapSet.lean}{coordinateCap, isCompact_coordinateCap}
+
+\begin{definition}[Dynamical skeleton convention]
+For a continuous real flow $\Phi$ on $X_B$, let
+\[
+ \Skel(\Phi)=\left\{x\in X_B:
+ \overline{\{\Phi_t(x):t\geq0\}}^{\,X_B}\ \text{is compact}\right\}.
+\]
+\end{definition}
+The closure is taken in the actual space $X_B$. This is the
+\emph{relatively compact forward orbit} convention. It does not assert that
+points are fixed, and it does not use $C_B$ in its definition.
+\leanref{ClusterSkeleton/TrappedSet.lean}{trappedSet}
+
+\section{The geometric theorem}
+\begin{theorem}[Formalized target]\label{thm:target}
+For every input $(d,B,M)$ above, there exist a smooth real manifold
+structure on the fixed topological space $X_B$ of real dimension $2d$,
+a smooth real one-form $\lambda$, a smooth vector field $Z$, and a jointly
+smooth flow $\Phi:\R\times X_B\to X_B$, with the following properties.
+\begin{enumerate}
+\item The actual inclusion $X_B\hookrightarrow\C^d\times\C^M$ is a smooth
+immersion, and $T$ is dense in $X_B$.
+\item $\omega=\dd\lambda$ is nondegenerate, and on $T$ it satisfies
+\[
+ \omega=\im\!\left(\frac12\sum_{i,j=1}^d
+ B_{ij}\,\dd\log a_i\wedge\dd\log a_j\right).
+\]
+The differential $\dd\log a_i$ means $\dd a_i/a_i$; no global logarithm
+is chosen. Since $\omega=\dd\lambda$, the form is closed.
+\item $\iota_Z\omega=\lambda$. For every $x\in X_B$ and $t\in\R$,
+\[
+ \Phi_0(x)=x,\qquad \Phi_{t+s}(x)=\Phi_t(\Phi_s(x)),\qquad
+ \frac{\dd}{\dd t}\Phi_t(x)=Z(\Phi_t(x)).
+\]
+Thus this same vector field is complete in both time directions.
+\item For this same flow, there is literal equality of subsets of $X_B$:
+\[
+ \boxed{\Skel(\Phi)=C_B.}
+\]
+\end{enumerate}
+\end{theorem}
+
+The quantifier order is
+\[
+ \forall(d,B,M)\text{ as above},\quad\exists(\text{smooth structure},
+ \lambda,Z,\Phi)\quad\text{with all four properties}.
+\]
+Neither a flow, completeness, compactness of the cap, nor either skeleton
+inclusion is an additional hypothesis. The construction uses positive cutoff
+parameters $\varepsilon,\delta$ and $\kappa\geq2\varepsilon+1$.
+The final existence theorem chooses $\varepsilon=\delta=1$, $\kappa=3$;
+these are auxiliary parameters, not values of frozen coordinates.
+
+\section{Definitions, formulation, and proof in Lean}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\textwidth}{@{}p{0.20\textwidth}X@{}}
+\toprule
+Role & Declaration and meaning\\\midrule
+Input definition & \lean{Seed}, with acyclicity as input;
+\lean{Seed.Unimodular}, the separate determinant hypothesis.\\
+Space and sets & \lean{Seed.Point}, \lean{coordinateCap}, and
+\lean{trappedSet} define the objects being compared.\\
+Witness interface & \lean{SmoothPresentation} and \lean{LiouvilleData}
+specify the required constructions. Defining these structures does not
+construct an inhabitant.\\
+Target proposition & \lean{LiouvilleSkeletonTarget} and
+\lean{FirstGeometricTarget} state the quantified goal.\\
+Constructed witnesses & \lean{SmoothAtlas.presentation} and
+\lean{FullSkeleton.liouvilleData} supply the actual geometry.\\
+Equality theorem & \lean{FullSkeleton.trappedSet_eq_coordinateCap}
+combines the two proved inclusions for the same flow.\\
+Existence theorem & \lean{FullSkeleton.firstGeometricTarget}
+proves \lean{FirstGeometricTarget}.\\\bottomrule
+\end{tabularx}
+
+All names in the last four rows lie in the namespace
+\lean{ClusterSkeleton}. The core theorem is in
+\lean{ClusterSkeleton/FullSkeleton.lean}; the target proposition is in
+\lean{ClusterSkeleton/GeometryTarget.lean}.
+
+Mathlib supplies native topology, manifolds, derivatives and flows.
+The pinned \lean{fs-fltz-minimal} dependency supplies smooth-form and
+Liouville interfaces built on these notions. This project defines the
+specific cluster model and proves the required constructions and equations.
+New formal definitions are an encoding choice; they are not in themselves
+a claim of new mathematical concepts or a proof of the target.
+
+\section{Scope and verification}
+This is the Liouville/skeleton part of the original acyclic-cluster
+geometric problem. The statement does not include a holomorphic extension
+theorem for the complex logarithmic two-form, finite type, a product
+description of individual cap pieces, generalized cocores, or any Fukaya,
+microlocal, or homological mirror symmetry equivalence.
+
+The repository's \lean{verification/README.md} distinguishes historical
+Horizon source-bound acceptance from the publication checkout's reproducible
+checks. The Lean kernel checks the supplied proofs; a separate statement
+review checks that the definitions and quantifiers express
+Theorem~\ref{thm:target}. The accepted foundation allowlist is
+\lean{propext}, \lean{Classical.choice}, and \lean{Quot.sound}; these are
+standard logical foundations, not additional geometric assumptions.
+
+\end{document}

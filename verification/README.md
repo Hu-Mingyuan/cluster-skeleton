@@ -43,6 +43,8 @@ The [final receipt](publication-check.json) records the result, toolchain, depen
 - [final-consumer.log](final-consumer.log): final theorem consumers; a successful Lean check can produce an empty log.
 - [axioms.log](axioms.log): module, generated-declaration, and final-root transitive axiom checks.
 
+The committed receipt and logs were produced by [successful CI run 40066281409](https://github.com/Hu-Mingyuan/cluster-skeleton/actions/runs/40066281409). All 65 input hashes match the delivered files.
+
 The receipt and matching logs are retained in the repository. Re-running the verifier replaces them with the new result. It first sets the receipt status to `running`, so a failed or interrupted invocation cannot leave an old success marked as its result. A successful receipt has `status: passed`, `dependency_worktrees_clean: true`, and `source_stability_verified: true`, and its input hashes must match the delivered files.
 
 [GitHub Actions](https://github.com/Hu-Mingyuan/cluster-skeleton/actions/workflows/lean.yml) also preserves the outputs for each run. The committed evidence remains available independently of CI artifact retention.

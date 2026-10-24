@@ -29,14 +29,16 @@ Here **skeleton** means the set of points whose forward orbit has compact closur
 
 ## Reproduce the checks
 
-With Elan, Git, and Python 3 installed, from the repository root run:
+Use Linux or Ubuntu under WSL on Windows, with Elan (`lake` and `lean` on `PATH`), Git, Python 3, and Bash 4 or newer installed. This repository is private; cloning requires an authenticated GitHub account with access:
 
 ```sh
+git clone https://github.com/Hu-Mingyuan/cluster-skeleton.git
+cd cluster-skeleton
 bash scripts/fetch-cache.sh
 python3 scripts/verify.py
 ```
 
-The first command obtains the pinned dependency cache. Subsequent checks can run only the second command. The default library entry point imports the final theorem. Verification builds the library, checks transitive axiom dependencies, and records exact source hashes. Only `propext`, `Classical.choice`, and `Quot.sound` are permitted. See the [verification guide](verification/README.md) for the exact checked scope and receipts.
+The cache command obtains the pinned dependencies. Subsequent checks can run only `python3 scripts/verify.py`. The default library entry point imports the final theorem. Verification builds the library, checks transitive axiom dependencies, rejects modified dependency checkouts, and confirms that source hashes remain unchanged during verification. Only `propext`, `Classical.choice`, and `Quot.sound` are permitted. Success ends with `FULL_GEOMETRIC_TARGET_VERIFIED`. The [verification guide](verification/README.md) describes the checked scope and the included final receipt and logs.
 
 | Dependency | Pinned revision |
 | --- | --- |

@@ -14,6 +14,6 @@ Read the self-contained [proof blueprint PDF](../proof-blueprint.pdf), with edit
 
 The final theorem is `ClusterSkeleton.FullSkeleton.firstGeometricTarget`. Both inclusions concern `NativeCompleteFlow.completeFlow`.
 
-Files under `verification/*Consumer.lean` and their interface notes are development-era consumer checks. The standard verification entry point and its current coverage are documented in [`verification/README.md`](../verification/README.md).
+[`FullSkeletonConsumer.lean`](../verification/FullSkeletonConsumer.lean) applies the final theorem to the literal coordinate conditions and to the complete Liouville manifold. The reproducible build, transitive axiom audit, and their exact source bindings are described in the [verification guide](../verification/README.md).
 
 The rewritten PDF contains only the relevant geometry. It proves a real smooth extension of the imaginary logarithmic form; later finite-type, cocore, and categorical statements from the original notes are not included.

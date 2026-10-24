@@ -2,6 +2,10 @@
 *.olean
 *.ilean
 verification/*.log
+!verification/toolchain.log
+!verification/build.log
+!verification/final-consumer.log
+!verification/axioms.log
 
 verification/*-ready
 verification/horizon-*.json

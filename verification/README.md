@@ -1,54 +1,54 @@
-# Verification and provenance
+# Verify the formalization
 
-## Publication result — 21 October 2026
-
-The isolated standard Lake build and the standalone final consumer passed. The publication audit checked 1,480 declarations attributed to all 57 project modules in the root-import environment, two explicit generated-declaration supplements, and eight direct final theorem/construction roots. Only the three allowed foundational axioms occurred. This new root-import audit does not replace or claim the scope of Horizon's larger historical multi-context audit.
-
-The committed local receipt has SHA256 `fcfc4f6d65c4796eb10a9217341adfd795c440c06d4f283c87f278567a1f721e`. Its source and log hashes were checked again against the publication files. The PDF compilation and full-page visual checks are recorded in [`document-check.json`](document-check.json).
-
-## Reproducible final-theorem check
-
-From the repository root, with Elan, Git and Python 3 installed:
+From the repository root on Linux or Ubuntu under WSL, with Elan (`lake` and `lean` on `PATH`), Git, Python 3, and Bash 4 or newer installed:
 
 ```sh
 bash scripts/fetch-cache.sh
 python3 scripts/verify.py
 ```
 
-The cache step materializes the locked dependencies and obtains their Mathlib artifacts; it does not update dependency revisions. The verifier checks the pinned Lean version and package commits, builds the full `ClusterSkeleton` library, checks `FullSkeletonConsumer.lean`, and runs `AxiomAudit.lean`.
+The cache command obtains dependency sources and compiled artifacts at the revisions in `lake-manifest.json`. The verifier uses ordinary Lake:
 
-The audit traverses transitive axioms for declarations attributed to every project module, including private and generated declarations. It also checks the final equality and existence theorem roots explicitly:
+```sh
+lake --rehash build ClusterSkeleton
+lake env lean verification/FullSkeletonConsumer.lean
+lake env lean verification/AxiomAudit.lean
+```
 
-- `ClusterSkeleton.FullSkeleton.trappedSet_eq_coordinateCap`
-- `ClusterSkeleton.FullSkeleton.liouvilleData` and its associated flow, torus, and skeleton statements
-- `ClusterSkeleton.FullSkeleton.liouvilleSkeletonTarget_of_parameters`
-- `ClusterSkeleton.FullSkeleton.liouvilleSkeletonTarget`
-- `ClusterSkeleton.FullSkeleton.firstGeometricTarget`
+Success ends with `FULL_GEOMETRIC_TARGET_VERIFIED`. The [CI workflow](../.github/workflows/lean.yml) runs the same checks.
 
-Only `propext`, `Classical.choice`, and `Quot.sound` are allowed. A reachable `sorryAx` or an extra geometric axiom fails the audit. Explicit project `axiom` and `opaque` declarations are rejected as well.
+## Checked theorem and source
 
-The machine-readable result is [`publication-check.json`](publication-check.json). Read its `status`, exact source hashes, final theorem names, module counts, and dependency revisions; only `status: passed` is a successful check. A new invocation first replaces any old success status with `running`, so an interrupted or failed check cannot masquerade as fresh success. Build, final-consumer, toolchain, and axiom logs are preserved locally and as private CI artifacts.
+The final existence theorem is `ClusterSkeleton.FullSkeleton.firstGeometricTarget`. Its witnesses construct the smooth presentation, primitive, Liouville field, and complete flow on the actual exchange space. `FullSkeleton.trappedSet_eq_coordinateCap` proves the full skeleton equality for that same flow.
 
-The default library entry point imports the final theorem. Private GitHub Actions uses the same verification script. [Check the workflow status](https://github.com/Hu-Mingyuan/cluster-skeleton/actions) for the particular uploaded revision; a pending or failing run is not a passing verification.
+[FullSkeletonConsumer.lean](FullSkeletonConsumer.lean) applies these proofs to the coordinate conditions and the complete Liouville manifold. [AxiomAudit.lean](AxiomAudit.lean) checks all 57 project modules in the root-import environment, including private and generated declarations, two explicit generated-declaration supplements, and eight direct final theorem/construction roots. The module audit covers 1,480 declarations; the receipt and log record the exact counts.
 
-## Exact source provenance
+Only `propext`, `Classical.choice`, and `Quot.sound` are permitted as transitive axioms. Missing audit results, `sorryAx`, additional axioms, and explicit project `axiom` or `opaque` declarations fail verification.
 
-The mathematical library was exported from the accepted private Horizon source commit:
+The verifier also checks:
 
-- Commit: `03f558f67301b9514c92ef1833dca1bd56b45ab7`.
-- Tree: `073177fc635f99a05cc2da8a4ee626ce2f52ddba`.
-- [`accepted-library.json`](accepted-library.json) records a byte comparison and hashes for all 57 mathematical library files.
+- Lean 4.34.1 and every locked dependency revision.
+- Clean dependency worktrees, including absence of untracked non-ignored files, before and after the checks.
+- All 57 mathematical source files against [accepted-library.json](accepted-library.json).
+- Identical hashes for all 65 compilation and audit inputs before and after verification.
 
-The publication adds the final default import, a reproducible final-root audit, updated documentation, and the rewritten PDFs. The accepted development commit is provenance; it is not a substitute for checking the publication's exact source hashes. The publication build uses an isolated directory and pinned dependency artifacts, without reusing any project's compiled Lean modules from the Horizon workspace.
+The accepted-library manifest binds the reviewed mathematical source to its accepted source commit. The final receipt covers the delivered library together with the default import, consumer, audit, dependency configuration, and verifier.
 
-## Mathematical statement review
+## Included final evidence
 
-[`statement-review.md`](statement-review.md) records the independent statement review and its scope. The Lean kernel checks derivations; it does not decide whether the chosen definitions express the intended problem. The definitions, quantified statement, and paper proof must therefore be reviewed separately.
+The [final receipt](publication-check.json) records the result, toolchain, dependency revisions, source hashes, audit coverage, and SHA-256 hashes of these logs:
 
-The result is a real smooth Liouville structure with complete flow and full trapped-set equality on the literal exchange space. It does not certify every assertion in the original broader notes.
+- [toolchain.log](toolchain.log): Lean version.
+- [build.log](build.log): full library compilation.
+- [final-consumer.log](final-consumer.log): final theorem consumers; a successful Lean check can produce an empty log.
+- [axioms.log](axioms.log): module, generated-declaration, and final-root transitive axiom checks.
 
-## Historical development material
+The receipt and matching logs are retained in the repository. Re-running the verifier replaces them with the new result. It first sets the receipt status to `running`, so a failed or interrupted invocation cannot leave an old success marked as its result. A successful receipt has `status: passed`, `dependency_worktrees_clean: true`, and `source_stability_verified: true`, and its input hashes must match the delivered files.
 
-[`ci-14549f3.json`](ci-14549f3.json) is an older, first-batch receipt for 27 declarations. It is retained as history and does **not** certify the later final theorem.
+[GitHub Actions](https://github.com/Hu-Mingyuan/cluster-skeleton/actions/workflows/lean.yml) also preserves the outputs for each run. The committed evidence remains available independently of CI artifact retention.
 
-Other `*Consumer.lean` files and `*Interface.md` notes record development-stage consumer contracts. The standard publication command checks the final consumer and the full library; it does not claim to re-run every historical intermediate consumer. Horizon runtime configuration, credentials, and operational transcripts are not included. No GitHub Pages publication is configured.
+## Mathematical meaning and documents
+
+The [statement review](statement-review.md) checks the definitions, quantifiers, and constructed witnesses against the intended real-geometric target. It distinguishes that review from compilation and from a line-by-line independent reproof of every lemma. The [theorem guide](../docs/target-theorem.md) and [proof map](../docs/proof-blueprint.md) identify the implemented claims.
+
+The [document check](document-check.json) binds the three-page theorem PDF and thirteen-page proof PDF to their editable LaTeX sources and records all-page visual inspection. The result is the real smooth Liouville structure, complete flow, and full trapped-set equality described there; the broader categorical claims in the original notes are outside this theorem.

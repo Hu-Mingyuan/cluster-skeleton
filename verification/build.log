@@ -1,0 +1,1206 @@
+⚠ [1957/1990] Replayed ClusterSkeleton.Seed
+warning: ClusterSkeleton/Seed.lean:111:4: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+✔ [2557/2576] Built ClusterSkeleton.TorusChart (3.8s)
+✔ [2617/2694] Built ClusterSkeleton.NodeCoordinates (3.0s)
+✔ [2845/2855] Built ClusterSkeleton.NodeLogExtension (5.6s)
+✔ [2849/2856] Built FsFltz.Geometry.Identification (6.4s)
+✔ [2852/2876] Built FsFltz.Geometry.VectorFieldBridge (3.9s)
+✔ [2895/2909] Built FsFltz.Geometry.FormCalculus (4.7s)
+✔ [2899/2916] Built ClusterSkeleton.IntegralBasisCompletion (4.7s)
+✔ [2902/2916] Built ClusterSkeleton.LaurentCoordinates (4.9s)
+✔ [2904/2916] Built ClusterSkeleton.IndependentLaurentCoordinates (3.5s)
+✔ [2905/2916] Built FsFltz.Geometry.ExteriorDerivative (12s)
+✔ [2906/2916] Built ClusterSkeleton.IndependentNodeChart (4.3s)
+✔ [2907/2916] Built FsFltz.Geometry.LiouvilleNaturality (3.9s)
+⚠ [2908/2916] Built ClusterSkeleton.InitialTorusDensity (2.8s)
+warning: ClusterSkeleton/InitialTorusDensity.lean:42:24: `Set.mem_setOf_eq` has been deprecated: Use `Set.mem_ofPred_eq` instead
+✔ [2909/2919] Built ClusterSkeleton.IndependentNodeSmooth (6.4s)
+✔ [2910/2919] Built FsFltz.Geometry.FlowBridge (5.2s)
+⚠ [2912/2923] Built ClusterSkeleton.SmoothAtlas (5.9s)
+warning: ClusterSkeleton/SmoothAtlas.lean:77:15: This simp argument is unused:
+  OpenPartialHomeomorph.trans_source
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [chart, rawChart]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: ClusterSkeleton/SmoothAtlas.lean:99:15: This simp argument is unused:
+  OpenPartialHomeomorph.trans_target
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [chart, rawChart]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: ClusterSkeleton/SmoothAtlas.lean:163:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/SmoothAtlas.lean:176:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/SmoothAtlas.lean:200:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/SmoothAtlas.lean:201:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+⚠ [2914/2923] Built ClusterSkeleton.GeometryNativeBridge (4.2s)
+warning: ClusterSkeleton/GeometryNativeBridge.lean:39:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/GeometryNativeBridge.lean:51:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/GeometryNativeBridge.lean:69:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/GeometryNativeBridge.lean:70:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/GeometryNativeBridge.lean:79:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+✔ [2915/2932] Built ClusterSkeleton.FormExtensionUniqueness (3.6s)
+⚠ [2925/2943] Built ClusterSkeleton.TorusNondegeneracy (6.8s)
+warning: ClusterSkeleton/TorusNondegeneracy.lean:62:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/TorusNondegeneracy.lean:73:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/TorusNondegeneracy.lean:83:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+✔ [2928/2943] Built FsFltz.Toric (3.0s)
+✔ [2931/2943] Built ClusterSkeleton.NodePrimitiveCancellation (7.7s)
+✔ [2932/2945] Built FsFltz.Analytic (5.5s)
+✔ [2934/2947] Built FsFltz.Differential (6.2s)
+✔ [2936/2952] Built FsFltz.SmoothTorus (7.3s)
+⚠ [2939/2961] Built ClusterSkeleton.NodeTwoForm (30s)
+warning: ClusterSkeleton/NodeTwoForm.lean:123:2: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+warning: ClusterSkeleton/NodeTwoForm.lean:150:43: This simp argument is unused:
+  smul_eq_mul
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [logParameter, rawParameters, dw, hx.2 k]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: ClusterSkeleton/NodeTwoForm.lean:145:4: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+warning: ClusterSkeleton/NodeTwoForm.lean:198:25: `ContinuousLinearMap.sum_apply` has been deprecated: Use `sum_apply` instead
+
+Note: The updated constant is in a different namespace. Dot notation may need to be changed (e.g., from `x.sum_apply` to `sum_apply x`).
+warning: ClusterSkeleton/NodeTwoForm.lean:198:56: `ContinuousLinearMap.smul_apply` has been deprecated: Use `smul_apply` instead
+
+Note: The updated constant is in a different namespace. Dot notation may need to be changed (e.g., from `x.smul_apply` to `smul_apply x`).
+warning: ClusterSkeleton/NodeTwoForm.lean:224:15: `ContinuousLinearMap.smul_apply` has been deprecated: Use `smul_apply` instead
+
+Note: The updated constant is in a different namespace. Dot notation may need to be changed (e.g., from `x.smul_apply` to `smul_apply x`).
+warning: ClusterSkeleton/NodeTwoForm.lean:224:47: `ContinuousLinearMap.add_apply` has been deprecated: Use `add_apply` instead
+
+Note: The updated constant is in a different namespace. Dot notation may need to be changed (e.g., from `x.add_apply` to `add_apply x`).
+warning: ClusterSkeleton/NodeTwoForm.lean:237:6: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+warning: ClusterSkeleton/NodeTwoForm.lean:237:6: Unused tactic linter: `ring` does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+warning: ClusterSkeleton/NodeTwoForm.lean:262:41: `dif_pos` has been deprecated: Use `dite_eq_left` instead
+warning: ClusterSkeleton/NodeTwoForm.lean:265:41: `dif_neg` has been deprecated: Use `dite_eq_right` instead
+warning: ClusterSkeleton/NodeTwoForm.lean:267:15: `ContinuousLinearMap.smul_apply` has been deprecated: Use `smul_apply` instead
+
+Note: The updated constant is in a different namespace. Dot notation may need to be changed (e.g., from `x.smul_apply` to `smul_apply x`).
+warning: ClusterSkeleton/NodeTwoForm.lean:398:13: This simp argument is unused:
+  Matrix.mulVec
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [dotProduct, Matrix.map_apply, Int.coe_castRingHom] at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: ClusterSkeleton/NodeTwoForm.lean:398:28: This simp argument is unused:
+  dotProduct
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [Matrix.mulVec, Matrix.map_apply, Int.coe_castRingHom] at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: ClusterSkeleton/NodeTwoForm.lean:398:40: This simp argument is unused:
+  Matrix.map_apply
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [Matrix.mulVec, dotProduct, Int.coe_castRingHom] at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: ClusterSkeleton/NodeTwoForm.lean:422:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/NodeTwoForm.lean:444:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/NodeTwoForm.lean:539:35: This simp argument is unused:
+  ← Finset.sum_neg_distrib
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [rawParameters, hz, du, dv]
+
+Note: Simp arguments with `←` have the additional effect of removing the other direction from the simp set, even if the simp argument itself is unused. If the hint above does not work, try replacing `←` with `-` to only get that effect and silence this warning.
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: ClusterSkeleton/NodeTwoForm.lean:596:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+✔ [2944/2961] Built ClusterSkeleton.LocalFormGluing (4.6s)
+✔ [2945/2961] Built FsFltz.QuotientGeometry (7.0s)
+✔ [2946/2961] Built ClusterSkeleton.DominanceCutoff (3.9s)
+✔ [2947/2962] Built ClusterSkeleton.NodeNondegeneracy (9.8s)
+✔ [2948/2965] Built ClusterSkeleton.PrimitiveCutoffs (8.1s)
+✔ [2950/2965] Built FsFltz.Geometry.ToricForms (4.4s)
+⚠ [2952/2967] Built ClusterSkeleton.PrimitiveLocalization (4.9s)
+warning: ClusterSkeleton/PrimitiveLocalization.lean:235:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/PrimitiveLocalization.lean:244:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+✔ [2954/2967] Built FsFltz.Geometry.SmoothForms (7.8s)
+✔ [2955/2967] Built FsFltz.Geometry.QuotientFormBridge (11s)
+✔ [2956/2984] Built FsFltz.Geometry.ToricSmoothForms (6.4s)
+⚠ [3656/3684] Built ClusterSkeleton.GlobalTwoForm (17s)
+warning: ClusterSkeleton/GlobalTwoForm.lean:84:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/GlobalTwoForm.lean:85:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/GlobalTwoForm.lean:77:5: Variable name `hy` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hy
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+warning: ClusterSkeleton/GlobalTwoForm.lean:78:5: Variable name `hp` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hp
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+warning: ClusterSkeleton/GlobalTwoForm.lean:103:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/GlobalTwoForm.lean:104:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/GlobalTwoForm.lean:99:7: Variable name `hy` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hy
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+warning: ClusterSkeleton/GlobalTwoForm.lean:100:7: Variable name `hp` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hp
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+warning: ClusterSkeleton/GlobalTwoForm.lean:131:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/GlobalTwoForm.lean:132:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/GlobalTwoForm.lean:154:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/GlobalTwoForm.lean:155:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/GlobalTwoForm.lean:198:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/GlobalTwoForm.lean:199:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/GlobalTwoForm.lean:247:52: Variable name `hb` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hb
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+warning: ClusterSkeleton/GlobalTwoForm.lean:275:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/GlobalTwoForm.lean:276:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/GlobalTwoForm.lean:342:23: This simp argument is unused:
+  fderiv_const
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [extDeriv]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+✔ [3658/3684] Built FsFltz.CoordinateGeometry (4.6s)
+⚠ [3659/3684] Built ClusterSkeleton.ScalarOrbitDynamics (4.8s)
+warning: ClusterSkeleton/ScalarOrbitDynamics.lean:116:28: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+✔ [3660/3684] Built ClusterSkeleton.GlobalSymplectic (3.2s)
+✔ [3662/3684] Built FsFltz.AnalyticGeometry (5.5s)
+⚠ [3664/3684] Built ClusterSkeleton.TorusPrimitive (18s)
+warning: ClusterSkeleton/TorusPrimitive.lean:110:64: This simp argument is unused:
+  zero_add
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val_fin_one, Finset.sum_mul, Complex.im_sum,
+    Complex.mul_im, Complex.mul_re, Complex.intCast_re, Complex.intCast_im, zero_mul, sub_zero, add_zero,
+    Finset.sum_add_distrib]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: ClusterSkeleton/TorusPrimitive.lean:133:47: `ContinuousLinearMap.sum_apply` has been deprecated: Use `sum_apply` instead
+
+Note: The updated constant is in a different namespace. Dot notation may need to be changed (e.g., from `x.sum_apply` to `sum_apply x`).
+warning: ClusterSkeleton/TorusPrimitive.lean:134:4: `ContinuousLinearMap.smul_apply` has been deprecated: Use `smul_apply` instead
+
+Note: The updated constant is in a different namespace. Dot notation may need to be changed (e.g., from `x.smul_apply` to `smul_apply x`).
+warning: ClusterSkeleton/TorusPrimitive.lean:189:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/TorusPrimitive.lean:190:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/TorusPrimitive.lean:179:7: Variable name `hy` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hy
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+warning: ClusterSkeleton/TorusPrimitive.lean:180:7: Variable name `hp` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hp
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+warning: ClusterSkeleton/TorusPrimitive.lean:270:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/TorusPrimitive.lean:266:7: Variable name `hy` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hy
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+warning: ClusterSkeleton/TorusPrimitive.lean:267:7: Variable name `hp` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hp
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+warning: ClusterSkeleton/TorusPrimitive.lean:281:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/TorusPrimitive.lean:282:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/TorusPrimitive.lean:312:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/TorusPrimitive.lean:313:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/TorusPrimitive.lean:305:7: Variable name `hy` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hy
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+warning: ClusterSkeleton/TorusPrimitive.lean:306:7: Variable name `hp` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hp
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+warning: ClusterSkeleton/TorusPrimitive.lean:340:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/TorusPrimitive.lean:336:7: Variable name `hy` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hy
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+warning: ClusterSkeleton/TorusPrimitive.lean:337:7: Variable name `hp` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hp
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+warning: ClusterSkeleton/TorusPrimitive.lean:353:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/TorusPrimitive.lean:354:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/TorusPrimitive.lean:382:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/TorusPrimitive.lean:378:7: Variable name `hy` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hy
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+warning: ClusterSkeleton/TorusPrimitive.lean:379:7: Variable name `hp` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hp
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+warning: ClusterSkeleton/TorusPrimitive.lean:398:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/TorusPrimitive.lean:399:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+✔ [3665/3684] Built FsFltz.Geometry.SymplecticBridge (13s)
+⚠ [3666/3684] Built ClusterSkeleton.TorusCorrection (4.7s)
+warning: ClusterSkeleton/TorusCorrection.lean:105:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/TorusCorrection.lean:115:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/TorusCorrection.lean:125:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/TorusCorrection.lean:143:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/TorusCorrection.lean:151:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/TorusCorrection.lean:179:7: Variable name `hy` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hy
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+warning: ClusterSkeleton/TorusCorrection.lean:180:7: Variable name `hp` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hp
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+⚠ [3667/3684] Built ClusterSkeleton.PrimitiveResidual (10s)
+warning: ClusterSkeleton/PrimitiveResidual.lean:93:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/PrimitiveResidual.lean:94:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/PrimitiveResidual.lean:135:13: `ContinuousLinearMap.sum_apply` has been deprecated: Use `sum_apply` instead
+
+Note: The updated constant is in a different namespace. Dot notation may need to be changed (e.g., from `x.sum_apply` to `sum_apply x`).
+warning: ClusterSkeleton/PrimitiveResidual.lean:135:44: `ContinuousLinearMap.smul_apply` has been deprecated: Use `smul_apply` instead
+
+Note: The updated constant is in a different namespace. Dot notation may need to be changed (e.g., from `x.smul_apply` to `smul_apply x`).
+warning: ClusterSkeleton/PrimitiveResidual.lean:145:45: `ContinuousLinearMap.smul_apply` has been deprecated: Use `smul_apply` instead
+
+Note: The updated constant is in a different namespace. Dot notation may need to be changed (e.g., from `x.smul_apply` to `smul_apply x`).
+warning: ClusterSkeleton/PrimitiveResidual.lean:89:7: Variable name `hy` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hy
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+warning: ClusterSkeleton/PrimitiveResidual.lean:90:7: Variable name `hp` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hp
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+warning: ClusterSkeleton/PrimitiveResidual.lean:200:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/PrimitiveResidual.lean:201:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+✔ [3668/3684] Built FsFltz.Geometry.SmoothLiouville (11s)
+⚠ [3669/3684] Built ClusterSkeleton.RegularCorrection (8.8s)
+warning: ClusterSkeleton/RegularCorrection.lean:48:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/RegularCorrection.lean:59:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/RegularCorrection.lean:74:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/RegularCorrection.lean:87:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/RegularCorrection.lean:110:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/RegularCorrection.lean:129:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/RegularCorrection.lean:142:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/RegularCorrection.lean:143:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/RegularCorrection.lean:138:7: Variable name `hy` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hy
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+warning: ClusterSkeleton/RegularCorrection.lean:139:7: Variable name `hp` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hp
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+warning: ClusterSkeleton/RegularCorrection.lean:178:7: Variable name `hy` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hy
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+warning: ClusterSkeleton/RegularCorrection.lean:179:7: Variable name `hp` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hp
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+warning: ClusterSkeleton/RegularCorrection.lean:214:25: `if_true` has been deprecated: Use `ite_true` instead
+warning: ClusterSkeleton/RegularCorrection.lean:214:34: `if_false` has been deprecated: Use `ite_false` instead
+warning: ClusterSkeleton/RegularCorrection.lean:221:8: `push_neg` has been deprecated. Prefer using `push Not` instead.
+If you'd rather continue using `push_neg` in your project, you can implement it as follows:
+```
+open Lean.Parser.Tactic in
+macro "push_neg" cfg:optConfig loc:(location)? : tactic =>
+  `(tactic| push $cfg:optConfig Not $[$loc]?)
+```
+warning: ClusterSkeleton/RegularCorrection.lean:226:25: `if_false` has been deprecated: Use `ite_false` instead
+warning: ClusterSkeleton/RegularCorrection.lean:245:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+⚠ [3670/3684] Built ClusterSkeleton.NativeNodePrimitive (13s)
+warning: ClusterSkeleton/NativeNodePrimitive.lean:31:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/NativeNodePrimitive.lean:87:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/NativeNodePrimitive.lean:88:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/NativeNodePrimitive.lean:82:7: Variable name `hy` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hy
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+warning: ClusterSkeleton/NativeNodePrimitive.lean:83:7: Variable name `hp` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hp
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+warning: ClusterSkeleton/NativeNodePrimitive.lean:104:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/NativeNodePrimitive.lean:105:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/NativeNodePrimitive.lean:135:13: `ContinuousLinearMap.sum_apply` has been deprecated: Use `sum_apply` instead
+
+Note: The updated constant is in a different namespace. Dot notation may need to be changed (e.g., from `x.sum_apply` to `sum_apply x`).
+warning: ClusterSkeleton/NativeNodePrimitive.lean:100:7: Variable name `hy` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hy
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+warning: ClusterSkeleton/NativeNodePrimitive.lean:101:7: Variable name `hp` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hp
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+warning: ClusterSkeleton/NativeNodePrimitive.lean:149:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/NativeNodePrimitive.lean:150:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/NativeNodePrimitive.lean:175:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/NativeNodePrimitive.lean:176:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/NativeNodePrimitive.lean:218:13: `ContinuousLinearMap.sub_apply` has been deprecated: Use `sub_apply` instead
+
+Note: The updated constant is in a different namespace. Dot notation may need to be changed (e.g., from `x.sub_apply` to `sub_apply x`).
+warning: ClusterSkeleton/NativeNodePrimitive.lean:218:44: `ContinuousLinearMap.smul_apply` has been deprecated: Use `smul_apply` instead
+
+Note: The updated constant is in a different namespace. Dot notation may need to be changed (e.g., from `x.smul_apply` to `smul_apply x`).
+warning: ClusterSkeleton/NativeNodePrimitive.lean:227:4: `ContinuousLinearMap.smul_apply` has been deprecated: Use `smul_apply` instead
+
+Note: The updated constant is in a different namespace. Dot notation may need to be changed (e.g., from `x.smul_apply` to `smul_apply x`).
+⚠ [3671/3685] Built ClusterSkeleton.TorusLiouvilleDynamics (25s)
+warning: ClusterSkeleton/TorusLiouvilleDynamics.lean:152:21: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: ClusterSkeleton/TorusLiouvilleDynamics.lean:192:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/TorusLiouvilleDynamics.lean:222:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/TorusLiouvilleDynamics.lean:239:58: This simp argument is unused:
+  mul_assoc
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [exchangeCharacter_eq_zpow_product, TorusNondegeneracy.originalDifferential_apply, smul_eq_mul,
+    div_eq_mul_inv, mul_comm, mul_left_comm]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: ClusterSkeleton/TorusLiouvilleDynamics.lean:251:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/TorusLiouvilleDynamics.lean:266:12: This simp argument is unused:
+  mul_assoc
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [hn, Complex.im_sum, Complex.mul_im]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: ClusterSkeleton/TorusLiouvilleDynamics.lean:287:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/TorusLiouvilleDynamics.lean:305:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/TorusLiouvilleDynamics.lean:330:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/TorusLiouvilleDynamics.lean:562:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/TorusLiouvilleDynamics.lean:564:17: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: ClusterSkeleton/TorusLiouvilleDynamics.lean:602:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/TorusLiouvilleDynamics.lean:604:17: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: ClusterSkeleton/TorusLiouvilleDynamics.lean:613:19: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+✔ [3672/3693] Built FsFltz.Geometry.Family (3.5s)
+⚠ [3673/3695] Built ClusterSkeleton.LocalPrimitive (5.3s)
+warning: ClusterSkeleton/LocalPrimitive.lean:60:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/LocalPrimitive.lean:76:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/LocalPrimitive.lean:77:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/LocalPrimitive.lean:117:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/LocalPrimitive.lean:118:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/LocalPrimitive.lean:174:13: `ContinuousLinearMap.sum_apply` has been deprecated: Use `sum_apply` instead
+
+Note: The updated constant is in a different namespace. Dot notation may need to be changed (e.g., from `x.sum_apply` to `sum_apply x`).
+warning: ClusterSkeleton/LocalPrimitive.lean:174:44: `ContinuousLinearMap.sub_apply` has been deprecated: Use `sub_apply` instead
+
+Note: The updated constant is in a different namespace. Dot notation may need to be changed (e.g., from `x.sub_apply` to `sub_apply x`).
+warning: ClusterSkeleton/LocalPrimitive.lean:175:4: `ContinuousLinearMap.add_apply` has been deprecated: Use `add_apply` instead
+
+Note: The updated constant is in a different namespace. Dot notation may need to be changed (e.g., from `x.add_apply` to `add_apply x`).
+warning: ClusterSkeleton/LocalPrimitive.lean:175:35: `ContinuousLinearMap.smul_apply` has been deprecated: Use `smul_apply` instead
+
+Note: The updated constant is in a different namespace. Dot notation may need to be changed (e.g., from `x.smul_apply` to `smul_apply x`).
+warning: ClusterSkeleton/LocalPrimitive.lean:216:8: `ContinuousLinearMap.sum_apply` has been deprecated: Use `sum_apply` instead
+
+Note: The updated constant is in a different namespace. Dot notation may need to be changed (e.g., from `x.sum_apply` to `sum_apply x`).
+✔ [3675/3695] Built FsFltz.Geometry.Deformation (4.6s)
+✔ [3676/3695] Built ClusterSkeleton.GlobalPrimitive (3.0s)
+✔ [3677/3697] Built FsFltz.Geometry.BoundaryMapBridge (5.8s)
+⚠ [3678/3699] Built ClusterSkeleton.GlobalLiouvilleField (6.1s)
+warning: ClusterSkeleton/GlobalLiouvilleField.lean:91:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/GlobalLiouvilleField.lean:183:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/GlobalLiouvilleField.lean:191:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/GlobalLiouvilleField.lean:199:2: Try this: 
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+warning: ClusterSkeleton/GlobalLiouvilleField.lean:237:36: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+✔ [3680/3699] Built FsFltz.Geometry.BoundarySmooth (5.8s)
+✔ [3683/3699] Built ClusterSkeleton.BoundaryTangency (9.8s)
+✔ [3684/3700] Built FsFltz.Geometry.CompletionGluing (6.0s)
+✔ [3686/3700] Built FsFltz.Geometry.LocalInverse (4.2s)
+✔ [3687/3700] Built ClusterSkeleton.ZeroStratumInvariance (5.3s)
+✔ [3688/3703] Built ClusterSkeleton.NormalizedPartnerNormDrift (6.7s)
+✔ [3690/3703] Built FsFltz.Geometry.CompletionCollar (8.4s)
+⚠ [3691/3703] Built ClusterSkeleton.NativeRadialOrbit (7.6s)
+warning: ClusterSkeleton/NativeRadialOrbit.lean:179:62: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+⚠ [3692/3706] Built ClusterSkeleton.ZeroStratumPartnerDynamics (5.0s)
+warning: ClusterSkeleton/ZeroStratumPartnerDynamics.lean:66:9: Variable name `u` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _u
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+✔ [3694/3706] Built ClusterSkeleton.LocalAngularDynamics (8.1s)
+✔ [3695/3707] Built FsFltz.Geometry.CompletionCollarExtension (8.6s)
+✔ [3699/3707] Built ClusterSkeleton.ZeroStratumEscape (5.2s)
+⚠ [3700/3707] Built ClusterSkeleton.AllStrataGrowth (5.6s)
+warning: ClusterSkeleton/AllStrataGrowth.lean:89:4: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: ClusterSkeleton/AllStrataGrowth.lean:179:22: This simp argument is unused:
+  norm_mul
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [Complex.norm_real, Real.norm_eq_abs]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+✔ [3704/3711] Built FsFltz.Geometry.CompactCollarNormalization (8.8s)
+✔ [3705/3717] Built ClusterSkeleton.FiniteTimeConfinement (7.1s)
+✔ [3727/3745] Built ClusterSkeleton.CapAngularTangency (4.7s)
+✔ [3728/3745] Built FsFltz.Geometry.CollarIsotopy (18s)
+⚠ [3731/3745] Built ClusterSkeleton.InteriorPartnerPropagation (15s)
+warning: ClusterSkeleton/InteriorPartnerPropagation.lean:428:64: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+warning: ClusterSkeleton/InteriorPartnerPropagation.lean:486:5: Variable name `hε` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hε
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+warning: ClusterSkeleton/InteriorPartnerPropagation.lean:486:18: Variable name `hκ` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hκ
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+warning: ClusterSkeleton/InteriorPartnerPropagation.lean:487:18: Variable name `hη` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hη
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+⚠ [3732/3745] Built ClusterSkeleton.CompactInteriorRigidity (9.3s)
+warning: ClusterSkeleton/CompactInteriorRigidity.lean:278:64: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+warning: ClusterSkeleton/CompactInteriorRigidity.lean:384:5: Variable name `hε` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hε
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+warning: ClusterSkeleton/CompactInteriorRigidity.lean:384:18: Variable name `hκ` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hκ
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+warning: ClusterSkeleton/CompactInteriorRigidity.lean:385:18: Variable name `hη` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hη
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+✔ [3733/3745] Built FsFltz.Geometry.CollarExtension (15s)
+⚠ [3734/3745] Built ClusterSkeleton.CapForwardInvariance (5.5s)
+warning: ClusterSkeleton/CapForwardInvariance.lean:93:5: Variable name `hε` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hε
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+warning: ClusterSkeleton/CapForwardInvariance.lean:93:18: Variable name `hκ` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hκ
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+warning: ClusterSkeleton/CapForwardInvariance.lean:94:18: Variable name `hη` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hη
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+✔ [3735/3745] Built FsFltz.Geometry.CollarFlow (5.3s)
+✔ [3736/3745] Built FsFltz.Geometry.CollarEvolution (4.0s)
+✔ [3737/3745] Built FsFltz.Geometry.CollarContinuousDependence (3.8s)
+✔ [3738/3745] Built FsFltz.Geometry.CollarSmoothDependence (7.5s)
+✔ [3739/3745] Built FsFltz.Geometry.CollarSmoothEvolution (10s)
+✔ [3740/3745] Built ClusterSkeleton.NativeCompleteFlow (5.5s)
+✔ [3741/3745] Built ClusterSkeleton.ConstructedFlowCapInclusion (3.8s)
+✔ [3742/3745] Built ClusterSkeleton.ConstructedFlowReverseInclusion (3.0s)
+✔ [3743/3745] Built ClusterSkeleton.FullSkeleton (2.5s)
+✔ [3744/3745] Built ClusterSkeleton (2.3s)
+Build completed successfully (3745 jobs).

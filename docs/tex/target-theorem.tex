@@ -51,6 +51,25 @@ still applies. This definition contains no vector field or flow.
 Compactness of $C_B$ is a theorem, not a field supplied with the definition.
 \leanref{ClusterSkeleton/CapSet.lean}{coordinateCap, isCompact_coordinateCap}
 
+\begin{definition}[Reference strata]
+Call $I\subseteq M$ \emph{independent} if $B_{ij}=0$ for all $i,j\in I$, and
+for $I\subseteq\{1,\ldots,d\}$ put
+\[
+ \Lambda_I=\left\{(a,b)\in X_B:\
+ b_i=0,\ |a_i|\leq1\ (i\in M\cap I),\quad |a_j|=1\ (j\notin I)\right\}.
+\]
+\end{definition}
+Each $\Lambda_I$ is closed, and compact when $I\subseteq M$. For independent
+$I$ this is the reference's stratum. The cap is their union,
+\[
+ C_B=\bigcup_{I\subseteq M\text{ independent}}\Lambda_I,
+\]
+because a cap point lies in the stratum indexed by its own set of strict disk
+directions $\{i\in M:|a_i|<1\}$, which is independent, while every
+$\Lambda_I$ with $I\subseteq M$ lies in $C_B$. Independence is needed for
+neither inclusion; it only indexes the union by the reference's family.
+\leanref{ClusterSkeleton/CapStrata.lean}{lambdaStratum, lambdaStratum_subset_coordinateCap, coordinateCap_subset_lambdaStratum_strictCapIndices, coordinateCap_eq_iUnion_lambdaStratum}
+
 \begin{definition}[Dynamical skeleton convention]
 For a continuous real flow $\Phi$ on $X_B$, let
 \[
@@ -87,10 +106,16 @@ is chosen. Since $\omega=\dd\lambda$, the form is closed.
 Thus this same vector field is complete in both time directions.
 \item For this same flow, there is literal equality of subsets of $X_B$:
 \[
- \boxed{\Skel(\Phi)=C_B.}
+ \boxed{\Skel(\Phi)=C_B
+ =\bigcup_{I\subseteq M\text{ independent}}\Lambda_I.}
 \]
 \end{enumerate}
 \end{theorem}
+
+The second equality is the reference's stratified form of the identity. It is
+a restatement of the same proved equality through the cap description above,
+not a further claim.
+\leanref{ClusterSkeleton/FullSkeleton.lean}{trappedSet_eq_coordinateCap, trappedSet_eq_iUnion_lambdaStratum}
 
 The quantifier order is
 \[
@@ -111,7 +136,8 @@ Role & Declaration and meaning\\\midrule
 Input definition & \lean{Seed}, with acyclicity as input;
 \lean{Seed.Unimodular}, the separate determinant hypothesis.\\
 Space and sets & \lean{Seed.Point}, \lean{coordinateCap}, and
-\lean{trappedSet} define the objects being compared.\\
+\lean{trappedSet} define the objects being compared;
+\lean{lambdaStratum} defines the strata $\Lambda_I$.\\
 Witness interface & \lean{SmoothPresentation} and \lean{LiouvilleData}
 specify the required constructions. Defining these structures does not
 construct an inhabitant.\\
@@ -120,7 +146,13 @@ Target proposition & \lean{LiouvilleSkeletonTarget} and
 Constructed witnesses & \lean{SmoothAtlas.presentation} and
 \lean{FullSkeleton.liouvilleData} supply the actual geometry.\\
 Equality theorem & \lean{FullSkeleton.trappedSet_eq_coordinateCap}
-combines the two proved inclusions for the same flow.\\
+combines the two proved inclusions for the same flow;
+\lean{FullSkeleton.trappedSet_eq_iUnion_lambdaStratum} restates it as the
+union of the strata, via
+\lean{coordinateCap_eq_iUnion_lambdaStratum}.\\
+Chart rank & \lean{IndependentNodeChart.complementRank_eq_sub_two_mul_card}
+proves the node-chart torus rank is $d-2|I|$ for independent $I$, with
+\lean{IndependentNodeChart.two_mul_card_le} for $2|I|\leq d$.\\
 Existence theorem & \lean{FullSkeleton.firstGeometricTarget}
 proves \lean{FirstGeometricTarget}.\\\bottomrule
 \end{tabularx}

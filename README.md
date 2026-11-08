@@ -1,6 +1,6 @@
 # Cluster skeleton geometry
 
-Lean formalization of the Liouville geometry of unimodular acyclic cluster models. On the actual space of complex exchange points, the project constructs a smooth exact symplectic structure, a complete two-sided Liouville flow, and proves that its full dynamical skeleton is the coordinate cap.
+Lean formalization of the Liouville geometry of unimodular acyclic cluster models. On the actual space of complex exchange points, the project constructs a smooth exact symplectic structure, a complete two-sided Liouville flow, and proves that its full dynamical skeleton is the coordinate cap, equivalently the union `⋃_{I independent} Λ_I` of the reference strata.
 
 Frozen coordinates remain variable elements of `ℂ*`. The full skew-symmetric integer matrix has determinant one; only the mutable quiver must be acyclic.
 
@@ -16,7 +16,7 @@ The working directory has been restored from the final published source `966d312
 - [Proof-to-code map](docs/proof-blueprint.md): the Lean implementation of each step.
 - [Verification records](verification/README.md): reproducible checks, axiom policy, and source provenance.
 
-Editable LaTeX sources for both PDFs are in [`docs/tex`](docs/tex). Only the relevant geometry is included in this publication. The complete source research notes and their later categorical arguments are not reproduced.
+Editable LaTeX sources for both PDFs are in [`docs/tex`](docs/tex); they are current, while both PDFs predate the stratified restatement above and were not regenerated, because the publication host has no LaTeX toolchain. Only the relevant geometry is included in this publication. The complete source research notes and their later categorical arguments are not reproduced.
 
 ## Definitions are separate from proofs
 
@@ -30,6 +30,27 @@ Editable LaTeX sources for both PDFs are in [`docs/tex`](docs/tex). Only the rel
 The final equality is `FullSkeleton.trappedSet_eq_coordinateCap`. The final quantified existence theorem is `FullSkeleton.firstGeometricTarget : FirstGeometricTarget`, in namespace `ClusterSkeleton`. Neither a pre-existing flow nor either skeleton inclusion is assumed. Auxiliary cutoff parameters are instantiated by `ε = 1`, `κ = 3`, `δ = 1`.
 
 Here **skeleton** means the set of points whose forward orbit has compact closure in the exchange variety. The coordinate cap is defined by `|a_f| = 1` for frozen indices and `|a_i| ≤ 1`, `(1 - |a_i|²)b_i = 0` for mutable indices. Their equality is a theorem about the same constructed flow.
+
+## Stratified form and node-chart rank
+
+[`CapStrata.lean`](ClusterSkeleton/CapStrata.lean) defines the reference stratum `lambdaStratum S I` (`Λ_I`: `b_i = 0` and `|a_i| ≤ 1` for mutable `i ∈ I`, `|a_j| = 1` for `j ∉ I`) and proves
+
+```lean
+coordinateCap_eq_iUnion_lambdaStratum :
+  coordinateCap S = ⋃ I : {I : Finset (Fin d) // S.Independent I}, lambdaStratum S I.val
+```
+
+together with `lambdaStratum_subset_coordinateCap`, `coordinateCap_subset_lambdaStratum_strictCapIndices`, `isClosed_lambdaStratum` and `isCompact_lambdaStratum`. Composed with the cap equality, this gives the reference's identity for the same flow:
+
+```lean
+FullSkeleton.trappedSet_eq_iUnion_lambdaStratum :
+  trappedSet (NativeCompleteFlow.completeFlow S hdet hε hκ hδ).flow
+    = ⋃ I : {I : Finset (Fin d) // S.Independent I}, lambdaStratum S I.val
+```
+
+The independent node charts carry the explicit torus exponent `d - 2|I|`: `IndependentNodeChart.complementRank_eq_sub_two_mul_card` proves `SplitIntegerRows.complementRank (independentRowRightInverse S I) = d - 2 * I.card`, with `IndependentNodeChart.two_mul_card_le : 2 * I.card ≤ d` ([`IndependentNodeSmooth.lean`](ClusterSkeleton/IndependentNodeSmooth.lean)).
+
+These restatements close gaps **G1** and **G2** of [`docs/skeleton-audit.md`](docs/skeleton-audit.md). They add no hypothesis and change no existing statement; the scope remains skew-symmetric unimodular with mutable acyclicity and variable frozen coordinates, and no weighted or principal-coefficient claim is made.
 
 ## Reproduce the checks
 

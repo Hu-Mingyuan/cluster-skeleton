@@ -400,6 +400,36 @@ and prove their equality for this same flow. The equivalent coordinate cap is
 For the converse equivalence, the indices with $|z_i|<1$ have $z_i'=0$;
 the zero-set argument applied to their exchange relations makes them
 independent (equivalently use the existing strict-cap-independence lemma).
+
+\paragraph{State of the formalization.}
+Both descriptions are now formalized, and
+\eqref{eq:acyclic-skeleton} holds literally in Lean for the constructed flow.
+The stratum $\Lambda_I$ of \eqref{eq:acyclic-skeleton} is
+\texttt{ClusterSkeleton.lambdaStratum} in
+\texttt{ClusterSkeleton/CapStrata.lean}, which also proves
+\texttt{lambdaStratum\_subset\_coordinateCap},
+\texttt{coordinateCap\_subset\_lambdaStratum\_strictCapIndices},
+\texttt{coordinateCap\_eq\_iUnion\_lambdaStratum} (the union over the
+subtype of independent $I$), \texttt{isClosed\_lambdaStratum} and
+\texttt{isCompact\_lambdaStratum} --- the per-stratum compactness used in
+inclusion (ii) above. Composed with the cap equality, this yields
+\texttt{ClusterSkeleton.FullSkeleton.trappedSet\_eq\_iUnion\_lambdaStratum},
+which is \eqref{eq:acyclic-skeleton} for the same constructed flow.
+Independence of $I$ is used for neither inclusion; it only indexes the union
+by the family used here.
+
+The torus exponent $m+f-2|I|$ of Lemma~\ref{lem:acyclic-node-charts}(ii) is
+\texttt{ClusterSkeleton.IndependentNodeChart.complementRank\_eq\_sub\_two\_mul\_card},
+namely \texttt{complementRank (independentRowRightInverse S I) = d - 2 * I.card}
+for independent $I$ in the skew-symmetric specialization $d=m+f$, with
+\texttt{two\_mul\_card\_le} for $2|I|\le d$. Both are in
+\texttt{ClusterSkeleton/IndependentNodeSmooth.lean}, in namespace
+\texttt{ClusterSkeleton.IndependentNodeChart}.
+
+These are restatements of the proved theorem and of the existing chart
+cardinality lemma: no hypothesis is added, no earlier statement is changed,
+and the scope stays the skew-symmetric unimodular case with mutable
+acyclicity and variable frozen coordinates.
 The existing Lean seed uses row exponents, whereas this reference uses
 column exponents. In the skew-symmetric specialization the two exchange
 monomials are interchanged, so their sum and the exchange variety agree.

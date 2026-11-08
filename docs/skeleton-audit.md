@@ -6,15 +6,19 @@ the supplied reference. Nothing below claims, implies, or proposes a weighted
 (`D̃ ≠ I`) theorem; the weighted notation of the reference is retained there only
 as notation.
 
-**Summary.** Every step of the supplied proof has a Lean counterpart in
-`ClusterSkeleton/*.lean` except the stratified description of the cap: the Lean
-theorem proves `trappedSet = coordinateCap` with the reference's *equivalent*
-coordinate cap, while `Λ_I` and `coordinateCap = ⋃_{I independent} Λ_I` are not
-defined or proved anywhere (gap **G1**). One further small statement is missing
-(**G2**: the exponent `m+f-2|I|` of the node chart's torus factor), and one is
-optional (**G3**). The statements proposed for G1 and G2 are proved in this
-document and were checked against this commit, so neither is an open proof
-obligation. Everything else is a convention difference that needs no Lean change
+**Summary.** Every step of the supplied proof now has a Lean counterpart in
+`ClusterSkeleton/*.lean`. When this audit was written, the stratified
+description of the cap was missing: the Lean theorem proved
+`trappedSet = coordinateCap` with the reference's *equivalent* coordinate cap,
+while `Λ_I` and `coordinateCap = ⋃_{I independent} Λ_I` were defined nowhere
+(gap **G1**), and the exponent `m+f-2|I|` of the node chart's torus factor was
+only implicit (gap **G2**). **Both gaps are now closed in the Lean source** at
+integrating commit `4c02c1e5bbc68907552632344ae04017d82a30b4`: G1 by
+`CapStrata.lambdaStratum`, `CapStrata.coordinateCap_eq_iUnion_lambdaStratum`
+and `FullSkeleton.trappedSet_eq_iUnion_lambdaStratum`, G2 by
+`IndependentNodeSmooth.complementRank_eq_sub_two_mul_card`; the per-gap entries
+in part 3 record the exact declarations. One gap remains **optional** (**G3**).
+Everything else is a convention difference that needs no Lean change
 (**N1-N9**). The translation has three sign/duality facts that must be
 quoted together: the two exchange monomials are interchanged (1.2), the exchange
 ratio and the node character are inverted (1.3, 1.4), and the Lean `H` is the
@@ -31,9 +35,11 @@ Inputs compared:
 * Lean construction: `ClusterSkeleton/*.lean` at the current head of
   `cluster-workspace` (base commit `7e1a6339f25c8b56cef1e60c37b59a32aa64f8ff`).
 
-No file under `ClusterSkeleton/`, no PDF and no file under `docs/tex/` is
-modified by this audit; every genuine difference is recorded in part 3 as a
-proposed Lean statement for later dispatch.
+No file under `ClusterSkeleton/`, no PDF and no file under `docs/tex/` was
+modified by the audit mission itself; every genuine difference was recorded in
+part 3 as a proposed Lean statement for later dispatch. The G1 and G2 proposals
+were subsequently implemented and published; `docs/tex/` was updated to match,
+and the PDFs were not regenerated (no LaTeX toolchain on the publication host).
 
 **Verification method.** The pinned environment is materialized in this
 checkout (Lean 4.34.1 via `ELAN_HOME=/mnt/d/HorizonData/tools/elan`, Mathlib and
@@ -67,9 +73,12 @@ was not run and no file in the repository other than this one was touched.
 
 Compilation and the transitive axiom audit of the compared Lean sources are
 independently recorded in [`../verification/build.log`](../verification/build.log)
-and [`../verification/axioms.log`](../verification/axioms.log) (re-verified at
-commit `0751c90`: `FULL_GEOMETRIC_TARGET_VERIFIED`, 57 modules, 1480
-declarations, axioms limited to `propext`, `Classical.choice`, `Quot.sound`).
+and [`../verification/axioms.log`](../verification/axioms.log). The audit was
+written against commit `0751c90` (`FULL_GEOMETRIC_TARGET_VERIFIED`, 57 modules,
+1480 declarations); after the G1/G2 integration the same verifier reports
+`FULL_GEOMETRIC_TARGET_VERIFIED` with 58 modules and 1492 declarations at
+accepted source commit `4c02c1e5bbc68907552632344ae04017d82a30b4`, axioms
+limited to `propext`, `Classical.choice`, `Quot.sound` throughout.
 
 **Citation convention.** Declarations are cited as `File.name`, where `File` is
 the module file under `ClusterSkeleton/`. Two files carry a namespace different
@@ -323,7 +332,7 @@ scope of this audit.
 | # | Reference step | Lean declaration(s) (module.name) | Status in the skew-symmetric scope |
 | --- | --- | --- | --- |
 | 1 | Lemma (i): `{i ∈ M : z_i(p)=0}` is independent (acyclic maximal-path argument) | `ZeroSet`: `Seed.Point.outgoing_ne_zero`, `matrix_eq_zero_of_coordinates_zero`, `zeroSet_independent` | present; **stronger**: proved by `S.acyclic.induction` for arbitrary multiplicities, without unimodularity, and includes the diagonal |
-| 2 | Lemma (ii): `U_I ≅ 𝒩^I × (ℂ*)^{m+f-2\|I\|}` with `(x,y,t) = (z_i, z_i'/P_i^-, t_i)` | `CoordinateLoci.candidateChartLocus`, `isOpen_candidateChartLocus`; `NodeCoordinates.normalized_node_equation`, `normalized_node_product_ne_one`, `independentRowMatrix_mul_rightInverse`, `independent_rows_linearIndependent`; `IntegralBasisCompletion.SplitIntegerRows.splittingEquiv`, `basis`, `independentRowBasis`; `IndependentNodeChart.forward`, `backward`, `backward_forward`, `forward_backward`, `homeomorph`; `IndependentNodeSmooth.basis_cardinality`, `vector_finrank_complex`, `vector_finrank_real`, `modelEquiv`; `IndependentLaurentCoordinates.independentRowLaurentHomeomorph`; `LaurentCoordinates.monomialHomeomorph` | present as a homeomorphism onto `({i∈I} → Node) × (ℂ*)^{complementRank}` in reciprocal node coordinates (1.3). `basis_cardinality` gives `\|I\| + complementRank = d - \|I\|`, i.e. the reference's exponent `m+f-2\|I\|`, but only implicitly: see gap **G2**. The ring-theoretic part (`𝒪(U_I)` presentation) is deliberately absent: **N2** |
+| 2 | Lemma (ii): `U_I ≅ 𝒩^I × (ℂ*)^{m+f-2\|I\|}` with `(x,y,t) = (z_i, z_i'/P_i^-, t_i)` | `CoordinateLoci.candidateChartLocus`, `isOpen_candidateChartLocus`; `NodeCoordinates.normalized_node_equation`, `normalized_node_product_ne_one`, `independentRowMatrix_mul_rightInverse`, `independent_rows_linearIndependent`; `IntegralBasisCompletion.SplitIntegerRows.splittingEquiv`, `basis`, `independentRowBasis`; `IndependentNodeChart.forward`, `backward`, `backward_forward`, `forward_backward`, `homeomorph`; `IndependentNodeSmooth.basis_cardinality`, `vector_finrank_complex`, `vector_finrank_real`, `modelEquiv`; `IndependentLaurentCoordinates.independentRowLaurentHomeomorph`; `LaurentCoordinates.monomialHomeomorph` | present as a homeomorphism onto `({i∈I} → Node) × (ℂ*)^{complementRank}` in reciprocal node coordinates (1.3). `basis_cardinality` gives `\|I\| + complementRank = d - \|I\|`, and the exponent `m+f-2\|I\|` is now literal as `IndependentNodeSmooth.complementRank_eq_sub_two_mul_card` (`complementRank (independentRowRightInverse S I) = d - 2 * I.card`), with `IndependentNodeSmooth.two_mul_card_le` for `2*\|I\| ≤ d`: gap **G2** closed. The ring-theoretic part (`𝒪(U_I)` presentation) is deliberately absent: **N2** |
 | 3 | Lemma (iii): the `U_I` cover `𝒜(B̃)` | `ZeroSet.exists_independent_nonvanishing_locus`, `CoordinateLoci.exists_independent_candidateChartLocus`, `iUnion_independent_candidateChartLocus`, `NodeNondegeneracy.zeroSet_chart_mem` | present; equal strength |
 | 4 | Exchange model `𝒜(B̃) = ℂ[z,z',z_F^{±1}]/(z_iz_i'-P_i^+-P_i^-)` (BFZ III, Cor. 1.21) | no counterpart (by design): `Seed.Point` is the actual complex point set with inherited topology; `CapSet.isClosed_ambientCap`, `FiniteTimeConfinement.CoordinateBounds.isCompact_coordinateBox` supply the only consequences used | **N2**: no Lean change needed |
 | 5 | Smooth atlas on the actual variety (separate obligation flagged in the reference) | `SmoothAtlas.rawChart`, `chart`, `chart_mem_atlas`, `contDiffOn_transition`, `smooth`, `inclusion_smooth`, `inclusion_immersion`, `presentation`; `GeometryNativeBridge.SmoothPresentation.inclusion_isDiffImmersionAt` | present; **stronger** than the reference's remark: the inclusion is proved smooth and immersive, not assumed |
@@ -337,21 +346,48 @@ scope of this audit.
 | 13 | Divisor flow `Z\|z_i\|² = -2a\|z_i\|²`, `ṫ_i = t_i Log(-t_i)`, invariance of `{z_i=0}` | `BoundaryTangency.deep_radius_torus`, `deep_radius` (`Re(comp_i) = -κ`), `nodeLog_drift_torus`, `nodeLog_drift` (`Z nodeLog_i = nodeLog_i`, equivalent to `ṫ = t Log(-t)` since `nodeLog = -Log(-t)`), `nodeProduct_drift`, `zero_coordinate_tangent`, `coordinate_tangent`; `ZeroStratumInvariance.normSq_drift` (`= -2κ\|z_i\|²`), `normSq_hasDerivWithinAt`, `coordinate_zero_iff`, `zeroSet_eq`, `coordinate_ne_zero_iff`; `CapAngularTangency.*` | present with `a = κ`; **stronger**: zero/nonzero persistence is proved in **both** time directions on an arbitrary preconnected domain, and the zero set is constant along curves |
 | 14 | Partner flow `Z\|y_i\|² = 2(1+a)\|y_i\|²` on `{z_i=0}`, `\|y_i(φ^τ p)\| = e^{(1+a)τ}\|y_i(p)\|`, and the general `Z log\|y_i\| = Re φ(t_i)+a` | `NormalizedPartnerNormDrift.partner_smooth`, `differential_partner`, `quotient_smooth`, `partner_drift_of_ne_zero`, `pairing_sub`, `normSq_drift_of_ne_zero`, `normSq_drift` (general near-node law with `nodeLogQuotient`, the analogue of `Re φ(t)+a`), `normSq_drift_zero` (`= 2(1+κ)\|y\|²`), `normSq_hasDerivWithinAt`, `normSq_hasDerivWithinAt_zero`; `ZeroStratumPartnerDynamics.exp_law_of_hasDerivWithinAt`, `normSq_hasDerivWithinAt`, `normSq_eq_exp_mul`, `partner_zero_iff`, `partner_ne_zero_iff`, `normSq_lt`, `strictMonoOn_normSq` | present with `a = κ`; **stronger**: the exponential law holds on arbitrary preconnected time sets in both directions |
 | 15 | Completeness of `Z` (maximal curve leaves every compact set) | `FiniteTimeConfinement.radial_component_bound`, `normalizedPartner_norm_le`, `logarithmic_component_bound`, `fixed_mask_log_bound`, `uniform_original_bounds`, `finite_time_compact_confinement`, `bounded_horizon_closure`, `CoordinateBounds.coordinateBox`, `isCompact_coordinateBox`, `partner_eq_normalized_mul`, `partner_eq_div`, `norm_partner_le_of_bounds`; `NativeCompleteFlow.exists_global_integralCurve`, `exists_completeLiouvilleFlow`, `completeFlow`, `exists_global_integralCurve_through`, `exists_extension_Ioo` | present; **stronger**/different route: finite-horizon confinement into a precomputed compact set plus a uniform local lifetime on compacts yields a genuine two-sided `Flow` with joint smoothness, rather than only `τ_± = ±∞` for each maximal curve: **N5** |
-| 16 | Inclusion (i) `Skel(Z) ⊂ ⋃_I Λ_I` | `ScalarOrbitDynamics.frozen_log_orbit`, `trapped_frozen_log_bounded`, `trapped_frozen_norm_eq_one`; `NativeRadialOrbit.radialEquation`, `negative_log_laws`, `nonnegative_log_law`, `positive_log_law`, `zero_log_law`, `eventually_not_mem_compact`, `not_isCompact_closure_forward_image`, `original_norm_le_one_of_mem_trappedSet`, `frozen_log_hasDerivAt`, `frozen_norm_eq_one_of_mem_trappedSet`, `trapped_radial_restrictions`; `CompactInteriorRigidity.row_single`, `amplitude_single_deep`, `characterCoefficient_eq_one_deep`, `sin_mul_vartheta_nonneg`, `neg_im_mul_vartheta_arg_nonneg`, `angular_distance_sq_hasDerivAt`, `angular_scalar_eq_neg_one_of_tendsto`, `angular_scalar_eq_neg_one_backward`, `interior_norm_tendsto_zero`, `exists_limit_zero_at_interior`, `frozen_norm_eq_one`, `interior_matrix_eq_zero`, `initial_neighbor_unit`, `neighbors_unit_forward`, `shifted_character_hasDerivAt`, `character_tendsto_neg_one`, `character_eq_neg_one_initial`, `initial_partners_zero`, `compactInteriorRigidityTarget`; `ZeroStratumEscape.compact_zero_slice_bound`, `eventually_not_mem_compact`, `not_isCompact_closure_forward_image`, `partner_eq_zero_of_isCompact_closure`, `partner_eq_zero_of_mem_trappedSet`, `not_mem_trappedSet`; `ConstructedFlowReverseInclusion.compact_forward_image`, `radial_and_frozen_restrictions`, `initially_zero_partner`, `initially_nonzero_interior_partners`, `interior_partner`, `mutable_cap_product`, `trappedSet_subset_coordinateCap`, `constructedFlowReverseInclusionTarget` | present with the conclusion stated as `⊆ coordinateCap` instead of `⊆ ⋃_I Λ_I`; the independence of the limiting index set is `CapIndependence.coordinateCap_strictCapIndices_independent` / `CompactInteriorRigidity.interior_matrix_eq_zero`. The set-level reconciliation is gap **G1**. The angular rigidity route differs from the reference's monotonicity argument: **N6** |
-| 17 | Inclusion (ii) `Λ_I ⊂ Skel(Z)` (`Λ_I` compact and forward invariant) | `CapSet.coordinateCap`, `coordinateCap_norm_a_le`, `coordinateCap_b_eq_zero`, `coordinateCap_norm_b_le`, `isCompact_coordinateCap`; `CapIndependence.coordinateCap_outgoing_not_interior`, `coordinateCap_strictCapIndices_independent`; `CapAngularTangency.norm_eq_one_of_not_strict`, `mem_strict_locus`, `normalizedPartner_eq_zero_of_interior`, `exchangeCharacter_eq_neg_one_of_interior`, `angular_eq_zero_of_interior`, `maskedLogs_eq_zero_of_unit`, `radial_and_deriv_zero`, `coordinate_drift_eq_zero_of_unit`, `coordinate_hasDerivWithinAt_zero`; `InteriorPartnerPropagation.unit_norm_forward`, `neighbors_unit_forward`, `partners_zero_of_character`, `angular_scalar_eq_neg_one*`, `character_eq_neg_one_forward`, `propagate`, `interiorPartnerPropagationTarget`; `CapForwardInvariance.zero_forward`, `interior_forward`, `mutable_constraints_forward`, `frozen_norm_forward`, `forward`, `coordinateCapForwardInvarianceTarget`; `TrappedSet.trappedSet`, `mem_trappedSet_of_forwardOrbit_subset`, `subset_trappedSet_of_isCompact_forwardInvariant`; `ConstructedFlowCapInclusion.integralCurveOn`, `forward`, `isForwardInvariant`, `subset_trappedSet`, `isCompact_forwardOrbit_closure`, `constructedFlowCapInclusionTarget` | present; **stronger**: compactness and forward invariance are proved for the whole cap at once (with `G1`, for the whole union `⋃_I Λ_I`), and the trapped set is defined purely dynamically |
-| 18 | Theorem `thm:acyclic-skeleton`: a Liouville form of `Im Ω` with `Skel = ⋃_I Λ_I` | `GeometryTarget.SmoothPresentation`, `LiouvilleData`, `LiouvilleSkeletonTarget`, `FirstGeometricTarget`; `InitialTorusDensity.dense_initialTorus`; `FullSkeleton.trappedSet_eq_coordinateCap`, `liouvilleData`, `liouvilleData_flow`, `torus_anchor`, `liouvilleData_trappedSet`, `liouvilleSkeletonTarget_of_parameters`, `liouvilleSkeletonTarget`, `firstGeometricTarget` | present as `trappedSet completeFlow.flow = coordinateCap S` for the same constructed flow, with `ε = 1, κ = 3, δ = 1`; equality with the reference's `⋃_I Λ_I` form is gap **G1** |
+| 16 | Inclusion (i) `Skel(Z) ⊂ ⋃_I Λ_I` | `ScalarOrbitDynamics.frozen_log_orbit`, `trapped_frozen_log_bounded`, `trapped_frozen_norm_eq_one`; `NativeRadialOrbit.radialEquation`, `negative_log_laws`, `nonnegative_log_law`, `positive_log_law`, `zero_log_law`, `eventually_not_mem_compact`, `not_isCompact_closure_forward_image`, `original_norm_le_one_of_mem_trappedSet`, `frozen_log_hasDerivAt`, `frozen_norm_eq_one_of_mem_trappedSet`, `trapped_radial_restrictions`; `CompactInteriorRigidity.row_single`, `amplitude_single_deep`, `characterCoefficient_eq_one_deep`, `sin_mul_vartheta_nonneg`, `neg_im_mul_vartheta_arg_nonneg`, `angular_distance_sq_hasDerivAt`, `angular_scalar_eq_neg_one_of_tendsto`, `angular_scalar_eq_neg_one_backward`, `interior_norm_tendsto_zero`, `exists_limit_zero_at_interior`, `frozen_norm_eq_one`, `interior_matrix_eq_zero`, `initial_neighbor_unit`, `neighbors_unit_forward`, `shifted_character_hasDerivAt`, `character_tendsto_neg_one`, `character_eq_neg_one_initial`, `initial_partners_zero`, `compactInteriorRigidityTarget`; `ZeroStratumEscape.compact_zero_slice_bound`, `eventually_not_mem_compact`, `not_isCompact_closure_forward_image`, `partner_eq_zero_of_isCompact_closure`, `partner_eq_zero_of_mem_trappedSet`, `not_mem_trappedSet`; `ConstructedFlowReverseInclusion.compact_forward_image`, `radial_and_frozen_restrictions`, `initially_zero_partner`, `initially_nonzero_interior_partners`, `interior_partner`, `mutable_cap_product`, `trappedSet_subset_coordinateCap`, `constructedFlowReverseInclusionTarget` | present with the conclusion stated as `⊆ coordinateCap`; the independence of the limiting index set is `CapIndependence.coordinateCap_strictCapIndices_independent` / `CompactInteriorRigidity.interior_matrix_eq_zero`. The set-level reconciliation with `⋃_I Λ_I` is now `CapStrata.coordinateCap_eq_iUnion_lambdaStratum`: gap **G1** closed. The angular rigidity route differs from the reference's monotonicity argument: **N6** |
+| 17 | Inclusion (ii) `Λ_I ⊂ Skel(Z)` (`Λ_I` compact and forward invariant) | `CapSet.coordinateCap`, `coordinateCap_norm_a_le`, `coordinateCap_b_eq_zero`, `coordinateCap_norm_b_le`, `isCompact_coordinateCap`; `CapIndependence.coordinateCap_outgoing_not_interior`, `coordinateCap_strictCapIndices_independent`; `CapAngularTangency.norm_eq_one_of_not_strict`, `mem_strict_locus`, `normalizedPartner_eq_zero_of_interior`, `exchangeCharacter_eq_neg_one_of_interior`, `angular_eq_zero_of_interior`, `maskedLogs_eq_zero_of_unit`, `radial_and_deriv_zero`, `coordinate_drift_eq_zero_of_unit`, `coordinate_hasDerivWithinAt_zero`; `InteriorPartnerPropagation.unit_norm_forward`, `neighbors_unit_forward`, `partners_zero_of_character`, `angular_scalar_eq_neg_one*`, `character_eq_neg_one_forward`, `propagate`, `interiorPartnerPropagationTarget`; `CapForwardInvariance.zero_forward`, `interior_forward`, `mutable_constraints_forward`, `frozen_norm_forward`, `forward`, `coordinateCapForwardInvarianceTarget`; `TrappedSet.trappedSet`, `mem_trappedSet_of_forwardOrbit_subset`, `subset_trappedSet_of_isCompact_forwardInvariant`; `ConstructedFlowCapInclusion.integralCurveOn`, `forward`, `isForwardInvariant`, `subset_trappedSet`, `isCompact_forwardOrbit_closure`, `constructedFlowCapInclusionTarget` | present; **stronger**: compactness and forward invariance are proved for the whole cap at once (hence, by `CapStrata.coordinateCap_eq_iUnion_lambdaStratum`, for the whole union `⋃_I Λ_I`; per-stratum compactness is `CapStrata.isCompact_lambdaStratum`), and the trapped set is defined purely dynamically |
+| 18 | Theorem `thm:acyclic-skeleton`: a Liouville form of `Im Ω` with `Skel = ⋃_I Λ_I` | `GeometryTarget.SmoothPresentation`, `LiouvilleData`, `LiouvilleSkeletonTarget`, `FirstGeometricTarget`; `InitialTorusDensity.dense_initialTorus`; `FullSkeleton.trappedSet_eq_coordinateCap`, `liouvilleData`, `liouvilleData_flow`, `torus_anchor`, `liouvilleData_trappedSet`, `liouvilleSkeletonTarget_of_parameters`, `liouvilleSkeletonTarget`, `firstGeometricTarget` | present as `trappedSet completeFlow.flow = coordinateCap S` for the same constructed flow, with `ε = 1, κ = 3, δ = 1`; equality with the reference's `⋃_I Λ_I` form is now proved as `FullSkeleton.trappedSet_eq_iUnion_lambdaStratum`: gap **G1** closed |
 
 ---
 
 ## 3. Gap list
 
 Ordered by priority: **G1 > G2 > G3**, then the items **N1-N9** that are
-classified "no Lean change needed, because ...". "Concrete gap" entries are
-proposals only; no Lean source is modified in this mission.
+classified "no Lean change needed, because ...". "Concrete gap" entries were
+proposals when this audit was written; **G1** and **G2** have since been
+implemented in the Lean source and are marked closed below, each with its
+exact declaration names and the integrating commit. **G3** is still an
+optional proposal.
 
-### G1 (high) — the cap is not stated as `⋃_{I independent} Λ_I`
+### G1 (high) — **closed**: the cap is now stated as `⋃_{I independent} Λ_I`
 
-*Difference.* The reference's skeleton identity is
+*Status.* **Closed** in the Lean source at integrating commit `4c02c1e5bbc68907552632344ae04017d82a30b4`
+(implemented by mission `4ba40e77-f6df-4185-bd7b-cda666df0e2c`,
+published commit `91c09d44fe3ce2bc132a4c8a1b19f5edd42d3cd6`). The chosen layout
+is the new module `ClusterSkeleton/CapStrata.lean` (importing `CapIndependence`,
+`CapAngularTangency` and `CoordinateLoci`), with the corollary appended to
+`ClusterSkeleton/FullSkeleton.lean`. The delivered declarations are exactly the
+statements proposed below, with no added hypothesis and no change to any
+existing statement:
+
+| Declaration | Full name |
+| --- | --- |
+| stratum | `ClusterSkeleton.lambdaStratum` |
+| `Λ_I ⊆ C_B` | `ClusterSkeleton.lambdaStratum_subset_coordinateCap` |
+| realized index set | `ClusterSkeleton.coordinateCap_subset_lambdaStratum_strictCapIndices` |
+| stratified cap | `ClusterSkeleton.coordinateCap_eq_iUnion_lambdaStratum` |
+| closedness | `ClusterSkeleton.isClosed_lambdaStratum` |
+| per-stratum compactness | `ClusterSkeleton.isCompact_lambdaStratum` |
+| stratified skeleton | `ClusterSkeleton.FullSkeleton.trappedSet_eq_iUnion_lambdaStratum` |
+
+All seven depend only on `propext`, `Classical.choice`, `Quot.sound`; the first
+six are attributed to `ClusterSkeleton.CapStrata` (6 audited declarations) and
+the last to `ClusterSkeleton.FullSkeleton`. The record of the original
+difference and the proposed statements is kept below unchanged.
+
+*Difference (as audited).* The reference's skeleton identity is
 `Skel(Z) = ⋃_{I⊂M independent} Λ_I` with
 `Λ_I = {z_i' = 0, |z_i| ≤ 1 (i∈I), |z_j| = 1 (j∈(M⊔F)\I)}`. Lean states
 `trappedSet … = coordinateCap S`, the reference's *equivalent* cap description.
@@ -448,13 +484,32 @@ only to index the union by the same family the reference uses, and the
 independence of the index set actually realized by a cap point is
 `coordinateCap_strictCapIndices_independent`.
 
-*Dependency closed.* Makes `FullSkeleton.trappedSet_eq_coordinateCap` literally
-equation `eq:acyclic-skeleton` of the reference, and supplies the reference's
-per-stratum compactness used in its inclusion (ii).
+*Dependency closed.* `FullSkeleton.trappedSet_eq_iUnion_lambdaStratum` now
+states equation `eq:acyclic-skeleton` of the reference literally for the same
+constructed flow, and `isCompact_lambdaStratum` supplies the reference's
+per-stratum compactness used in its inclusion (ii). The delivered proofs are
+the ones reproduced above, with `isClosed_lambdaStratum` proved by splitting the
+two defining families with `Set.ofPred_forall` and `isClosed_iInter` rather than
+by a `by_cases` on membership of `I`; the statements are unchanged.
 
-### G2 (medium) — the node-chart torus exponent `m+f-2|I|` is only implicit
+### G2 (medium) — **closed**: the node-chart torus exponent is now literal
 
-*Difference.* The reference's Lemma (ii) asserts
+*Status.* **Closed** in the Lean source at integrating commit `4c02c1e5bbc68907552632344ae04017d82a30b4`
+(implemented by mission `b1e1f5f9-b96b-45b0-a1be-edeab110c7f9`,
+published commit `36e0e8ac48bb4feeea14f39dfee5845474887c6e`), in
+`ClusterSkeleton/IndependentNodeSmooth.lean` next to `basis_cardinality` and so
+in namespace `ClusterSkeleton.IndependentNodeChart`:
+
+| Declaration | Statement |
+| --- | --- |
+| `ClusterSkeleton.IndependentNodeChart.complementRank_eq_sub_two_mul_card` | `SplitIntegerRows.complementRank (independentRowRightInverse S I) = d - 2 * I.card` |
+| `ClusterSkeleton.IndependentNodeChart.two_mul_card_le` | `2 * I.card ≤ d` |
+
+Both take only the standing `hdet : S.Unimodular` and `hI : S.Independent I`,
+and both depend only on `propext`, `Classical.choice`, `Quot.sound`. The record
+of the original difference and the proposed statement is kept below unchanged.
+
+*Difference (as audited).* The reference's Lemma (ii) asserts
 `U_I ≅ 𝒩^I × (ℂ*)^{m+f-2|I|}`. Lean's `IndependentNodeChart.homeomorph` lands in
 `({i // i ∈ I} → Node) × NonzeroTorus (Complement S I)` where
 `Complement S I = Fin (SplitIntegerRows.complementRank (independentRowRightInverse S I))`
@@ -494,8 +549,9 @@ theorem complementRank_eq_sub_two_mul_card (S : Seed d) (I : Finset (Fin d))
   omega
 ```
 
-*Dependency closed.* Makes Lemma (ii)'s statement literal; also documents that
-`2|I| ≤ d` for independent `I`, which is currently only implicit.
+*Dependency closed.* Lemma (ii)'s exponent is now literal, and the companion
+`two_mul_card_le` documents `2|I| ≤ d` for independent `I`, which was
+previously only implicit.
 
 ### G3 (low) — unimodularity is stated as `det B = 1`, the reference as `E ∈ GL_n(ℤ)`
 
@@ -643,7 +699,15 @@ in `BoundaryTangency.nodeLog_drift`, `ZeroStratumInvariance.normSq_drift`,
   appears on either side.
 * Unimodularity is retained (`Seed.Unimodular`); see N1/G3.
 * Holomorphic extension, finite type, cocores and HMS are not claimed (N3).
-* The audit is a statement-level comparison. It does not re-verify compilation
-  of `ClusterSkeleton` itself (no file there is modified); the recorded build and
-  transitive axiom evidence for the compared sources is
-  in [`../verification/README.md`](../verification/README.md).
+* The audit is a statement-level comparison. The closures of G1 and G2 added
+  no hypothesis, weakened nothing, and changed no existing statement, so every
+  scope statement above still holds verbatim for the integrated source; in
+  particular the new `lambdaStratum` and `complementRank` declarations are
+  stated with `d_i = 1`, `K = E = B`, retain `Seed.acyclic` and the variable
+  frozen coordinates, and make no weighted or principal-coefficient claim. The
+  build and transitive axiom evidence for the integrated source is recorded in
+  [`../verification/README.md`](../verification/README.md).
+* One documentation step is deliberately left open: `target-theorem.pdf` and
+  `proof-blueprint.pdf` still predate the G1/G2 closure, because the
+  publication host has no LaTeX toolchain. The `docs/tex/` sources carry the
+  updated text.

@@ -12,8 +12,10 @@ theorem proves `trappedSet = coordinateCap` with the reference's *equivalent*
 coordinate cap, while `Λ_I` and `coordinateCap = ⋃_{I independent} Λ_I` are not
 defined or proved anywhere (gap **G1**). One further small statement is missing
 (**G2**: the exponent `m+f-2|I|` of the node chart's torus factor), and one is
-optional (**G3**). Everything else is a convention difference that needs no Lean
-change (**N1-N9**). The translation has three sign/duality facts that must be
+optional (**G3**). The statements proposed for G1 and G2 are proved in this
+document and were checked against this commit, so neither is an open proof
+obligation. Everything else is a convention difference that needs no Lean change
+(**N1-N9**). The translation has three sign/duality facts that must be
 quoted together: the two exchange monomials are interchanged (1.2), the exchange
 ratio and the node character are inverted (1.3, 1.4), and the Lean `H` is the
 negative of the reference's `H` while the Lean primitive subtracts `dH`, so the
@@ -33,17 +35,41 @@ No file under `ClusterSkeleton/`, no PDF and no file under `docs/tex/` is
 modified by this audit; every genuine difference is recorded in part 3 as a
 proposed Lean statement for later dispatch.
 
-**Verification method.** `lake env lean --version` works in this checkout
-(Lean 4.34.1 via `ELAN_HOME=/mnt/d/HorizonData/tools/elan`), but the Mathlib
-and project `.olean` artifacts are absent (`.lake/build` is empty and
-`.lake/packages/mathlib/.lake/build/lib/lean` contains only the cache tool), so
-`#check` scratch files cannot elaborate without first materializing the pinned
-Mathlib cache. `lake update` was not run. **All declaration names, signatures,
-definitional unfoldings and statement contents quoted below were therefore
-established by reading the Lean sources at the commit above**, not by `#check`.
-Compilation of these sources is independently recorded in
-[`../verification/build.log`](../verification/build.log) (`Build completed
-successfully (3745 jobs)`) and [`../verification/axioms.log`](../verification/axioms.log).
+**Verification method.** The pinned environment is materialized in this
+checkout (Lean 4.34.1 via `ELAN_HOME=/mnt/d/HorizonData/tools/elan`, Mathlib and
+`FsFltz` oleans present, `ClusterSkeleton` built), so the audit was checked
+mechanically with `lake env lean` on scratch files under `$TMPDIR`; `lake update`
+was not run and no file in the repository other than this one was touched.
+
+* **Names and types.** Every Lean declaration cited below was confirmed with
+  `#check`. Two citations were corrected by that pass: `PrimitiveLocalization`
+  has no `logNorms` of its own (it reuses `DominanceCutoff.logNorms`), and
+  `dense_initialTorus` is `ClusterSkeleton.dense_initialTorus`, declared in
+  `InitialTorusDensity.lean` outside the `IndependentNodeChart` namespace.
+* **Definitional claims.** Each quoted unfolding was confirmed by `rfl`: the row
+  exponents of `positiveMonomial`/`negativeMonomial` (1.2), `exchangeCharacter`
+  and `normalizedPartner` (1.3), `rowLog`, `angular` and `nodeLog` (1.4), the
+  exact `H` sum and `alpha = beta - dH` (1.6), the formulas for `radial`,
+  `radialLength`, `rho`, `vartheta`, `angularWindow`, `angularRadius`, `chi` and
+  `dominance` (1.8), and the `coordinateCap` description (1.9). The constant
+  identifications `a = κ` (`radial = A + κ` for `A ≤ -(2κ-2ε)`) and `δ₀ = 2ε`
+  (`radial = 0` for `A ≥ -2ε`) were derived from `radial_tail` and
+  `radial_eq_zero`.
+* **The sign argument.** Its three ingredients were *proved* in scratch, not
+  merely read: `rho (-x) = rho x`, `vartheta δ (-T) = -vartheta δ T`, and
+  therefore `deriv (vartheta δ) (-T) = deriv (vartheta δ) T` (via
+  `deriv_comp_neg`). These are what make `H_Lean = -H_reference` and make the
+  radial equation of 1.7 transport verbatim.
+* **The proposals in part 3.** The statements proposed for gaps **G1** and
+  **G2** were written out and proved in scratch files against this commit, so
+  the follow-up dispatch is a copy-in rather than an open proof obligation; the
+  proofs are reproduced with each gap.
+
+Compilation and the transitive axiom audit of the compared Lean sources are
+independently recorded in [`../verification/build.log`](../verification/build.log)
+and [`../verification/axioms.log`](../verification/axioms.log) (re-verified at
+commit `0751c90`: `FULL_GEOMETRIC_TARGET_VERIFIED`, 57 modules, 1480
+declarations, axioms limited to `propext`, `Classical.choice`, `Quot.sound`).
 
 **Citation convention.** Declarations are cited as `File.name`, where `File` is
 the module file under `ClusterSkeleton/`. Two files carry a namespace different
@@ -52,9 +78,11 @@ from their name: `IndependentNodeSmooth.lean` continues the namespace
 has the full name `ClusterSkeleton.IndependentNodeChart.basis_cardinality`), and
 `FiniteTimeConfinement.lean` also contains the namespace
 `ClusterSkeleton.CoordinateBounds` (cited below as
-`FiniteTimeConfinement.CoordinateBounds.*`). A few cited helpers are `private`
-in their file and are marked as such; a proposed statement that needs one of
-them must either re-prove it or drop the `private` modifier.
+`FiniteTimeConfinement.CoordinateBounds.*`), and `InitialTorusDensity.lean`
+opens `ClusterSkeleton.IndependentNodeChart` for its local lemmas while
+`dense_initialTorus` itself is `ClusterSkeleton.dense_initialTorus`. A few cited
+helpers are `private` in their file and are marked as such; a proposed statement
+that needs one of them must either re-prove it or drop the `private` modifier.
 
 ---
 
@@ -129,7 +157,7 @@ both monomials are units: `positiveMonomial_ne_zero_on_independent_locus`,
 
 | Reference | Lean | Relation |
 | --- | --- | --- |
-| `u_j = log\|z_j\|` | `TorusCorrection.A S p j = Real.log ‖p.a j‖` (also `GlobalLiouvilleField.A`, `DominanceCutoff.logNorms`, `PrimitiveLocalization.logNorms`) | equal |
+| `u_j = log\|z_j\|` | `TorusCorrection.A S p j = Real.log ‖p.a j‖` (also `GlobalLiouvilleField.A` and `DominanceCutoff.logNorms`, which `PrimitiveLocalization` reuses) | equal |
 | `θ_j = arg z_j` | `Complex.arg (p.a j)`, used only through `TorusPrimitive.angleCovector` (`Im(da_j/a_j)`) | equal |
 | `v_i = log\|t_i\| = c_i(u)` | `TorusCorrection.rowLog S p i = ∑ j, (B i j) * A p j` | `rowLog = -v_i` |
 | `η_i = arg t_i = c_i(θ)` | `arg (exchangeCharacter p i)` | `arg(exchangeCharacter p i) = -η_i` in `ℝ/2πℤ` |
@@ -333,7 +361,7 @@ form. **Apart from the holomorphicity of `Ω` itself (N3, out of scope), this
 is the only part of the reference's theorem statement with no Lean
 counterpart.**
 
-*Proposed Lean statements* (target module: `ClusterSkeleton/CapIndependence.lean`,
+*Proposed Lean statements, all checked* (target module: `ClusterSkeleton/CapIndependence.lean`,
 which already imports `CapSet` and contains the strict-index independence
 lemma; alternatively a new `ClusterSkeleton/CapStrata.lean` imported by
 `FullSkeleton`):
@@ -368,15 +396,57 @@ theorem trappedSet_eq_iUnion_lambdaStratum :
       ⋃ I : {I : Finset (Fin d) // S.Independent I}, lambdaStratum S I.val
 ```
 
-*Proof route (no new mathematics).* `⊇` of the third statement is the first
-statement with `hI := (I.property).1`, where for mutable `j ∉ I` the factor
-`1-‖a_j‖² = 0` and for `i ∈ I` the partner vanishes. `⊆` is the second
-statement, from `p.strictCapIndices` independence
-(`coordinateCap_strictCapIndices_independent`), `coordinateCap_b_eq_zero` for
-`i ∈ strictCapIndices` and `CapAngularTangency.norm_eq_one_of_not_strict` for
-`j ∉ strictCapIndices`. Compactness follows from `isCompact_coordinateCap`
-together with closedness of `lambdaStratum` (the defining conditions are closed
-in the inherited topology, as in the private `CapSet.isClosed_ambientCap`).
+*Proof (checked in scratch against this commit; no new mathematics).*
+
+```lean
+theorem lambdaStratum_subset_coordinateCap {S : Seed d} {I : Finset (Fin d)}
+    (hI : I ⊆ S.mutable) : lambdaStratum S I ⊆ coordinateCap S := by
+  intro p hp
+  refine ⟨fun f hf => hp.2 f (fun hfI => hf (hI hfI)), fun i => ?_⟩
+  by_cases hi : (i : Fin d) ∈ I
+  · exact ⟨(hp.1 i hi).1, by rw [(hp.1 i hi).2, mul_zero]⟩
+  · have h1 := hp.2 (i : Fin d) hi
+    refine ⟨le_of_eq h1, ?_⟩
+    rw [h1]
+    norm_num
+
+theorem coordinateCap_subset_lambdaStratum_strictCapIndices {S : Seed d}
+    {p : S.Point} (hp : p ∈ coordinateCap S) :
+    p ∈ lambdaStratum S p.strictCapIndices := by
+  refine ⟨fun i hi => ?_,
+    fun j hj => CapAngularTangency.norm_eq_one_of_not_strict S hp j hj⟩
+  have hlt : ‖p.a i‖ < 1 := ((p.mem_strictCapIndices i).mp hi).2
+  exact ⟨hlt.le, coordinateCap_b_eq_zero hp i hlt⟩
+
+theorem coordinateCap_eq_iUnion_lambdaStratum (S : Seed d) :
+    coordinateCap S =
+      ⋃ I : {I : Finset (Fin d) // S.Independent I}, lambdaStratum S I.val := by
+  refine Subset.antisymm (fun p hp => ?_) (fun p hp => ?_)
+  · exact mem_iUnion.mpr
+      ⟨⟨p.strictCapIndices, coordinateCap_strictCapIndices_independent hp⟩,
+        coordinateCap_subset_lambdaStratum_strictCapIndices hp⟩
+  · obtain ⟨I, hI⟩ := mem_iUnion.mp hp
+    exact lambdaStratum_subset_coordinateCap I.property.1 hI
+```
+
+Compactness needs one auxiliary closedness lemma, also checked:
+`isClosed_lambdaStratum` splits the two defining families with
+`isClosed_iInter` and a `by_cases` on membership of `I` (each branch is either
+`isClosed_le`/`isClosed_eq` against `(continuous_originalCoordinate S j).norm`
+and `(continuous_apply i).comp continuous_subtype_val.snd`, or `isClosed_univ`),
+and then
+
+```lean
+theorem isCompact_lambdaStratum (S : Seed d) (I : Finset (Fin d))
+    (hI : I ⊆ S.mutable) : IsCompact (lambdaStratum S I) :=
+  (isCompact_coordinateCap S).of_isClosed_subset (isClosed_lambdaStratum S I)
+    (lambdaStratum_subset_coordinateCap hI)
+```
+
+Note that independence of `I` is *not* needed for either inclusion; it enters
+only to index the union by the same family the reference uses, and the
+independence of the index set actually realized by a cap point is
+`coordinateCap_strictCapIndices_independent`.
 
 *Dependency closed.* Makes `FullSkeleton.trappedSet_eq_coordinateCap` literally
 equation `eq:acyclic-skeleton` of the reference, and supplies the reference's
@@ -393,8 +463,8 @@ only as `IndependentNodeSmooth.basis_cardinality`
 (`card {i ∈ I} + card (Complement S I) = card {j ∉ I}`), never as the stated
 exponent.
 
-*Proposed Lean statement* (target module: `ClusterSkeleton/IndependentNodeSmooth.lean`,
-next to `basis_cardinality`):
+*Proposed Lean statement, checked* (target module:
+`ClusterSkeleton/IndependentNodeSmooth.lean`, next to `basis_cardinality`):
 
 ```lean
 theorem complementRank_eq_sub_two_mul_card {d : ℕ} (S : Seed d)
@@ -403,9 +473,26 @@ theorem complementRank_eq_sub_two_mul_card {d : ℕ} (S : Seed d)
       = d - 2 * I.card
 ```
 
-*Proof route.* `basis_cardinality` plus `Fintype.card_subtype_compl` and
-`Fintype.card_subtype_le`, i.e. exactly the `omega` step already performed
-inside `vector_finrank_complex`.
+*Proof (checked in scratch against this commit).*
+
+```lean
+theorem complementRank_eq_sub_two_mul_card (S : Seed d) (I : Finset (Fin d))
+    (hdet : S.Unimodular) (hI : S.Independent I) :
+    SplitIntegerRows.complementRank (independentRowRightInverse S I)
+      = d - 2 * I.card := by
+  classical
+  have hb := IndependentNodeChart.basis_cardinality S I hdet hI
+  have hin : Fintype.card {i : Fin d // i ∈ I} = I.card := Fintype.card_coe I
+  have hout : Fintype.card {j : Fin d // j ∉ I} = d - I.card := by
+    have h := Fintype.card_subtype_compl (fun j : Fin d => j ∈ I)
+    simpa [hin] using h
+  have hle : I.card ≤ d := by simpa using Finset.card_le_univ I
+  have hc : Fintype.card (IndependentNodeChart.Complement S I)
+      = SplitIntegerRows.complementRank (independentRowRightInverse S I) := by
+    simp [IndependentNodeChart.Complement]
+  rw [hin, hout, hc] at hb
+  omega
+```
 
 *Dependency closed.* Makes Lemma (ii)'s statement literal; also documents that
 `2|I| ≤ d` for independent `I`, which is currently only implicit.
@@ -556,6 +643,7 @@ in `BoundaryTangency.nodeLog_drift`, `ZeroStratumInvariance.normSq_drift`,
   appears on either side.
 * Unimodularity is retained (`Seed.Unimodular`); see N1/G3.
 * Holomorphic extension, finite type, cocores and HMS are not claimed (N3).
-* The audit is a statement-level comparison. It does not re-verify compilation;
-  the recorded build and transitive axiom evidence for the compared sources is
+* The audit is a statement-level comparison. It does not re-verify compilation
+  of `ClusterSkeleton` itself (no file there is modified); the recorded build and
+  transitive axiom evidence for the compared sources is
   in [`../verification/README.md`](../verification/README.md).

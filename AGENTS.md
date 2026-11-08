@@ -6,4 +6,4 @@ Construct all witnesses on the actual complex exchange-equation carrier with its
 Use Claude Fable for every planner assignment and Claude Opus for proof workers and reviews; no silent model substitution. Set model_options explicitly when dispatching workers.
 Directly update the existing source and PDFs; do not create dated copies or a new project. Existing accepted evidence may be reused for unchanged sources.
 No sorry, new axioms, opaque proof shortcuts or weakened statements. Record exact types, compilation and transitive axiom audits. Standard propext/Classical.choice/Quot.sound are allowed.
-Keep project source and dependencies on D:. Do not change upstream FsFltz or the ChatGPT sources/ directory.
+Keep the canonical project at /home/archon/workspaces/cluster-skeleton on this VPS and use the existing pinned dependencies. Do not change upstream FsFltz or the ChatGPT sources/ directory.

@@ -4,7 +4,47 @@
   "archon_accepted_head": "03f558f67301b9514c92ef1833dca1bd56b45ab7",
   "lean_source_files": 57,
   "new_proof_pdf_sha256": "d983d0777e9a5466a0c81e8d9e4ad8096765636fb398b7dd32d1f04d3bbd045c",
-  "current_rebuild": "not yet run",
+  "current_rebuild": {
+    "status": "passed",
+    "checked_at_utc": "2026-11-08T20:50:01.922304+00:00",
+    "finished_at_utc": "2026-11-08T20:56:13.022248+00:00",
+    "verified_source_commit": "8920fdee879875539d4ac3ef5d39d7e387eeebba",
+    "mission_commit": "7e1a6339f25c8b56cef1e60c37b59a32aa64f8ff",
+    "cluster_skeleton_tree": "f1ff31e798e5d87acf1ae73484ebfd82259a98c7",
+    "cluster_skeleton_tree_note": "identical at 7e1a6339f25c8b56cef1e60c37b59a32aa64f8ff and 8920fdee879875539d4ac3ef5d39d7e387eeebba; the only later change is docs/skeleton-audit.md",
+    "lean_version": "Lean (version 4.34.1, x86_64-unknown-linux-gnu, commit 5045d0056413266e57c625dcd7c365b10e377c52, Release)",
+    "dependency_commits": {
+      "fsfltz": "1a3d387cfacc746e25aad31e5b27b1803103e7cb",
+      "mathlib": "d13f23b723b8a846827a245b89c10fc7d3f11612",
+      "plausible": "118aa17ee84656b8bd727fef7c458ee8c833385c",
+      "LeanSearchClient": "ddf04cf3949fa556442341e87d47f9f6e6074707",
+      "importGraph": "e928b72544873815af278d38681b31c0293588e3",
+      "proofwidgets": "106ff4fafc74ef4ac99d81dbf3ab399118f497a5",
+      "aesop": "355695d523e41d0554926416cba2a2b3544fbbc9",
+      "Qq": "6a489d9af5d0c47e5b259e2e8bcdfc1811b5a259",
+      "batteries": "f2effa3d803fda822b1f97b806c47cf2adfbcbc2",
+      "Cli": "e92c9f15fdfacc8536f31cfb3b7ad26c3c8cd204"
+    },
+    "dependency_worktrees_clean": true,
+    "source_stability_verified": true,
+    "final_target": "ClusterSkeleton.FullSkeleton.firstGeometricTarget",
+    "final_target_status": "proved",
+    "allowed_axioms": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "audited_modules": 57,
+    "audited_declarations": 1480,
+    "result_marker": "FULL_GEOMETRIC_TARGET_VERIFIED",
+    "environment_note": "restored locally: shared ELAN_HOME toolchain leanprover/lean4:v4.34.1, dependencies and Mathlib oleans obtained through scripts/fetch-cache.sh",
+    "logs": [
+      "verification/toolchain.log",
+      "verification/build.log",
+      "verification/final-consumer.log",
+      "verification/axioms.log"
+    ]
+  },
   "planner_model": "fable",
   "worker_model": "opus",
   "current_pdf_sha256": {

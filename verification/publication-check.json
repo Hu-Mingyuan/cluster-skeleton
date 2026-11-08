@@ -1,5 +1,5 @@
 {
-  "checked_at_utc": "2026-10-24T05:27:59.422100+00:00",
+  "checked_at_utc": "2026-11-08T20:50:01.922304+00:00",
   "status": "passed",
   "scope": "complete library, final consumer, transitive axiom audit",
   "lean_version": "Lean (version 4.34.1, x86_64-unknown-linux-gnu, commit 5045d0056413266e57c625dcd7c365b10e377c52, Release)",
@@ -164,9 +164,9 @@
   },
   "evidence_sha256": {
     "toolchain.log": "355a9a028f81641782d75d6e6b58dec70f29d2f61238a9e271690259d9bf5680",
-    "build.log": "22da4be8dfb90965a9fcab6cf835856b7c555ddd2fa3cf944165e78d6810ca39",
+    "build.log": "d86a8aa67a8e244330e8f49314de07132b4bcb445a37e9657a120924e63a542d",
     "final-consumer.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "axioms.log": "dc50273c762dead196f336721d9ec7ee3cc821e1731cb4510b3ed93d89aa8809"
   },
-  "finished_at_utc": "2026-10-24T05:29:19.548837+00:00"
+  "finished_at_utc": "2026-11-08T20:56:13.022248+00:00"
 }

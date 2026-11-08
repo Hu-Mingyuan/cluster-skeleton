@@ -8,10 +8,11 @@ exponent) are closed and machine-checked; see
 [verification records](../verification/README.md) and the G1/G2 sections of
 [the audit](skeleton-audit.md).
 
-Two steps remain. Both need a host operator: the publication host that produced
-the accepted evidence has neither a Git push credential nor a LaTeX toolchain,
-so no automated session can perform them. Neither step affects the mathematics,
-and neither leaves any accepted theorem conditional.
+Two steps remain, and step 2 is already half done off-host. Both need a host
+operator: the publication host that produced the accepted evidence has neither a
+Git push credential nor a LaTeX toolchain, so no automated session can perform
+them. Neither step affects the mathematics, and neither leaves any accepted
+theorem conditional.
 
 ## 1. Deliver the accepted head to the origin default branch
 
@@ -42,44 +43,62 @@ that decision.
 ## 2. Regenerate both PDFs in place
 
 The editable sources in [`docs/tex`](tex) state the stratified identity and the
-`d - 2|I|` torus rank. The two committed PDFs predate them:
+`d - 2|I|` torus rank. Use **XeLaTeX on TeX Live 2024**, the toolchain recorded
+for the committed PDFs; a different engine can change the output even where the
+source is unchanged. Overwrite in place at the repository root, as the project
+roadmap asked. Do not add new PDF filenames. Both documents use
+`docs/tex/preamble.tex`.
 
-| File | Needs rebuilding from |
-| --- | --- |
-| [`target-theorem.pdf`](../target-theorem.pdf) | `docs/tex/target-theorem.tex` |
-| [`proof-blueprint.pdf`](../proof-blueprint.pdf) | `docs/tex/proof-blueprint.tex` |
+### 2a. `target-theorem.pdf` — done off-host, awaiting the rest
 
-Both use `docs/tex/preamble.tex`. On the publication host `pdflatex`, `latexmk`,
-`lualatex`, `xelatex` and `tectonic` are all absent. On a host with LaTeX,
-overwrite the two PDFs in place at the repository root. Use the same toolchain
-that produced the committed ones, **XeLaTeX on TeX Live 2024**, as recorded in
-`verification/document-check.json`; a different engine can change the output
-even where the source is unchanged.
+A regenerated [`target-theorem.pdf`](../target-theorem.pdf) was placed in the
+publication checkout at 22:59:29 UTC on 8 November 2026 and is committed here.
+It was built elsewhere, since this host has no LaTeX: its metadata reports
+`/Producer (xdvipdfmx (20220710))`, the XeTeX driver, consistent with the
+recorded engine.
 
-Overwriting in place is deliberate: it is what the project roadmap asked for.
-Do not add new PDF filenames.
+It is a genuine rebuild of the current source, not the old file: it runs to
+4 pages where the previous one had 3, it carries the new
+`Reference strata` definition and the `Skel = ⋃_{I independent} Λ_I` equality,
+and its Lean-correspondence table now lists `lambdaStratum`,
+`coordinateCap_eq_iUnion_lambdaStratum`,
+`FullSkeleton.trappedSet_eq_iUnion_lambdaStratum`, the chart-rank row for
+`IndependentNodeChart.complementRank_eq_sub_two_mul_card` and its companion
+`two_mul_card_le`. That content check was made by extracting the PDF text; **no
+page-by-page visual inspection was performed**, so the visual QA for this file
+is still outstanding and is part of step 2c.
 
-Then rewrite [`verification/document-check.json`](../verification/document-check.json)
-rather than only refreshing its hashes. That file has not been updated since
-commit `2c239b0`, and **four of its five recorded hashes are already stale**:
+### 2b. `proof-blueprint.pdf` — still stale
+
+[`proof-blueprint.pdf`](../proof-blueprint.pdf) has not been rebuilt. It still
+dates from 17:29 UTC, before the stratified restatement, while its source
+`docs/tex/proof-blueprint.tex` refers to the new declarations in seven places.
+Rebuild it from that source with the same engine.
+
+### 2c. Rewrite `verification/document-check.json`
+
+Rewrite [`verification/document-check.json`](../verification/document-check.json)
+rather than only refreshing its hashes. That file has not changed since commit
+`2c239b0`, and it was already inaccurate before this work began:
 
 | Recorded entry | State today |
 | --- | --- |
 | `docs/tex/preamble.tex` | matches |
 | `docs/tex/target-theorem.tex` | stale, source edited for G1/G2 |
 | `docs/tex/proof-blueprint.tex` | stale, source edited for G1/G2 |
-| `target-theorem.pdf` | stale, PDF already replaced at commit `262e47e` |
+| `target-theorem.pdf` | stale; superseded again by the 22:59 rebuild |
 | `proof-blueprint.pdf` | stale, PDF already replaced at commit `262e47e` |
 
-So the file does not describe the currently committed PDFs at all, and its
-"all 16 rendered pages visually inspected" line refers to PDFs that are no
-longer in the tree. The page counts it records, 3 and 13, should also be
-re-checked rather than assumed. A fresh visual inspection of the regenerated
-PDFs is needed, not a hash refresh.
+Both PDFs had in fact been replaced at commit `262e47e` without the check being
+updated, so its `"All 16 rendered pages visually inspected"` line refers to
+files that are no longer in the tree, and its page counts of 3 and 13 are both
+questionable: the rebuilt theorem PDF has 4 pages. Record a fresh inspection of
+both regenerated documents, with their real page counts and hashes, rather than
+editing the old numbers.
 
-This affects typesetting and visual QA only. `document-check.json` is outside
-the Lean verification scope and is not referenced by
-`verification/publication-check.json`, so none of this touches the accepted
+This step affects typesetting and visual QA only. `document-check.json` is
+outside the Lean verification scope and is not referenced by
+`verification/publication-check.json`, so none of it touches the accepted
 formalization.
 
 ## What must not be redone

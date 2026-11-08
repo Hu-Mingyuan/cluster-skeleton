@@ -16,7 +16,7 @@ The working directory has been restored from the final published source `966d312
 - [Proof-to-code map](docs/proof-blueprint.md): the Lean implementation of each step.
 - [Verification records](verification/README.md): reproducible checks, axiom policy, and source provenance.
 
-Editable LaTeX sources for both PDFs are in [`docs/tex`](docs/tex); they are current, while both PDFs predate the stratified restatement above and were not regenerated, because the publication host has no LaTeX toolchain. Only the relevant geometry is included in this publication. The complete source research notes and their later categorical arguments are not reproduced.
+Editable LaTeX sources for both PDFs are in [`docs/tex`](docs/tex); they are current, while both PDFs predate the stratified restatement above and were not regenerated, because the publication host has no LaTeX toolchain. The two remaining operator steps, regenerating those PDFs and delivering the accepted head to the origin default branch, are written up in [the operator handoff](docs/operator-handoff.md). Only the relevant geometry is included in this publication. The complete source research notes and their later categorical arguments are not reproduced.
 
 ## Definitions are separate from proofs
 

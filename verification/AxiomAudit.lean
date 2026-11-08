@@ -14,6 +14,9 @@ Only Lean's standard foundational axioms are allowed. -/
 #print axioms ClusterSkeleton.FullSkeleton.liouvilleSkeletonTarget_of_parameters
 #print axioms ClusterSkeleton.FullSkeleton.liouvilleSkeletonTarget
 #print axioms ClusterSkeleton.FullSkeleton.firstGeometricTarget
+#print axioms ClusterSkeleton.FullSkeleton.trappedSet_eq_iUnion_lambdaStratum
+#print axioms ClusterSkeleton.coordinateCap_eq_iUnion_lambdaStratum
+#print axioms ClusterSkeleton.IndependentNodeChart.complementRank_eq_sub_two_mul_card
 
 open Lean Elab Command in
 run_cmd do
@@ -24,6 +27,7 @@ run_cmd do
     `ClusterSkeleton.CapForwardInvariance,
     `ClusterSkeleton.CapIndependence,
     `ClusterSkeleton.CapSet,
+    `ClusterSkeleton.CapStrata,
     `ClusterSkeleton.CompactInteriorRigidity,
     `ClusterSkeleton.ConstructedFlowCapInclusion,
     `ClusterSkeleton.ConstructedFlowReverseInclusion,

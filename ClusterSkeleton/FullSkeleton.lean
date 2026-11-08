@@ -1,3 +1,4 @@
+import ClusterSkeleton.CapStrata
 import ClusterSkeleton.ConstructedFlowCapInclusion
 import ClusterSkeleton.ConstructedFlowReverseInclusion
 
@@ -28,6 +29,15 @@ theorem trappedSet_eq_coordinateCap :
   Set.Subset.antisymm
     (ConstructedFlowReverseInclusion.trappedSet_subset_coordinateCap S hdet hε hκ hδ)
     (ConstructedFlowCapInclusion.subset_trappedSet S hdet hε hκ hδ)
+
+/-- The reference's stratified form of the skeleton identity: the dynamical
+trapped set of the same constructed flow is the union of the strata `Λ_I` over
+the independent subsets of the mutable vertices. -/
+theorem trappedSet_eq_iUnion_lambdaStratum :
+    trappedSet (NativeCompleteFlow.completeFlow S hdet hε hκ hδ).flow =
+      ⋃ I : {I : Finset (Fin d) // S.Independent I}, lambdaStratum S I.val :=
+  (trappedSet_eq_coordinateCap S hdet hε hκ hδ).trans
+    (coordinateCap_eq_iUnion_lambdaStratum S)
 
 /-- Construct all the original Liouville data using the accepted global
 primitive, its actual vector field, and this very same complete flow. -/

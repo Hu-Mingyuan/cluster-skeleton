@@ -246,6 +246,36 @@ theorem basis_cardinality :
   have h := Module.finrank_eq_card_basis (independentRowBasis S I hdet hI)
   simpa only [Module.finrank_pi, Fintype.card_sum] using h.symm
 
+/-- The outside coordinates not consumed by the independent rows, as a literal count:
+independence forces `2 * |I| ≤ d`. -/
+theorem two_mul_card_le :
+    2 * I.card ≤ d := by
+  classical
+  have hb := basis_cardinality S I hdet hI
+  have hin : Fintype.card {i : Fin d // i ∈ I} = I.card := Fintype.card_coe I
+  have hout : Fintype.card {j : Fin d // j ∉ I} = d - I.card := by
+    rw [Fintype.card_subtype_compl (fun j : Fin d => j ∈ I), hin, Fintype.card_fin]
+  have hle : I.card ≤ d := by simpa using Finset.card_le_univ I
+  rw [hin, hout] at hb
+  omega
+
+/-- The torus exponent of the node chart is literally `d - 2 * |I|`, the reference's
+`m + f - 2|I|` for the full set of original coordinates. -/
+theorem complementRank_eq_sub_two_mul_card :
+    SplitIntegerRows.complementRank (independentRowRightInverse S I)
+      = d - 2 * I.card := by
+  classical
+  have hb := basis_cardinality S I hdet hI
+  have hin : Fintype.card {i : Fin d // i ∈ I} = I.card := Fintype.card_coe I
+  have hout : Fintype.card {j : Fin d // j ∉ I} = d - I.card := by
+    rw [Fintype.card_subtype_compl (fun j : Fin d => j ∈ I), hin, Fintype.card_fin]
+  have hle : I.card ≤ d := by simpa using Finset.card_le_univ I
+  have hc : Fintype.card (Complement S I)
+      = SplitIntegerRows.complementRank (independentRowRightInverse S I) := by
+    simp [Complement]
+  rw [hin, hout, hc] at hb
+  omega
+
 /-- The complex node vector space has dimension d, including empty index sets. -/
 theorem vector_finrank_complex : Module.finrank ℂ (Vector S I) = d := by
   have hb := basis_cardinality S I hdet hI

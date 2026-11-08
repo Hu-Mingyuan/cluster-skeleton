@@ -1,3 +1,5 @@
+Current reference: `proof-blueprint.pdf` and `docs/tex/proof-blueprint.tex` now use the supplied skeleton appendix. Reuse the existing Lean source described below; audit conventions and fill any genuine differences in the requested skew-symmetric scope. The weighted notation does not itself establish a weighted Lean theorem.
+
 # Geometric proof-to-code map
 
 Read the self-contained [proof blueprint PDF](../proof-blueprint.pdf), with editable source in [`tex/proof-blueprint.tex`](tex/proof-blueprint.tex). The [target guide](target-theorem.md) separates definitions and formulation from proofs.

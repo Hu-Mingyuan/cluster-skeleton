@@ -19,5 +19,13 @@
     "commit": "03f558f67301b9514c92ef1833dca1bd56b45ab7",
     "tree": "073177fc635f99a05cc2da8a4ee626ce2f52ddba",
     "note": "Local development source provenance; publication adds documentation and standard final-theorem verification."
+  },
+  "current_skeleton_reference": {
+    "title": "Skeleton in the acyclic case",
+    "sha256": "074e17d348cc533b3d0f23c2dd048942953aba05a356cefa1bf244bb1efac137",
+    "scope": "Skeleton section only; use existing skew-symmetric Lean theorem and source; no categorical HMS.",
+    "local_pdf": "proof-blueprint.pdf",
+    "local_tex": "docs/tex/proof-blueprint.tex",
+    "unimodularity_and_acyclicity": "retained"
   }
 }

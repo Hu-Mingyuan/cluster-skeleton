@@ -4,6 +4,10 @@ Lean formalization of the Liouville geometry of unimodular acyclic cluster model
 
 Frozen coordinates remain variable elements of `ℂ*`. The full skew-symmetric integer matrix has determinant one; only the mutable quiver must be acyclic.
 
+## Current continuation
+
+The working directory has been restored from the final published source `966d31257fd6fc9975ac4004ed9a2b3db5ea38ef`. The existing skew-symmetric determinant-one theorem below is the verified baseline. The proof PDF was replaced on 8 November 2026 using the supplied skeleton appendix; its weighted notation is reference material. Continue from the existing code in the requested skew-symmetric scope; a general weighted extension is not certified by the current theorem. Local Archon must use Claude Fable for planner assignments and Claude Opus for proof workers.
+
 ## Read the mathematics
 
 - [Target theorem (PDF)](target-theorem.pdf): precise hypotheses, definitions, quantifiers, and scope.

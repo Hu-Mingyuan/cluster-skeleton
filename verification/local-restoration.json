@@ -1,0 +1,14 @@
+{
+  "restored_from": "966d31257fd6fc9975ac4004ed9a2b3db5ea38ef",
+  "local_original_archon_run": "1a77799b-9bf3-4582-9072-a429653c258f",
+  "archon_accepted_head": "03f558f67301b9514c92ef1833dca1bd56b45ab7",
+  "lean_source_files": 57,
+  "new_proof_pdf_sha256": "d983d0777e9a5466a0c81e8d9e4ad8096765636fb398b7dd32d1f04d3bbd045c",
+  "current_rebuild": "not yet run",
+  "planner_model": "fable",
+  "worker_model": "opus",
+  "current_pdf_sha256": {
+    "proof-blueprint.pdf": "38142cd569469e1c9b29989de8bb78401a281186a9d07f40506f99df97afb3dd",
+    "target-theorem.pdf": "c23b9864180532a09e490e6bb2bdd1d0ce54fc87bb65e2c6d0151ae2a642f016"
+  }
+}

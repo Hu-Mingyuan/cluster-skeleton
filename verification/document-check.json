@@ -1,21 +1,24 @@
 {
-  "scope": "Typesetting and visual QA; mathematical validity is checked separately in Lean and statement review",
-  "compiler": "XeLaTeX, TeX Live 2024",
+  "scope": "Typesetting and visual QA; mathematical validity is checked separately by the accepted Lean verification and statement review.",
+  "compiler": {
+    "target-theorem.pdf": "XeLaTeX, TeX Live 2024",
+    "proof-blueprint.pdf": "pdfLaTeX, TeX Live 2024"
+  },
   "pages": {
-    "target-theorem.pdf": 3,
-    "proof-blueprint.pdf": 13
+    "target-theorem.pdf": 4,
+    "proof-blueprint.pdf": 6
   },
   "checks": [
-    "Compilation succeeded",
-    "No undefined references or overfull boxes in final logs",
-    "All 16 rendered pages visually inspected",
-    "PDF text extraction contains no unresolved reference markers"
+    "Both PDFs compiled successfully from the current LaTeX sources",
+    "No undefined references, missing characters or overfull boxes in final logs",
+    "All ten rendered pages visually inspected",
+    "Current stratified skeleton statement and torus exponent included"
   ],
   "source_and_output_sha256": {
-    "docs/tex/preamble.tex": "35aa160bd7f046803344c5b24bc1a6ef91c85d6a983dd2f96d18dc6f846d44ff",
-    "docs/tex/proof-blueprint.tex": "7e0e5417065a409e0f3d8f7c5814dc8e5fd7c093b7dd825f3104d05d635a62f2",
-    "docs/tex/target-theorem.tex": "955a11d3d1dd8540730d20025f3286780d89b07453bc50c815d07eae8d3177cf",
-    "target-theorem.pdf": "48adfc754d179d8f4e80083cc8e8e3f4f6e90b6c770ee2bfe91afae5110a4cd4",
-    "proof-blueprint.pdf": "38d9c07df08c6217e0b9659a4ef744f5be9cba734513a8df049cfec2a59e1149"
+    "docs/tex/preamble.tex": "f6db2a72071b953d5e04947ad1402bc439089610368b63a991375f65a73efce7",
+    "docs/tex/proof-blueprint.tex": "08f0747a89008fa711b572700cde8661320cad15e0a6d6d406e7d2808c342c88",
+    "docs/tex/target-theorem.tex": "9d7aeff85b3d6c1a1f66640bb25a6f02fdac2178f7f174727e3e317c4ff7fb43",
+    "target-theorem.pdf": "a4e9d94d007c12e6c67cc39040a007b28d1b37759aaf998d761720d61890b1c3",
+    "proof-blueprint.pdf": "043fb51ee96e2534776e03aafa3b8affbf2174bae1b391d965582543b3d092de"
   }
 }

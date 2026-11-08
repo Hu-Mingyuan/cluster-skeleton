@@ -176,26 +176,25 @@ theorem for the complex logarithmic two-form, finite type, a product
 description of individual cap pieces, generalized cocores, or any Fukaya,
 microlocal, or homological mirror symmetry equivalence.
 
-The repository's \lean{verification/README.md} distinguishes historical
-Horizon source-bound acceptance from the publication checkout's reproducible
-checks. The Lean kernel checks the supplied proofs; a separate statement
+The repository's \lean{verification/README.md} records reproducible
+checks and the hashes of the accepted sources. The Lean kernel checks the supplied proofs; a separate statement
 review checks that the definitions and quantifiers express
 Theorem~\ref{thm:target}. The accepted foundation allowlist is
 \lean{propext}, \lean{Classical.choice}, and \lean{Quot.sound}; these are
 standard logical foundations, not additional geometric assumptions.
 
 
-\section{Updated reference and continuation scope}
-The accompanying proof blueprint now follows the supplied appendix
+\section{Reference conventions and scope}
+The accompanying proof blueprint follows the supplied appendix
 ``Skeleton in the acyclic case''. It uses column exchange exponents and
 an integral unimodular completion $E$ with a positive rational diagonal
 $\widetilde D$ such that $E\widetilde D$ is skew-symmetric.
-The existing formalized theorem above is the specialization
+The formalized theorem above is the specialization
 $\widetilde D=I$. Row and column exchange conventions interchange the
 two monomials in this specialization; their sum is unchanged.
-The continuation uses the existing code to check the supplied argument in
-the requested skew-symmetric case. The weighted notation in the reference
-does not certify a general skew-symmetrizable Lean theorem.
+The Lean result concerns this skew-symmetric specialization. The weighted
+notation in the reference does not certify a general skew-symmetrizable
+Lean theorem.
 Unimodularity and mutable acyclicity remain hypotheses.
 
 \end{document}

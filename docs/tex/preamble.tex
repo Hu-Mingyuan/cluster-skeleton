@@ -10,6 +10,7 @@
 \definecolor{inkblue}{HTML}{244860}
 \usepackage[unicode,colorlinks=true,linkcolor=inkblue,urlcolor=inkblue,citecolor=inkblue]{hyperref}
 \usepackage{bookmark}
+\usepackage{xurl}
 \usepackage{fancyhdr}
 \pagestyle{fancy}\fancyhf{}
 \fancyhead[L]{\small\sffamily Cluster skeleton geometry}
@@ -34,6 +35,6 @@
 \newcommand{\re}{\operatorname{Re}}
 \newcommand{\Skel}{\operatorname{Skel}}
 \newcommand{\supp}{\operatorname{supp}}
-\newcommand{\lean}[1]{\texttt{\small\detokenize{#1}}}
+\newcommand{\lean}[1]{{\small\expandafter\nolinkurl\expandafter{\detokenize{#1}}}}
 \newcommand{\leanref}[2]{\par\smallskip{\small\sffamily Lean correspondence: \lean{#1}; \lean{#2}.}\par\smallskip}
 \emergencystretch=2em

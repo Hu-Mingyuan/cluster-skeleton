@@ -16,14 +16,14 @@
   "lean": "leanprover/lean4:v4.34.1",
   "mathlib": "d13f23b723b8a846827a245b89c10fc7d3f11612",
   "accepted_horizon_source": {
-    "commit": "03f558f67301b9514c92ef1833dca1bd56b45ab7",
-    "tree": "073177fc635f99a05cc2da8a4ee626ce2f52ddba",
-    "note": "Local development source provenance; publication adds documentation and standard final-theorem verification."
+    "commit": "4c02c1e5bbc68907552632344ae04017d82a30b4",
+    "tree": "421e0f101ffceedc9370ae9df37e51ad8983deeb",
+    "note": "Accepted Lean source for the coordinate-cap and stratified skeleton statements, with the explicit independent node-chart torus rank."
   },
   "current_skeleton_reference": {
     "title": "Skeleton in the acyclic case",
     "sha256": "074e17d348cc533b3d0f23c2dd048942953aba05a356cefa1bf244bb1efac137",
-    "scope": "Skeleton section only; use existing skew-symmetric Lean theorem and source; no categorical HMS.",
+    "scope": "Skeleton section only; formalized skew-symmetric unimodular specialization with mutable acyclicity and variable frozen coordinates; no categorical HMS.",
     "local_pdf": "proof-blueprint.pdf",
     "local_tex": "docs/tex/proof-blueprint.tex",
     "unimodularity_and_acyclicity": "retained"

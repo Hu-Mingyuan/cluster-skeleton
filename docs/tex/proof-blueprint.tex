@@ -3,6 +3,7 @@
 \usepackage{lmodern,microtype,amsmath,amssymb,amsthm,mathtools,enumitem}
 \usepackage[margin=25mm]{geometry}
 \usepackage[colorlinks=true,linkcolor=blue,urlcolor=blue,citecolor=blue]{hyperref}
+\usepackage{xurl}
 \newtheorem{theorem}{Theorem}\newtheorem{lemma}{Lemma}
 \newcommand{\cA}{\mathcal A}\newcommand{\sA}{\mathcal A}
 \newcommand{\cN}{\mathcal N}\newcommand{\cO}{\mathcal O}
@@ -16,13 +17,12 @@
 \author{Cluster skeleton geometry: formalization reference}
 \date{8 November 2026}
 \begin{document}\maketitle
-This reference replaces the previous project PDF and follows the supplied
-``Skeleton in the acyclic case'' proof. Its scope is the smooth Liouville
-primitive, complete flow, and the explicit dynamical skeleton. The mathematical
-proof below is the informal input to Lean. Its presence here does not certify
-that the corresponding Lean theorem has been completed.
-The existing skew-symmetric unimodular target is the specialization
-$\widetilde D=I$; the weighted notation is retained from the supplied proof.
+This reference presents the supplied ``Skeleton in the acyclic case''
+argument for the smooth Liouville primitive, complete flow, and explicit
+dynamical skeleton. The accompanying Lean formalization proves the
+skew-symmetric unimodular specialization $\widetilde D=I$.
+Weighted notation is retained from the reference argument; a general
+weighted Lean theorem is not asserted.
 \section{Skeleton in the acyclic case}
 \label{app:acyclic-skeleton}
 
@@ -405,45 +405,44 @@ independent (equivalently use the existing strict-cap-independence lemma).
 Both descriptions are now formalized, and
 \eqref{eq:acyclic-skeleton} holds literally in Lean for the constructed flow.
 The stratum $\Lambda_I$ of \eqref{eq:acyclic-skeleton} is
-\texttt{ClusterSkeleton.lambdaStratum} in
-\texttt{ClusterSkeleton/CapStrata.lean}, which also proves
-\texttt{lambdaStratum\_subset\_coordinateCap},
-\texttt{coordinateCap\_subset\_lambdaStratum\_strictCapIndices},
-\texttt{coordinateCap\_eq\_iUnion\_lambdaStratum} (the union over the
-subtype of independent $I$), \texttt{isClosed\_lambdaStratum} and
-\texttt{isCompact\_lambdaStratum} --- the per-stratum compactness used in
+\nolinkurl{ClusterSkeleton.lambdaStratum} in
+\nolinkurl{ClusterSkeleton/CapStrata.lean}, which also proves
+\nolinkurl{lambdaStratum_subset_coordinateCap},
+\nolinkurl{coordinateCap_subset_lambdaStratum_strictCapIndices},
+\nolinkurl{coordinateCap_eq_iUnion_lambdaStratum} (the union over the
+subtype of independent $I$), \nolinkurl{isClosed_lambdaStratum} and
+\nolinkurl{isCompact_lambdaStratum} --- the per-stratum compactness used in
 inclusion (ii) above. Composed with the cap equality, this yields
-\texttt{ClusterSkeleton.FullSkeleton.trappedSet\_eq\_iUnion\_lambdaStratum},
+\nolinkurl{ClusterSkeleton.FullSkeleton.trappedSet_eq_iUnion_lambdaStratum},
 which is \eqref{eq:acyclic-skeleton} for the same constructed flow.
 Independence of $I$ is used for neither inclusion; it only indexes the union
 by the family used here.
 
 The torus exponent $m+f-2|I|$ of Lemma~\ref{lem:acyclic-node-charts}(ii) is
-\texttt{ClusterSkeleton.IndependentNodeChart.complementRank\_eq\_sub\_two\_mul\_card},
-namely \texttt{complementRank (independentRowRightInverse S I) = d - 2 * I.card}
+\nolinkurl{ClusterSkeleton.IndependentNodeChart.complementRank_eq_sub_two_mul_card},
+namely \nolinkurl{complementRank (independentRowRightInverse S I) = d - 2 * I.card}
 for independent $I$ in the skew-symmetric specialization $d=m+f$, with
-\texttt{two\_mul\_card\_le} for $2|I|\le d$. Both are in
-\texttt{ClusterSkeleton/IndependentNodeSmooth.lean}, in namespace
-\texttt{ClusterSkeleton.IndependentNodeChart}.
+\nolinkurl{two_mul_card_le} for $2|I|\le d$. Both are in
+\nolinkurl{ClusterSkeleton/IndependentNodeSmooth.lean}, in namespace
+\nolinkurl{ClusterSkeleton.IndependentNodeChart}.
 
 These are restatements of the proved theorem and of the existing chart
-cardinality lemma: no hypothesis is added, no earlier statement is changed,
+cardinality lemma: no hypothesis is added, the source hypotheses are unchanged,
 and the scope stays the skew-symmetric unimodular case with mutable
 acyclicity and variable frozen coordinates.
 The existing Lean seed uses row exponents, whereas this reference uses
 column exponents. In the skew-symmetric specialization the two exchange
 monomials are interchanged, so their sum and the exchange variety agree.
-Exchange ratios are inverted. Check the sign of the logarithmic form and
-all angle-flow formulas explicitly when transporting the proof.
+Exchange ratios are inverted. The sign of the logarithmic form and the angle-flow conventions are
+compared in the accompanying proof-to-code audit.
 
 No principal-coefficient assumption is imposed. Unimodularity is retained;
 neither removal of acyclicity nor arbitrary singular matrices is asserted.
-The weighted statement requires updating the seed interface; the old
-skew-symmetric case must remain a specialization. Use native Mathlib geometry
-and the pinned FsFltz interfaces. A successful build of conditional lemmas
-does not establish the existence target. For each accepted theorem record
-its exact type and a transitive axiom audit; permit only
-\texttt{propext}, \texttt{Classical.choice}, and \texttt{Quot.sound}.
+The formalization uses native Mathlib geometry and the pinned FsFltz
+interfaces. The verification records bind the accepted source to its exact
+theorem types and transitive axiom audit; the permitted logical foundations
+are \nolinkurl{propext}, \nolinkurl{Classical.choice}, and
+\nolinkurl{Quot.sound}.
 
 \begin{thebibliography}{9}
 \bibitem{BFZ-III} A. Berenstein, S. Fomin, A. Zelevinsky,

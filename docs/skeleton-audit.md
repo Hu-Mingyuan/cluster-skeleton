@@ -6,46 +6,33 @@ the supplied reference. Nothing below claims, implies, or proposes a weighted
 (`D̃ ≠ I`) theorem; the weighted notation of the reference is retained there only
 as notation.
 
-**Summary.** Every step of the supplied proof now has a Lean counterpart in
-`ClusterSkeleton/*.lean`. When this audit was written, the stratified
-description of the cap was missing: the Lean theorem proved
-`trappedSet = coordinateCap` with the reference's *equivalent* coordinate cap,
-while `Λ_I` and `coordinateCap = ⋃_{I independent} Λ_I` were defined nowhere
-(gap **G1**), and the exponent `m+f-2|I|` of the node chart's torus factor was
-only implicit (gap **G2**). **Both gaps are now closed in the Lean source** at
-integrating commit `4c02c1e5bbc68907552632344ae04017d82a30b4`: G1 by
-`CapStrata.lambdaStratum`, `CapStrata.coordinateCap_eq_iUnion_lambdaStratum`
-and `FullSkeleton.trappedSet_eq_iUnion_lambdaStratum`, G2 by
-`IndependentNodeSmooth.complementRank_eq_sub_two_mul_card`; the per-gap entries
-in part 3 record the exact declarations. One gap remains **optional** (**G3**).
-Everything else is a convention difference that needs no Lean change
-(**N1-N9**). The translation has three sign/duality facts that must be
-quoted together: the two exchange monomials are interchanged (1.2), the exchange
-ratio and the node character are inverted (1.3, 1.4), and the Lean `H` is the
-negative of the reference's `H` while the Lean primitive subtracts `dH`, so the
-constructed primitive is exactly the reference's `λ_ac` (1.6).
+**Summary.** The supplied proof has a Lean counterpart in
+`ClusterSkeleton/*.lean` in the scope stated above. The stratified cap identity
+is proved by `coordinateCap_eq_iUnion_lambdaStratum` and
+`FullSkeleton.trappedSet_eq_iUnion_lambdaStratum`; the explicit chart rank is
+proved by `IndependentNodeChart.complementRank_eq_sub_two_mul_card`.
+The entries **G1** and **G2** below give the exact declarations. **G3** is an
+optional determinant convention, outside the required statement.
+The convention comparisons **N1-N9** require no additional Lean changes.
+Three sign and duality facts are used together: the exchange monomials are
+interchanged (1.2), the exchange ratio and node character are inverted (1.3,
+1.4), and the Lean `H` is the negative of the reference's `H` while the Lean
+primitive subtracts `dH` (1.6).
 
 Inputs compared:
 
-* reference proof: [`tex/proof-blueprint.tex`](tex/proof-blueprint.tex)
-  (`Skeleton in the acyclic case`, Lemma `lem:acyclic-node-charts`,
-  Theorem `thm:acyclic-skeleton` and its proof), with
-  [`roadmap.md`](roadmap.md), [`target-theorem.md`](target-theorem.md),
-  [`proof-blueprint.md`](proof-blueprint.md) and `AGENTS.md`;
-* Lean construction: `ClusterSkeleton/*.lean` at the current head of
-  `cluster-workspace` (base commit `7e1a6339f25c8b56cef1e60c37b59a32aa64f8ff`).
+* reference proof: [`tex/proof-blueprint.tex`](tex/proof-blueprint.tex),
+  [`target-theorem.md`](target-theorem.md) and
+  [`proof-blueprint.md`](proof-blueprint.md);
+* accepted Lean source identified by
+  [`../verification/accepted-library.json`](../verification/accepted-library.json).
 
-No file under `ClusterSkeleton/`, no PDF and no file under `docs/tex/` was
-modified by the audit mission itself; every genuine difference was recorded in
-part 3 as a proposed Lean statement for later dispatch. The G1 and G2 proposals
-were subsequently implemented and published; `docs/tex/` was updated to match,
-and the PDFs were not regenerated (no LaTeX toolchain on the publication host).
-
-**Verification method.** The pinned environment is materialized in this
-checkout (Lean 4.34.1 via `ELAN_HOME=/mnt/d/HorizonData/tools/elan`, Mathlib and
-`FsFltz` oleans present, `ClusterSkeleton` built), so the audit was checked
-mechanically with `lake env lean` on scratch files under `$TMPDIR`; `lake update`
-was not run and no file in the repository other than this one was touched.
+**Verification method.** Declaration names and types were checked with
+`lake env lean` in the pinned Lean 4.34.1, Mathlib and FsFltz environment.
+The full build and transitive axiom evidence are recorded in
+[`../verification/README.md`](../verification/README.md). The current PDFs
+include the stratified identity and explicit chart rank; their independent
+typesetting check is [`../verification/document-check.json`](../verification/document-check.json).
 
 * **Names and types.** Every Lean declaration cited below was confirmed with
   `#check`. Two citations were corrected by that pass: `PrimitiveLocalization`
@@ -66,16 +53,13 @@ was not run and no file in the repository other than this one was touched.
   therefore `deriv (vartheta δ) (-T) = deriv (vartheta δ) T` (via
   `deriv_comp_neg`). These are what make `H_Lean = -H_reference` and make the
   radial equation of 1.7 transport verbatim.
-* **The proposals in part 3.** The statements proposed for gaps **G1** and
-  **G2** were written out and proved in scratch files against this commit, so
-  the follow-up dispatch is a copy-in rather than an open proof obligation; the
-  proofs are reproduced with each gap.
+* **The statements in part 3.** The **G1** and **G2** statements are
+  implemented in the accepted library. Their proofs and exact declarations
+  are reproduced with each entry.
 
 Compilation and the transitive axiom audit of the compared Lean sources are
 independently recorded in [`../verification/build.log`](../verification/build.log)
-and [`../verification/axioms.log`](../verification/axioms.log). The audit was
-written against commit `0751c90` (`FULL_GEOMETRIC_TARGET_VERIFIED`, 57 modules,
-1480 declarations); after the G1/G2 integration the same verifier reports
+and [`../verification/axioms.log`](../verification/axioms.log). The verifier reports
 `FULL_GEOMETRIC_TARGET_VERIFIED` with 58 modules and 1492 declarations at
 accepted source commit `4c02c1e5bbc68907552632344ae04017d82a30b4`, axioms
 limited to `propext`, `Classical.choice`, `Quot.sound` throughout.
@@ -707,7 +691,5 @@ in `BoundaryTangency.nodeLog_drift`, `ZeroStratumInvariance.normSq_drift`,
   frozen coordinates, and make no weighted or principal-coefficient claim. The
   build and transitive axiom evidence for the integrated source is recorded in
   [`../verification/README.md`](../verification/README.md).
-* One documentation step is deliberately left open: `target-theorem.pdf` and
-  `proof-blueprint.pdf` still predate the G1/G2 closure, because the
-  publication host has no LaTeX toolchain. The `docs/tex/` sources carry the
-  updated text.
+* Both PDFs and their editable `docs/tex/` sources state the accepted
+  stratified skeleton result and explicit torus rank.

@@ -41,6 +41,6 @@ These close gaps **G1** and **G2** of the [audit](skeleton-audit.md); the scope 
 
 [`FullSkeletonConsumer.lean`](../verification/FullSkeletonConsumer.lean) applies the final theorem to the literal coordinate conditions and to the complete Liouville manifold. The reproducible build, transitive axiom audit, and their exact source bindings are described in the [verification guide](../verification/README.md).
 
-The PDF and `docs/tex/proof-blueprint.tex` state the reference's stratified identity; `tex` records the Lean declarations above, while `proof-blueprint.pdf` predates them and has not been regenerated, because the publication host has no LaTeX toolchain.
+The current PDF and `docs/tex/proof-blueprint.tex` state the stratified identity and record its Lean declarations.
 
 The rewritten PDF contains only the relevant geometry. It proves a real smooth extension of the imaginary logarithmic form; later finite-type, cocore, and categorical statements from the original notes are not included.

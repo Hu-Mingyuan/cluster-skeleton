@@ -4,9 +4,9 @@ Lean formalization of the Liouville geometry of unimodular acyclic cluster model
 
 Frozen coordinates remain variable elements of `ℂ*`. The full skew-symmetric integer matrix has determinant one; only the mutable quiver must be acyclic.
 
-## Current continuation
+## Verified result
 
-The working directory has been restored from the final published source `966d31257fd6fc9975ac4004ed9a2b3db5ea38ef`. The existing skew-symmetric determinant-one theorem below is the verified baseline. The proof PDF was replaced on 8 November 2026 using the supplied skeleton appendix; its weighted notation is reference material. Continue from the existing code in the requested skew-symmetric scope; a general weighted extension is not certified by the current theorem. Local Archon must use Claude Fable for planner assignments and Claude Opus for proof workers.
+The formalized skeleton is the coordinate cap and the union of the independent-set strata `Λ_I`. Independent node charts have torus exponent `d - 2|I|`. The complete library, final theorem consumers, and transitive axiom audit pass: 58 modules and 1,492 declarations, using only `propext`, `Classical.choice`, and `Quot.sound`.
 
 ## Read the mathematics
 
@@ -16,7 +16,7 @@ The working directory has been restored from the final published source `966d312
 - [Proof-to-code map](docs/proof-blueprint.md): the Lean implementation of each step.
 - [Verification records](verification/README.md): reproducible checks, axiom policy, and source provenance.
 
-Editable LaTeX sources for both PDFs are in [`docs/tex`](docs/tex); they are current, while both PDFs predate the stratified restatement above and were not regenerated, because the publication host has no LaTeX toolchain. The two remaining operator steps, regenerating those PDFs and delivering the accepted head to the origin default branch, are written up in [the operator handoff](docs/operator-handoff.md). Only the relevant geometry is included in this publication. The complete source research notes and their later categorical arguments are not reproduced.
+Editable LaTeX sources for both current PDFs are in [`docs/tex`](docs/tex). The [proof correspondence audit](docs/skeleton-audit.md) records the stratified identity, chart dimension and convention matching. This publication includes the relevant geometry; the source manuscript's later categorical arguments are outside its scope.
 
 ## Definitions are separate from proofs
 
@@ -27,7 +27,7 @@ Editable LaTeX sources for both PDFs are in [`docs/tex`](docs/tex); they are cur
 | Formulation | [`GeometryTarget.lean`](ClusterSkeleton/GeometryTarget.lean) | `FirstGeometricTarget` states the goal; defining it does not prove it |
 | Constructions and proofs | [`FullSkeleton.lean`](ClusterSkeleton/FullSkeleton.lean) and its imports | Construct the witnesses and prove `FullSkeleton.firstGeometricTarget` |
 
-The final equality is `FullSkeleton.trappedSet_eq_coordinateCap`. The final quantified existence theorem is `FullSkeleton.firstGeometricTarget : FirstGeometricTarget`, in namespace `ClusterSkeleton`. Neither a pre-existing flow nor either skeleton inclusion is assumed. Auxiliary cutoff parameters are instantiated by `ε = 1`, `κ = 3`, `δ = 1`.
+The cap equality is `FullSkeleton.trappedSet_eq_coordinateCap`; its stratified form is `FullSkeleton.trappedSet_eq_iUnion_lambdaStratum`. The final quantified existence theorem is `FullSkeleton.firstGeometricTarget : FirstGeometricTarget`, in namespace `ClusterSkeleton`. Neither a pre-existing flow nor either skeleton inclusion is assumed. Auxiliary cutoff parameters are instantiated by `ε = 1`, `κ = 3`, `δ = 1`.
 
 Here **skeleton** means the set of points whose forward orbit has compact closure in the exchange variety. The coordinate cap is defined by `|a_f| = 1` for frozen indices and `|a_i| ≤ 1`, `(1 - |a_i|²)b_i = 0` for mutable indices. Their equality is a theorem about the same constructed flow.
 

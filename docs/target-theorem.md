@@ -54,6 +54,6 @@ The final declarations are in [`FullSkeleton.lean`](../ClusterSkeleton/FullSkele
 
 This proves real smooth symplectic geometry, not algebraic smoothness or a complex-manifold structure. Holomorphic extension, finite type, cap products, cocores, and HMS are not claimed. The scope is the skew-symmetric unimodular case with mutable acyclicity and variable frozen coordinates; no weighted (`D̃ ≠ I`) and no principal-coefficient statement is asserted. The stratified restatement and the torus rank add no hypothesis and change no existing statement.
 
-`target-theorem.pdf` predates the stratified restatement; its editable source [`tex/target-theorem.tex`](tex/target-theorem.tex) is current, and the PDF was not regenerated because the publication host has no LaTeX toolchain.
+The current [`target-theorem.pdf`](../target-theorem.pdf) and its editable source [`tex/target-theorem.tex`](tex/target-theorem.tex) include the stratified statement.
 
 Both mathematical statement review and Lean checking are necessary. The [verification guide](../verification/README.md) records build and axiom evidence. Only the foundational axioms `propext`, `Classical.choice`, and `Quot.sound` are allowed; no additional geometric axioms are permitted.

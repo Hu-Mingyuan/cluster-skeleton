@@ -71,12 +71,15 @@ def coordinateDifferential {S : Seed d} (P : SmoothPresentation S)
   exact mfderiv (𝓘(ℝ, Model (2 * d))) (𝓘(ℝ, ℂ))
     (fun q : S.Point => q.a j) p
 
-/-- Evaluation of Im(1/2 Σ Bᵢⱼ dlog(aᵢ) ∧ dlog(aⱼ)).
+/-- Evaluation of `Im(1/2 Σ_{i,j} K_ij dlog(a_i) ∧ dlog(a_j))`, the imaginary part
+of the reference's weighted logarithmic form
+`Ω_T = ½ Σ_{j,l} K_jl dlog z_j ∧ dlog z_l`, whose coefficient is the skew
+rational matrix `K = E * D`, not the integral exchange matrix `E`.
 Only its restriction to `initialTorus` is used in the target. -/
 def logarithmicImaginaryValue {S : Seed d} (P : SmoothPresentation S)
     (p : S.Point) (v w : P.manifold.Tangent p) : ℝ :=
   ((1 / 2 : ℂ) * ∑ i : Fin d, ∑ j : Fin d,
-    (S.B i j : ℂ) *
+    (S.K i j : ℂ) *
       ((P.coordinateDifferential i p v / p.a i) *
         (P.coordinateDifferential j p w / p.a j) -
        (P.coordinateDifferential i p w / p.a i) *

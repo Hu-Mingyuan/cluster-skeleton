@@ -149,6 +149,23 @@ theorem B_pos_iff_neg (i j : Fin d) : 0 < S.B i j ↔ S.B j i < 0 :=
 theorem B_eq_zero_iff (i j : Fin d) : S.B i j = 0 ↔ S.B j i = 0 :=
   S.E_eq_zero_iff j i
 
+/-- **The weighted node coefficient.** The form matrix in the exponent
+orientation: `K i j = -(d i) * B i j`, i.e. `E i j * D j = -(D i) * E j i`. This
+is the symmetrizability field read against the exponent matrix `B = Eᵀ`, and it
+is the pointwise form of the reference identity
+`∑_j K_ij dlog z_j = -d_i dlog t_i` (the `x_i` row of the weighted node form).
+With `D = 1` it degenerates to `K = -B`. -/
+theorem K_eq_neg_D_mul_B (i j : Fin d) : S.K i j = -(S.D i) * (S.B i j : ℚ) := by
+  rw [K_apply, B_apply, S.skewSymmetrizable i j]
+  ring
+
+/-- The summed form of `K_eq_neg_D_mul_B`: the `i`-row of `K` is `-d_i` times
+the `i`-row of the exponent matrix. -/
+theorem sum_K_row_eq (i : Fin d) (x : Fin d → ℚ) :
+    ∑ j, S.K i j * x j = -(S.D i) * ∑ j, (S.B i j : ℚ) * x j := by
+  rw [Finset.mul_sum]
+  exact Finset.sum_congr rfl fun j _ => by rw [S.K_eq_neg_D_mul_B i j, mul_assoc]
+
 /-- Both exponent orientations have the same determinant, so unimodularity of `E`
 is unimodularity of the exponent matrix. -/
 theorem B_det (hdet : S.Unimodular) : S.B.det = 1 := by

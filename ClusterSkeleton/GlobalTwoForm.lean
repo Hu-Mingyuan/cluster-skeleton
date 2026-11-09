@@ -228,15 +228,17 @@ theorem isSmoothForm_exteriorDerivative_omega :
   SmoothManifold.isSmoothForm_exteriorDerivative _ _ (isSmoothForm_omega S hdet)
 
 /-- The constant real alternating form whose pullback by local logarithms has
-exactly the prescribed factor one half and imaginary part. -/
+exactly the prescribed factor one half and imaginary part. Its coefficient is
+the weighted form matrix `K = E * D`, matching
+`SmoothPresentation.logarithmicImaginaryValue`. -/
 def matrixForm : (Fin d → ℂ) [⋀^Fin 2]→L[ℝ] ℝ :=
   Complex.imCLM.compContinuousAlternatingMap
-    (((1 / 2 : ℂ) • ∑ i : Fin d, ∑ j : Fin d, (S.B i j : ℂ) •
+    (((1 / 2 : ℂ) • ∑ i : Fin d, ∑ j : Fin d, (S.K i j : ℂ) •
       wedge (ContinuousLinearMap.proj i) (ContinuousLinearMap.proj j)).restrictScalars ℝ)
 
 theorem matrixForm_apply (v : Fin 2 → (Fin d → ℂ)) :
     matrixForm S v = ((1 / 2 : ℂ) * ∑ i : Fin d, ∑ j : Fin d,
-      (S.B i j : ℂ) * (v 0 i * v 1 j - v 1 i * v 0 j)).im := by
+      (S.K i j : ℂ) * (v 0 i * v 1 j - v 1 i * v 0 j)).im := by
   simp [matrixForm, wedge_apply, smul_eq_mul]
 
 /-- Normalize each coordinate at a nonzero center before using the principal

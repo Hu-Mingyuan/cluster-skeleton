@@ -7,6 +7,10 @@ import Lean.Elab.Tactic.Omega
 This is the acyclic exchange-equation argument in the converse direction of
 Proposition 2.6. It applies to the strict-interior coordinates of a cap point,
 including its zero coordinates. It does not yet prove flow invariance.
+
+As for the zero set, only the sign combinatorics of `E` is used, through
+`Seed.E_pos_of_neg` and `Seed.E_eq_zero_iff`; the positive symmetrizer weights
+play no role. Exponents are the column exponents `S.B i j = S.E j i`.
 -/
 
 namespace ClusterSkeleton
@@ -30,19 +34,20 @@ private theorem norm_positiveMonomial_lt_one {p : S.Point}
     (hij : 0 < S.B i j) (hj : ‖p.a j‖ < 1) :
     ‖S.positiveMonomial p.a i‖ < 1 := by
   classical
-  have hn : (S.B i j).toNat ≠ 0 := by omega
+  have hij' : 0 < S.E j i := hij
+  have hn : (S.E j i).toNat ≠ 0 := by omega
   have hrest :
       ∏ k ∈ (Finset.univ : Finset (Fin d)).erase j,
-        ‖p.a k‖ ^ (S.B i k).toNat ≤ 1 :=
+        ‖p.a k‖ ^ (S.E k i).toNat ≤ 1 :=
     Finset.prod_le_one₀ (fun k _ => pow_nonneg (norm_nonneg _) _)
       (fun k _ => pow_le_one₀ (norm_nonneg _) (coordinateCap_norm_a_le hp k))
   simp only [Seed.positiveMonomial, norm_prod, norm_pow]
   calc
-    (∏ k : Fin d, ‖p.a k‖ ^ (S.B i k).toNat) =
+    (∏ k : Fin d, ‖p.a k‖ ^ (S.E k i).toNat) =
         (∏ k ∈ (Finset.univ : Finset (Fin d)).erase j,
-          ‖p.a k‖ ^ (S.B i k).toNat) * ‖p.a j‖ ^ (S.B i j).toNat :=
+          ‖p.a k‖ ^ (S.E k i).toNat) * ‖p.a j‖ ^ (S.E j i).toNat :=
       (Finset.prod_erase_mul _ _ (Finset.mem_univ j)).symm
-    _ ≤ 1 * ‖p.a j‖ ^ (S.B i j).toNat :=
+    _ ≤ 1 * ‖p.a j‖ ^ (S.E j i).toNat :=
       mul_le_mul_of_nonneg_right hrest (pow_nonneg (norm_nonneg _) _)
     _ < 1 := by simpa using pow_lt_one₀ (norm_nonneg _) hj hn
 
@@ -52,26 +57,24 @@ theorem coordinateCap_outgoing_not_interior {p : S.Point}
     ∀ i : S.Mutable, ‖p.a i‖ < 1 →
       ∀ j : S.Mutable, 0 < S.B i j → ¬ ‖p.a j‖ < 1 := by
   intro i
-  induction i using S.acyclic.induction with
+  induction i using S.acyclic_exponent.induction with
   | h i ih =>
     intro hi j hij hj
     have hQ : ‖S.negativeMonomial p.a i‖ = 1 := by
       simp only [Seed.negativeMonomial, norm_prod, norm_pow]
       apply Finset.prod_eq_one
       intro k _
-      by_cases hneg : S.B i k < 0
+      by_cases hneg : S.E k (i : Fin d) < 0
       · have hkunit : ‖p.a k‖ = 1 := by
           by_cases hkm : k ∈ S.mutable
-          · have hki : 0 < S.B k i := by
-              have hskew := S.skew i k
-              omega
+          · have hki : 0 < S.B k (i : Fin d) := S.E_pos_of_neg hneg
             have hknot : ¬ ‖p.a k‖ < 1 := by
               intro hk
               exact ih ⟨k, hkm⟩ hki hk i hki hi
             exact le_antisymm (coordinateCap_norm_a_le hp k) (le_of_not_gt hknot)
           · exact hp.1 k hkm
         simp [hkunit]
-      · have hn : (-S.B i k).toNat = 0 := by omega
+      · have hn : (-S.E k (i : Fin d)).toNat = 0 := by omega
         simp [hn]
     have hP := norm_positiveMonomial_lt_one hp (i : Fin d) (j : Fin d) hij hj
     have hsum : S.positiveMonomial p.a i + S.negativeMonomial p.a i = 0 := by
@@ -89,15 +92,26 @@ theorem coordinateCap_strictCapIndices_independent {p : S.Point}
   · intro i hi j hj
     obtain ⟨him, hi'⟩ := (p.mem_strictCapIndices i).mp hi
     obtain ⟨hjm, hj'⟩ := (p.mem_strictCapIndices j).mp hj
-    have hnotpos : ¬ 0 < S.B i j := by
+    have hnotpos : ¬ 0 < S.E j i := by
       intro hpos
       exact coordinateCap_outgoing_not_interior hp ⟨i, him⟩ hi' ⟨j, hjm⟩ hpos hj'
-    have hnotneg : ¬ S.B i j < 0 := by
+    have hnotneg : ¬ S.E j i < 0 := by
       intro hneg
-      have hpos : 0 < S.B j i := by
-        have hskew := S.skew i j
-        omega
+      have hpos : 0 < S.E i j := S.E_pos_of_neg hneg
       exact coordinateCap_outgoing_not_interior hp ⟨j, hjm⟩ hj' ⟨i, him⟩ hpos hi'
-    omega
+    have hji : S.E j i = 0 := by omega
+    exact (S.E_eq_zero_iff j i).mp hji
+
+/-- Outside the strict disk directions every original coordinate has modulus one,
+including the independently variable frozen coordinates. This is a cap-equation
+fact; it is stated here so that the stratified description of the cap does not
+depend on the flow modules. -/
+theorem norm_eq_one_of_not_strict (S : Seed d) {p : S.Point}
+    (hp : p ∈ coordinateCap S) (j : Fin d) (hj : j ∉ p.strictCapIndices) :
+    ‖p.a j‖ = 1 := by
+  by_cases hm : j ∈ S.mutable
+  · have hn : ¬ ‖p.a j‖ < 1 := fun h => hj ((p.mem_strictCapIndices j).mpr ⟨hm, h⟩)
+    exact le_antisymm (coordinateCap_norm_a_le hp j) (le_of_not_gt hn)
+  · exact hp.1 j hm
 
 end ClusterSkeleton

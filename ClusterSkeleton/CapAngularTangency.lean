@@ -19,13 +19,12 @@ variable {d : ℕ} (S : Seed d)
 open LocalAngularDynamics TorusLiouvilleDynamics
 
 /-- Outside the strict disk directions every original coordinate has modulus one,
-including the independently variable frozen coordinates. -/
+including the independently variable frozen coordinates. The proof now lives in
+`CapIndependence`, so that the stratified cap description does not import the
+flow modules; this is the same statement under its original name. -/
 theorem norm_eq_one_of_not_strict {p : S.Point} (hp : p ∈ coordinateCap S)
-    (j : Fin d) (hj : j ∉ p.strictCapIndices) : ‖p.a j‖ = 1 := by
-  by_cases hm : j ∈ S.mutable
-  · have hn : ¬ ‖p.a j‖ < 1 := fun h => hj ((p.mem_strictCapIndices j).mpr ⟨hm, h⟩)
-    exact le_antisymm (coordinateCap_norm_a_le hp j) (le_of_not_gt hn)
-  · exact hp.1 j hm
+    (j : Fin d) (hj : j ∉ p.strictCapIndices) : ‖p.a j‖ = 1 :=
+  ClusterSkeleton.norm_eq_one_of_not_strict S hp j hj
 
 /-- The independent locus selected by the cap contains its actual point. -/
 theorem mem_strict_locus {p : S.Point} (hp : p ∈ coordinateCap S) :

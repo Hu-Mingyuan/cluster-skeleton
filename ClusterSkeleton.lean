@@ -2,7 +2,9 @@ import ClusterSkeleton.ZeroSet
 import ClusterSkeleton.GeometryTarget
 import ClusterSkeleton.CapIndependence
 import ClusterSkeleton.CapStrata
+import ClusterSkeleton.SkewSeed
 import ClusterSkeleton.Examples.A2
+import ClusterSkeleton.Examples.NonSkew
 import ClusterSkeleton.TorusChart
 import ClusterSkeleton.NodeCoordinates
 import ClusterSkeleton.NodeLogExtension

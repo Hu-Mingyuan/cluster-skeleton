@@ -1,4 +1,4 @@
-Current reference: `proof-blueprint.pdf` and `docs/tex/proof-blueprint.tex` now use the supplied skeleton appendix. Reuse the existing Lean source described below; audit conventions and fill any genuine differences in the requested skew-symmetric scope. The weighted notation does not itself establish a weighted Lean theorem.
+> Scope: this guide records the verified skew-symmetric (`D = I`) baseline. The current PDFs and [active objective](roadmap.md) specify the skew-symmetrizable generalization, which is not yet Lean-verified.
 
 # Geometric proof-to-code map
 

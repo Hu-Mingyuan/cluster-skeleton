@@ -1,5 +1,7 @@
 # Verify the formalization
 
+The receipts below certify only the skew-symmetric baseline. The current PDFs describe the broader skew-symmetrizable target; they must not be read as a completed weighted Lean proof.
+
 From the repository root on Linux or Ubuntu under WSL, with Elan (`lake` and `lean` on `PATH`), Git, Python 3, and Bash 4 or newer installed:
 
 ```sh
@@ -53,4 +55,4 @@ The receipt and matching logs are retained in the repository. Re-running the ver
 
 The [statement review](statement-review.md) checks the definitions, quantifiers, and constructed witnesses against the intended real-geometric target. It distinguishes that review from compilation and from a line-by-line independent reproof of every lemma. The [theorem guide](../docs/target-theorem.md) and [proof map](../docs/proof-blueprint.md) identify the implemented claims.
 
-The [document check](document-check.json) binds the current four-page theorem PDF and six-page proof PDF to their editable LaTeX sources. Both include the stratified identity and the `d - 2|I|` torus rank; all ten rendered pages were visually inspected. The result is the real smooth Liouville structure, complete flow, and full trapped-set equality described there; the broader categorical claims in the reference are outside this theorem.
+The [document check](document-check.json) binds the current PDFs to their editable LaTeX sources and records document compilation and visual inspection. It is not a Lean proof receipt. The generalized target is in [the active objective](../docs/roadmap.md); its formal verification remains to be completed.

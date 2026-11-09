@@ -1,200 +1,168 @@
 \input{preamble.tex}
-\title{The Liouville skeleton of a unimodular acyclic cluster model\\[5pt]\large Definitions, target statement, and Lean correspondence}
+\title{The Liouville skeleton in the skew-symmetrizable acyclic case\\[5pt]\large Hypotheses, geometric target, and formalization scope}
 \author{Cluster skeleton formalization project}
 \date{}
-\begin{document}
-\maketitle
+\begin{document}\maketitle
 \begin{abstract}
-This document specifies the geometric theorem formalized by this repository.
-It separates the input data and newly defined predicates from the theorems
-which construct their witnesses. The accompanying proof blueprint gives the
-mathematical argument. The scope is a smooth real Liouville structure with
-complete flow and an explicit full dynamical skeleton.
+We specify the skeleton theorem for an integral unimodular completion
+$E$ equipped with a positive rational diagonal matrix $\widetilde D$ such
+that $K=E\widetilde D$ is skew-symmetric. The accompanying blueprint gives
+the weighted geometric argument. The existing Lean library proves the
+special case $\widetilde D=I$; the general statement below is the current
+formalization target, not a claim of completed Lean verification.
 \end{abstract}
 
-\section{Input data and the underlying space}
-Let $d\geq0$ and let $B=(B_{ij})\in M_d(\Z)$ be skew-symmetric with
-$\det B=1$. Choose a set $M\subseteq\{1,\ldots,d\}$ of mutable indices;
-write $F$ for its complement. The directed graph on $M$, with an arrow
-$i\to j$ when $B_{ij}>0$, is required to be acyclic. There is no
-acyclicity assumption on the full graph. The determinant condition concerns
-the entire matrix, including frozen indices.
+\section{Input data and exchange space}
+Let $n\ge0$, let $M\subseteq\{1,\ldots,n\}$ be mutable, and let $F$ be
+its complement. Fix
+\[
+ E\in GL_n(\Z),\qquad
+ \widetilde D=\operatorname{diag}(d_1,\ldots,d_n),\quad
+ d_j\in\mathbb Q_{>0},\qquad
+ K=E\widetilde D,\quad K^{\mathsf T}=-K.
+\]
+Thus $E_{ij}d_j=-E_{ji}d_i$, rather than $E_{ij}=-E_{ji}$.
+Require the mutable block $B=E_{M,M}$ to be acyclic: the arrows
+$i\to j$ with $B_{ij}>0$ have no directed cycle. No acyclicity is
+required on the full set of indices. The unimodular completion is part of
+the input; existence of such a completion for every exchange matrix is
+not asserted. In fact $\det E=1$: a nonsingular real skew-symmetric matrix
+has positive determinant, so $\det E=\det K/\det\widetilde D>0$,
+while unimodularity gives $\det E=\pm1$.
 
-For $a\in\C^d$ put
+Use \emph{column} exchange exponents throughout:
 \[
- P_i(a)=\prod_{j=1}^d a_j^{[B_{ij}]_+},\qquad
- Q_i(a)=\prod_{j=1}^d a_j^{[-B_{ij}]_+},\qquad [n]_+=\max(n,0).
+ P_i^\pm(z)=\prod_{j=1}^n z_j^{[\pm E_{ji}]_+}.
 \]
-Define the actual space of complex exchange points
 \[
- X_B=\left\{(a,b)\in\C^d\times\C^M:\
- a_ib_i=P_i(a)+Q_i(a)\ (i\in M),\quad a_f\ne0\ (f\in F)\right\}.
+ X_E=\left\{(z,z')\in\C^n\times\C^M:
+ \begin{array}{ll}
+ z_i z_i'=P_i^+(z)+P_i^-(z)&(i\in M),\\
+ z_f\ne0 &(f\in F)
+ \end{array}\right\}.
 \]
-It has the subspace topology from the indicated vector space. The frozen
-coordinates are variable points of $\C^*$, not specialized coefficients.
-The point $a_j=1$, $b_i=2$ shows that this space is nonempty.
-Its initial torus is $T=\{a_1\cdots a_d\ne0\}\subseteq X_B$.
-\leanref{ClusterSkeleton/Seed.lean}{Seed, Seed.Unimodular, Seed.Point}
+Here $[a]_+=\max(a,0)$. Give $X_E$ the induced topology. Frozen
+coordinates remain variable elements of $\C^*$; no principal-coefficient
+assumption is made. The initial torus is
+$T=\{z_1\cdots z_n\ne0\}\subset X_E$. On it set
+\[
+ c_i=Ee_i,\qquad t_i=z^{c_i}=P_i^+/P_i^-,\qquad
+ \Omega_T=\frac12\sum_{j,l}K_{jl}\,\dd\log z_j\wedge\dd\log z_l.
+\]
+The integer exponents come from $E$, not from the generally rational $K$.
 
-\section{Two independent subsets}
-\begin{definition}[Coordinate cap]
-The coordinate cap is the subset
+\section{Independently defined subsets}
+Define the coordinate cap without reference to any flow:
 \[
- C_B=\left\{(a,b)\in X_B:\
- |a_f|=1\ (f\in F),\quad
- |a_i|\leq1,\ (1-|a_i|^2)b_i=0\ (i\in M)\right\}.
+ C_E=\{(z,z')\in X_E: |z_f|=1\ (f\in F),\quad
+ |z_i|\le1,\ (1-|z_i|^2)z_i'=0\ (i\in M)\}.
 \]
-\end{definition}
-In particular, $|a_i|<1$ forces $b_i=0$. At $|a_i|=1$ the product
-condition imposes no further restriction on $b_i$; the exchange equation
-still applies. This definition contains no vector field or flow.
-Compactness of $C_B$ is a theorem, not a field supplied with the definition.
-\leanref{ClusterSkeleton/CapSet.lean}{coordinateCap, isCompact_coordinateCap}
+Call $I\subseteq M$ independent if $E_{ij}=0$ for all $i,j\in I$, and put
+\[
+ \Lambda_I=\{(z,z')\in X_E:
+ z_i'=0,\ |z_i|\le1\ (i\in I),\quad |z_j|=1\ (j\notin I)\}.
+\]
+For a real flow $\Phi$ on $X_E$, independently define
+\[
+ \Skel(\Phi)=\{p\in X_E:
+ \overline{\{\Phi_t(p):t\ge0\}}^{\,X_E}\text{ is compact}\}.
+\]
+The closure is taken in the actual exchange space.
 
-\begin{definition}[Reference strata]
-Call $I\subseteq M$ \emph{independent} if $B_{ij}=0$ for all $i,j\in I$, and
-for $I\subseteq\{1,\ldots,d\}$ put
-\[
- \Lambda_I=\left\{(a,b)\in X_B:\
- b_i=0,\ |a_i|\leq1\ (i\in M\cap I),\quad |a_j|=1\ (j\notin I)\right\}.
-\]
-\end{definition}
-Each $\Lambda_I$ is closed, and compact when $I\subseteq M$. For independent
-$I$ this is the reference's stratum. The cap is their union,
-\[
- C_B=\bigcup_{I\subseteq M\text{ independent}}\Lambda_I,
-\]
-because a cap point lies in the stratum indexed by its own set of strict disk
-directions $\{i\in M:|a_i|<1\}$, which is independent, while every
-$\Lambda_I$ with $I\subseteq M$ lies in $C_B$. Independence is needed for
-neither inclusion; it only indexes the union by the reference's family.
-\leanref{ClusterSkeleton/CapStrata.lean}{lambdaStratum, lambdaStratum_subset_coordinateCap, coordinateCap_subset_lambdaStratum_strictCapIndices, coordinateCap_eq_iUnion_lambdaStratum}
-
-\begin{definition}[Dynamical skeleton convention]
-For a continuous real flow $\Phi$ on $X_B$, let
-\[
- \Skel(\Phi)=\left\{x\in X_B:
- \overline{\{\Phi_t(x):t\geq0\}}^{\,X_B}\ \text{is compact}\right\}.
-\]
-\end{definition}
-The closure is taken in the actual space $X_B$. This is the
-\emph{relatively compact forward orbit} convention. It does not assert that
-points are fixed, and it does not use $C_B$ in its definition.
-\leanref{ClusterSkeleton/TrappedSet.lean}{trappedSet}
-
-\section{The geometric theorem}
-\begin{theorem}[Formalized target]\label{thm:target}
-For every input $(d,B,M)$ above, there exist a smooth real manifold
-structure on the fixed topological space $X_B$ of real dimension $2d$,
-a smooth real one-form $\lambda$, a smooth vector field $Z$, and a jointly
-smooth flow $\Phi:\R\times X_B\to X_B$, with the following properties.
+\section{The weighted geometric target}
+\begin{theorem}[Skew-symmetrizable skeleton target]\label{thm:target}
+For every $(n,E,\widetilde D,M)$ satisfying the hypotheses above, the
+fixed space $X_E$ admits a smooth real manifold structure of dimension
+$2n$, a smooth real one-form $\lambda$, a smooth vector field $Z$, and
+a jointly smooth flow $\Phi:\R\times X_E\to X_E$ such that:
 \begin{enumerate}
-\item The actual inclusion $X_B\hookrightarrow\C^d\times\C^M$ is a smooth
-immersion, and $T$ is dense in $X_B$.
-\item $\omega=\dd\lambda$ is nondegenerate, and on $T$ it satisfies
+\item The actual coordinate inclusion in $\C^n\times\C^M$ is a smooth
+immersion, and $T$ is dense.
+\item $\omega=\dd\lambda$ is nondegenerate and
+$\omega|_T=\im\Omega_T$.
+\item $\iota_Z\omega=\lambda$, $\Phi_0(p)=p$,
+$\Phi_{t+s}(p)=\Phi_t(\Phi_s(p))$, and
+$\frac{\dd}{\dd t}\Phi_t(p)=Z(\Phi_t(p))$ for every real $s,t$.
+Thus this same field is complete in both time directions.
+\item For this same flow,
 \[
- \omega=\im\!\left(\frac12\sum_{i,j=1}^d
- B_{ij}\,\dd\log a_i\wedge\dd\log a_j\right).
+ \boxed{\Skel(\Phi)=C_E=
+ \bigcup_{I\subseteq M\text{ independent}}\Lambda_I.}
 \]
-The differential $\dd\log a_i$ means $\dd a_i/a_i$; no global logarithm
-is chosen. Since $\omega=\dd\lambda$, the form is closed.
-\item $\iota_Z\omega=\lambda$. For every $x\in X_B$ and $t\in\R$,
-\[
- \Phi_0(x)=x,\qquad \Phi_{t+s}(x)=\Phi_t(\Phi_s(x)),\qquad
- \frac{\dd}{\dd t}\Phi_t(x)=Z(\Phi_t(x)).
-\]
-Thus this same vector field is complete in both time directions.
-\item For this same flow, there is literal equality of subsets of $X_B$:
-\[
- \boxed{\Skel(\Phi)=C_B
- =\bigcup_{I\subseteq M\text{ independent}}\Lambda_I.}
-\]
+Each $\Lambda_I$ in this union is compact.
 \end{enumerate}
+For independent $I$, the node chart
+$U_I=\{z_j\ne0\ (j\notin I)\}$ has the form
+$\mathcal N^{I}\times(\C^*)^{n-2|I|}$, where
+$\mathcal N=\{(x,y,t):xy=1+t,\ t\ne0\}$; in particular $2|I|\le n$.
 \end{theorem}
+The quantifier order is $\forall(n,E,\widetilde D,M)\ \exists
+(\text{smooth structure},\lambda,Z,\Phi)$. No flow, primitive,
+completeness, nondegeneracy, or skeleton inclusion is supplied as an
+additional hypothesis. The real smooth theorem is the Lean objective;
+the blueprint also explains the local extension of $\Omega_T$.
 
-The second equality is the reference's stratified form of the identity. It is
-a restatement of the same proved equality through the cap description above,
-not a further claim.
-\leanref{ClusterSkeleton/FullSkeleton.lean}{trappedSet_eq_coordinateCap, trappedSet_eq_iUnion_lambdaStratum}
-
-The quantifier order is
+\section{Why the weights cannot be discarded}
+Write $z_j=e^{u_j+\mathrm i\theta_j}$, $v_i=c_i(u)$ and
+$\eta_i=c_i(\theta)$. The blueprint constructs
 \[
- \forall(d,B,M)\text{ as above},\quad\exists(\text{smooth structure},
- \lambda,Z,\Phi)\quad\text{with all four properties}.
+ \lambda_{\rm tor}=u^{\mathsf T}K\,\dd\theta,\qquad
+ H=\sum_{i\in M}d_i h(u_i)\chi_i\rho(v_i)\beta(\eta_i),\qquad
+ \lambda=\lambda_{\rm tor}+\dd H.
 \]
-Neither a flow, completeness, compactness of the cap, nor either skeleton
-inclusion is an additional hypothesis. The construction uses positive cutoff
-parameters $\varepsilon,\delta$ and $\kappa\geq2\varepsilon+1$.
-The final existence theorem chooses $\varepsilon=\delta=1$, $\kappa=3$;
-these are auxiliary parameters, not values of frozen coordinates.
+The identities $Ke_i=d_ic_i$ and
+$c_i^{\mathsf T}K^{-1}=-e_i^{\mathsf T}/d_i$ give
+\[
+ \dot u_i=u_i-h(u_i)\chi_i\rho(v_i)\beta'(\eta_i),\qquad
+ \dot\eta_i=d_i^{-1}\partial_{u_i}H.
+\]
+The radial equations have the same form as in the unweighted case
+because the weights cancel, not because $d_i$ is assumed to be one.
+Every node symplectic block and its primitive carries the factor $d_i$.
+Positivity of $d_i$ and invertibility of $K$ enter the construction.
 
-\section{Definitions, formulation, and proof in Lean}
-\renewcommand{\arraystretch}{1.25}
-\begin{tabularx}{\textwidth}{@{}p{0.20\textwidth}X@{}}
-\toprule
-Role & Declaration and meaning\\\midrule
-Input definition & \lean{Seed}, with acyclicity as input;
-\lean{Seed.Unimodular}, the separate determinant hypothesis.\\
-Space and sets & \lean{Seed.Point}, \lean{coordinateCap}, and
-\lean{trappedSet} define the objects being compared;
-\lean{lambdaStratum} defines the strata $\Lambda_I$.\\
-Witness interface & \lean{SmoothPresentation} and \lean{LiouvilleData}
-specify the required constructions. Defining these structures does not
-construct an inhabitant.\\
-Target proposition & \lean{LiouvilleSkeletonTarget} and
-\lean{FirstGeometricTarget} state the quantified goal.\\
-Constructed witnesses & \lean{SmoothAtlas.presentation} and
-\lean{FullSkeleton.liouvilleData} supply the actual geometry.\\
-Equality theorem & \lean{FullSkeleton.trappedSet_eq_coordinateCap}
-combines the two proved inclusions for the same flow;
-\lean{FullSkeleton.trappedSet_eq_iUnion_lambdaStratum} restates it as the
-union of the strata, via
-\lean{coordinateCap_eq_iUnion_lambdaStratum}.\\
-Chart rank & \lean{IndependentNodeChart.complementRank_eq_sub_two_mul_card}
-proves the node-chart torus rank is $d-2|I|$ for independent $I$, with
-\lean{IndependentNodeChart.two_mul_card_le} for $2|I|\leq d$.\\
-Existence theorem & \lean{FullSkeleton.firstGeometricTarget}
-proves \lean{FirstGeometricTarget}.\\\bottomrule
-\end{tabularx}
+A concrete input that the general theorem must accept is
+\[
+ E=\begin{pmatrix}
+ 0&1&-1&0\\-2&0&0&-1\\1&0&0&0\\0&1&0&0
+ \end{pmatrix},\qquad
+ \widetilde D=\operatorname{diag}(1,2,1,2),\qquad M=\{1,2\}.
+\]
+Here $\det E=1$, $E\widetilde D$ is skew-symmetric, and the mutable
+quiver is acyclic, but $E_{12}=1\ne2=-E_{21}$. This example checks
+that the input is genuinely broader; it does not replace the theorem
+quantified over all admissible inputs.
 
-All names in the last four rows lie in the namespace
-\lean{ClusterSkeleton}. The core theorem is in
-\lean{ClusterSkeleton/FullSkeleton.lean}; the target proposition is in
-\lean{ClusterSkeleton/GeometryTarget.lean}.
+\section{Lean correspondence and acceptance}
+The existing source is the starting library. Its current
+\lean{Seed.skew} requires a skew-symmetric integer matrix, and
+\lean{FullSkeleton.firstGeometricTarget} proves that specialization.
+Existing verification receipts therefore certify only that baseline.
+They must not be reported as verification of Theorem~\ref{thm:target}.
 
-Mathlib supplies native topology, manifolds, derivatives and flows.
-The pinned \lean{fs-fltz-minimal} dependency supplies smooth-form and
-Liouville interfaces built on these notions. This project defines the
-specific cluster model and proves the required constructions and equations.
-New formal definitions are an encoding choice; they are not in themselves
-a claim of new mathematical concepts or a proof of the target.
+The generalized seed must distinguish integral exchange data $E$ from
+the weighted form $K=E\widetilde D$. The existing modules for zero
+sets, independent charts, smooth forms, cutoffs, global primitives,
+complete flows and both skeleton inclusions must be adapted on the same
+actual exchange space. Reuse existing constructions and proofs wherever
+valid; replacing the entire geometry by an assumed witness is not a proof.
 
-\section{Scope and verification}
-This is the Liouville/skeleton part of the original acyclic-cluster
-geometric problem. The statement does not include a holomorphic extension
-theorem for the complex logarithmic two-form, finite type, a product
-description of individual cap pieces, generalized cocores, or any Fukaya,
-microlocal, or homological mirror symmetry equivalence.
+The old code uses row exchange exponents. For $\widetilde D=I$, row
+and column conventions only interchange the two monomials. For general
+$\widetilde D$, this argument fails: the magnitudes can differ.
+The implementation must use the column convention above, or prove an
+explicit transpose/convention equivalence preserving the exchange
+space, the sign of the form, and the same-flow skeleton identity.
 
-The repository's \lean{verification/README.md} records reproducible
-checks and the hashes of the accepted sources. The Lean kernel checks the supplied proofs; a separate statement
-review checks that the definitions and quantifiers express
-Theorem~\ref{thm:target}. The accepted foundation allowlist is
-\lean{propext}, \lean{Classical.choice}, and \lean{Quot.sound}; these are
-standard logical foundations, not additional geometric assumptions.
+Acceptance requires the quantified weighted theorem, recovery of the
+old specialization, the non-skew example above, full library and final
+consumer compilation, and a transitive axiom audit allowing only
+\lean{propext}, \lean{Classical.choice}, and \lean{Quot.sound}.
+No \lean{sorry}, added geometric axiom, modified dependency, or
+assumption equivalent to the desired theorem is allowed. Updated
+receipts must bind the new source and the generalized theorem types.
 
-
-\section{Reference conventions and scope}
-The accompanying proof blueprint follows the supplied appendix
-``Skeleton in the acyclic case''. It uses column exchange exponents and
-an integral unimodular completion $E$ with a positive rational diagonal
-$\widetilde D$ such that $E\widetilde D$ is skew-symmetric.
-The formalized theorem above is the specialization
-$\widetilde D=I$. Row and column exchange conventions interchange the
-two monomials in this specialization; their sum is unchanged.
-The Lean result concerns this skew-symmetric specialization. The weighted
-notation in the reference does not certify a general skew-symmetrizable
-Lean theorem.
-Unimodularity and mutable acyclicity remain hypotheses.
-
+This target retains unimodularity and mutable acyclicity. It makes no
+claim for singular completions, arbitrary cyclic seeds, generalized
+cocores, or categorical mirror symmetry.
 \end{document}

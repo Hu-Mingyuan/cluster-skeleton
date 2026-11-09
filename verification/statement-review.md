@@ -1,3 +1,5 @@
+> Scope: this guide records the verified skew-symmetric (`D = I`) baseline. The current PDFs and [active objective](../docs/roadmap.md) specify the skew-symmetrizable generalization, which is not yet Lean-verified.
+
 # Mathematical statement review
 
 Date: 21 October 2026. Scope: independent reading of the final target, its constructed witnesses, the native geometric interfaces, and the corresponding geometric portion of the supplied manuscript. This review is separate from compilation and is not a claim of a line-by-line independent reproof of the entire Lean library.

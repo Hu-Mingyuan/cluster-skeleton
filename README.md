@@ -4,7 +4,11 @@ Lean formalization of the Liouville geometry of unimodular acyclic cluster model
 
 Frozen coordinates remain variable elements of `ℂ*`. The full skew-symmetric integer matrix has determinant one; only the mutable quiver must be acyclic.
 
-## Verified result
+## Current target: skew-symmetrizable generalization
+
+The current PDFs state the general target for integral unimodular `E` and an arbitrary positive rational diagonal `D` with `E D` skew-symmetric. The exchange equations use the **columns of E**. This generalization is in progress; the existing Lean code and receipts still certify only the `D = I` baseline. See [the current objective](docs/roadmap.md).
+
+## Verified baseline: skew-symmetric case
 
 The formalized skeleton is the coordinate cap and the union of the independent-set strata `Λ_I`. Independent node charts have torus exponent `d - 2|I|`. The complete library, final theorem consumers, and transitive axiom audit pass: 58 modules and 1,492 declarations, using only `propext`, `Classical.choice`, and `Quot.sound`.
 
@@ -54,7 +58,7 @@ These restatements close gaps **G1** and **G2** of [`docs/skeleton-audit.md`](do
 
 ## Reproduce the checks
 
-Use Linux or Ubuntu under WSL on Windows, with Elan (`lake` and `lean` on `PATH`), Git, Python 3, and Bash 4 or newer installed. This repository is private; cloning requires an authenticated GitHub account with access:
+Use Linux or Ubuntu under WSL on Windows, with Elan (`lake` and `lean` on `PATH`), Git, Python 3, and Bash 4 or newer installed. The repository is public:
 
 ```sh
 git clone https://github.com/Hu-Mingyuan/cluster-skeleton.git
@@ -79,4 +83,4 @@ The geometric problem comes from the supplied *acyclic_cluster_HMS* manuscript; 
 
 The theorem concerns real smooth symplectic geometry. Holomorphic extension of the complex form, finite type, cap-product descriptions, generalized cocores, and categorical HMS are outside its scope.
 
-This repository is maintained privately. No GitHub Pages deployment is configured.
+The repository is public. No GitHub Pages deployment is configured.

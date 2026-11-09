@@ -1,3 +1,5 @@
+> Scope: this guide records the verified skew-symmetric (`D = I`) baseline. The current PDFs and [active objective](roadmap.md) specify the skew-symmetrizable generalization, which is not yet Lean-verified.
+
 # Definitions, formulation, and the proved target
 
 The full mathematical statement is in [target-theorem.pdf](../target-theorem.pdf), with editable source in [`tex/target-theorem.tex`](tex/target-theorem.tex).

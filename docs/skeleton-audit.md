@@ -1,3 +1,5 @@
+> Scope: this guide records the verified skew-symmetric (`D = I`) baseline. The current PDFs and [active objective](roadmap.md) specify the skew-symmetrizable generalization, which is not yet Lean-verified.
+
 # Audit of the supplied skeleton proof against the Lean construction
 
 Scope: the **skew-symmetric unimodular** case with **mutable acyclicity** and

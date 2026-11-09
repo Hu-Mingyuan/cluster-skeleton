@@ -1,25 +1,22 @@
 {
-  "scope": "Typesetting and visual QA; mathematical validity is checked separately by the accepted Lean verification and statement review.",
-  "compiler": {
-    "target-theorem.pdf": "XeLaTeX, TeX Live 2024",
-    "proof-blueprint.pdf": "pdfLaTeX, TeX Live 2024"
-  },
+  "status": "passed",
+  "scope": "Weighted skew-symmetrizable target and proof blueprint; formal Lean generalization pending",
   "pages": {
-    "target-theorem.pdf": 4,
-    "proof-blueprint.pdf": 6
+    "target-theorem.pdf": 3,
+    "proof-blueprint.pdf": 7
   },
   "checks": [
-    "Both PDFs compiled successfully from the current LaTeX sources",
-    "No undefined references, missing characters or overfull boxes in final logs",
-    "All ten rendered pages visually inspected",
-    "Current stratified skeleton statement and torus exponent included",
-    "No document date is displayed in either PDF; all rendered pages inspected after date removal"
+    "Both LaTeX documents compile",
+    "Both PDFs use the weighted hypotheses and no visible document date",
+    "No overfull boxes, undefined references, or missing characters",
+    "All 10 rendered pages visually inspected; no clipping or overlap",
+    "Document check only; generalized Lean theorem remains pending"
   ],
   "source_and_output_sha256": {
     "docs/tex/preamble.tex": "f6db2a72071b953d5e04947ad1402bc439089610368b63a991375f65a73efce7",
-    "docs/tex/proof-blueprint.tex": "333725e86a41592b65b35b7477cbffeccc04ff43477c4c3569f5267c65229209",
-    "docs/tex/target-theorem.tex": "0cc5544ead0a3f11d7d8187822ac9930199b838951024dfa621bb0ea44546c82",
-    "target-theorem.pdf": "ee9b376ab3c1b2cd430352bd71fe4169697a3a38e401d9b52dd1aa35dbed0615",
-    "proof-blueprint.pdf": "9c4e9e51fd31dfa63466dd2fe100f45dfd967c4d402f359c07e8c237ae5430ee"
+    "docs/tex/target-theorem.tex": "42434eb9ed1449047703e473b28b7ce23fa31c710f72be57ff51ee7897879f2b",
+    "docs/tex/proof-blueprint.tex": "66d695b05f05f1c8cfbb46415cb0a0599598664632f73ae8f7f7eb33a03ddfe9",
+    "target-theorem.pdf": "9b31218e4cc8d761bc2e11ddd93fa7313aac86bf6801efafe3111723dcb7967b",
+    "proof-blueprint.pdf": "2f8e589047ba6d1fc3bf48bcacecc4c0969f75dfd3034a6bfb54c77a829fef24"
   }
 }

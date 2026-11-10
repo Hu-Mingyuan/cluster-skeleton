@@ -179,8 +179,13 @@ final consumer and any statement review must cite all of them, not
 | "Each `Λ_I` in this union is compact" | `isCompact_lambdaStratum` (and `isCompact_coordinateCap` for the cap) |
 | `U_I ≅ 𝒩^I × (ℂ*)^{n-2\|I\|}`, `2\|I\| ≤ n` | `IndependentNodeChart.homeomorph`, `IndependentNodeChart.complementRank_eq_sub_two_mul_card`, `IndependentNodeChart.two_mul_card_le` |
 
+`coordinateCap_eq_iUnion_lambdaStratum` is flow-free, so the stratified form
+follows for *any* witness the target's existential produces; a consumer never has
+to reach inside the target to recover `NativeCompleteFlow.completeFlow`.
+
 This split is inherited from the superseded baseline and is not a weighted
-regression; it is recorded as finding **R4** in the [audit](skeleton-audit.md) §3.
+regression; it is recorded as finding **R4** in the [audit](skeleton-audit.md) §3,
+together with the statement review's own citation list.
 
 ## `D = I` recovery and the non-skew instance
 
@@ -191,14 +196,18 @@ regression; it is recorded as finding **R4** in the [audit](skeleton-audit.md) �
   change and no transpose, so the recovered Liouville field is not time-reversed.
   The carrier is the same set (`SkewSeed.carrier_set_eq`) and the canonical
   identification is `SkewSeed.pointHomeomorph`, with
-  `SkewSeed.pointHomeomorph_val` by `rfl`. The statement of recovery, the old
-  loci on the old carrier and the flow conjugation are the scaffolding of
+  `SkewSeed.pointHomeomorph_val` by `rfl`. The old loci on the old carrier, their
+  image/preimage identifications and the flow conjugation are
   `ClusterSkeleton/SkewSeedRecovery.lean` at commit
   `e7a6d9637ac0acec71639a71731f1d6ca27e2e0c`, described in
-  [`weighted-recovery-plan.md`](weighted-recovery-plan.md); the
-  [audit](skeleton-audit.md) §1.11 records which clauses are already proved, which
-  single instantiation clause the final-assembly mission still has to land, and
-  the recorded decision **not** to claim a transported smooth structure.
+  [`weighted-recovery-plan.md`](weighted-recovery-plan.md); the packaged statement
+  `SkewSeedSkeleton.skeleton_recovery` is
+  `ClusterSkeleton/SkewSeedSkeleton.lean` at commit
+  `07132a64143f7525e13b9b5f3a540f4602fd0319`, a publication of the
+  **still-running** final-assembly mission. The [audit](skeleton-audit.md) §1.11
+  gives the clause-by-clause breakdown, the elaboration evidence, and the recorded
+  decision **not** to claim a transported smooth structure or a term identity of
+  the recovered flow with the baseline's.
 * **Non-skew instance.** `Examples.nonSkewSeed` is the PDF's
   `E = [[0,1,-1,0],[-2,0,0,-1],[1,0,0,0],[0,1,0,0]]`, `D = diag(1,2,1,2)`,
   `M = {0,1}` (zero-based), with `Examples.nonSkewSeed_unimodular`,
@@ -206,9 +215,14 @@ regression; it is recorded as finding **R4** in the [audit](skeleton-audit.md) �
   `nonSkewSeed_K_transpose` and `nonSkewSeed_det_K` all **proved**, not assumed.
   Applying the final theorem to it is the single line
   `FullSkeleton.firstGeometricTarget 4 Examples.nonSkewSeed Examples.nonSkewSeed_unimodular`;
-  it typechecks at this commit but is **not yet a declaration in the library**
-  (finding **R4**). This consumer supplements, and never replaces, the universal
-  theorem.
+  it typechecks at this commit but is not a declaration in the tree at `114d639`.
+  The consumers `Examples.nonSkewSeed_liouvilleSkeletonTarget`,
+  `nonSkewSeed_target_of_firstGeometricTarget`, `nonSkewSeed_side_checks`,
+  `nonSkewSeed_trappedSet` and `nonSkewSeed_trappedSet_iUnion` are
+  `ClusterSkeleton/Examples/NonSkewSkeleton.lean` at commit
+  `07132a64143f7525e13b9b5f3a540f4602fd0319`, a publication of the still-running
+  final-assembly mission (finding **R4** of the audit records the status). This
+  consumer supplements, and never replaces, the universal theorem.
 
 ## Scope and trust boundary
 

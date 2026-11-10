@@ -32,8 +32,8 @@ skew-symmetric, acyclic mutable block, variable frozen coordinates,
 | Trapped points lie in cap | Radial escape, interior partner rigidity, zero-stratum partner escape | `CompactInteriorRigidity`, `ZeroStratumEscape`, `ConstructedFlowReverseInclusion` |
 | Stratified cap | The cap as the union of the reference strata `Λ_I` over independent `I`; closedness and per-stratum compactness | `CapStrata` |
 | Final existence | Same-flow set equality, its stratified form, and constructed witnesses, for every weighted seed | `FullSkeleton` |
-| `D = I` recovery | The old skew-symmetric input, its weighted reading `E := B`, `D := 1` (so `K = B`), the carrier identity and the old loci on the old carrier | `SkewSeed`; `SkewSeedRecovery` (at commit `e7a6d963…`, see below) |
-| Inputs the theorem must accept | The weighted `A_2` seed with `D = 1` and the reference's non-skew `4 × 4` input | `Examples.A2`, `Examples.NonSkew` |
+| `D = I` recovery | The old skew-symmetric input, its weighted reading `E := B`, `D := 1` (so `K = B`), the carrier identity, the old loci on the old carrier, and the packaged recovery statement | `SkewSeed`; `SkewSeedRecovery` (at `e7a6d963…`) and `SkewSeedSkeleton` (at `07132a64…`), see below |
+| Inputs the theorem must accept | The weighted `A_2` seed with `D = 1`, the reference's non-skew `4 × 4` input, and its instantiation of the final theorem | `Examples.A2`, `Examples.NonSkew`; `Examples.NonSkewSkeleton` (at `07132a64…`) |
 
 The final theorem is `ClusterSkeleton.FullSkeleton.firstGeometricTarget`:
 
@@ -176,17 +176,22 @@ monomials swap and only their sum is used:
 `SkewSeed.toSeed_monomial_sum`) and the canonical identification is
 `SkewSeed.pointHomeomorph` with `SkewSeed.pointHomeomorph_val` by `rfl`.
 
-The statement of recovery — the old loci `SkewSeed.initialTorus`,
+The scaffolding of recovery — the old loci `SkewSeed.initialTorus`,
 `SkewSeed.coordinateCap`, `SkewSeed.lambdaStratum` on the old carrier, their
 image/preimage identifications, the flow conjugation `SkewSeed.conjFlow` and
 `SkewSeed.trappedSet_conjFlow_eq_coordinateCap` — is the module
 `ClusterSkeleton/SkewSeedRecovery.lean` at commit
 `e7a6d9637ac0acec71639a71731f1d6ca27e2e0c`, documented in
-[`weighted-recovery-plan.md`](weighted-recovery-plan.md). It is **not** part of
-the tree at `114d639`; the final-assembly mission imports it and adds the single
-instantiation clause. Audit §1.11 records which clauses are proved, which one is
-outstanding, and the recorded decision not to claim a transported smooth
-structure.
+[`weighted-recovery-plan.md`](weighted-recovery-plan.md); the packaged statement
+`SkewSeedSkeleton.skeleton_recovery` (with
+`skeleton_recovery_of_parameters`, `liouvilleSkeletonTarget`,
+`dense_initialTorus`, `liouvilleData_torus_anchor_old_matrix` and
+`liouvilleData_trappedSet_conjFlow`/`_iUnion`) is
+`ClusterSkeleton/SkewSeedSkeleton.lean` at commit
+`07132a64143f7525e13b9b5f3a540f4602fd0319`. Neither module is part of the tree at
+`114d639`, and `07132a64` is a publication of a **still-running** mission. Audit
+§1.11 records the clause-by-clause status, the elaboration evidence, and the
+recorded decision not to claim a transported smooth structure.
 
 ## Verification status
 

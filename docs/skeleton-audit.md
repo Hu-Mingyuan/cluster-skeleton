@@ -72,6 +72,10 @@ Inputs compared:
   `08472e04e10e000f813ed9bbb4abe81a0aa0fc6a` (two-form and node coefficient,
   `beta`, `H` summand by summand, `alpha = beta + dH`, the hand derivation of
   the flow equations, findings R5–R7);
+* the final statement review `docs/reviews/final-statement-review.md` at commit
+  `24b7bef8aaea7fd098e8ccd10474502d5a7320fa` (the PDF-clause-to-declaration map
+  of its item 6, the byte-level baseline diff of its item 7, and findings R4, A1,
+  D1, D2), published while this rewrite was being written;
 * the stage-C site inventory [`weighted-stage-c-map.md`](weighted-stage-c-map.md)
   (all 152 matrix-role sites of the dynamics modules, roles (a)–(h)) and the
   recovery route [`weighted-recovery-plan.md`](weighted-recovery-plan.md).
@@ -929,11 +933,41 @@ example … : evalTwo (exteriorDerivative (FullSkeleton.liouvilleData S.toSeed �
   exact SkewSeed.torus_anchor_old_matrix S _ p v w
 ```
 
-All three elaborate. So the recovery closes with **no mathematical gap**: what is
-outstanding is only that these be landed as named declarations in the library,
-together with the import of `SkewSeedRecovery` into `ClusterSkeleton.lean`. The
-names under which the final-assembly mission lands them are not yet published and
-are therefore not cited here.
+All three elaborate. So the recovery closes with **no mathematical gap**.
+
+**The packaged statement, as published by the running final-assembly mission.**
+While this rewrite was being written, assignment `3e612104` published the module
+`ClusterSkeleton/SkewSeedSkeleton.lean` (namespace `ClusterSkeleton.SkewSeed`) at
+verified commit `07132a64143f7525e13b9b5f3a540f4602fd0319`, together with the
+import of `ClusterSkeleton.SkewSeedRecovery` and
+`ClusterSkeleton.SkewSeedSkeleton` into `ClusterSkeleton.lean`:
+
+| declaration | content |
+| --- | --- |
+| `SkewSeedSkeleton.liouvilleSkeletonTarget` | clause (a): `LiouvilleSkeletonTarget S.toSeed` |
+| `SkewSeedSkeleton.dense_initialTorus` | density of the **old** initial torus |
+| `SkewSeedSkeleton.liouvilleData_torus_anchor_old_matrix` | clause (b) for the constructed datum: `d(primitive)` on the recovered torus, written with the old integer `S.B` |
+| `SkewSeedSkeleton.liouvilleData_trappedSet_conjFlow`, `liouvilleData_trappedSet_conjFlow_iUnion` | the old skeleton identity and its stratified form on the **old** carrier |
+| `SkewSeedSkeleton.skeleton_recovery_of_parameters`, `SkewSeedSkeleton.skeleton_recovery` | the packaged recovery statement, the second at `ε = 1, κ = 3, δ = 1` |
+
+`skeleton_recovery` reads: for every `SkewSeed d` with `S.Unimodular` — the old
+library's hypothesis and the only hypothesis — the old initial torus is dense,
+and there exist a smooth presentation of the exchange space and a Liouville datum
+on it whose anchored two-form is `Im(½ ∑_{i,j} (S.B i j : ℂ) dlog a_i ∧ dlog a_j)`
+(the **old integer** matrix) and whose complete flow, read on the old carrier
+along `pointHomeomorph`, has exactly `C_B = ⋃_I Λ_I` as its dynamical skeleton.
+Its docstring states that the smooth structure is existential and that no
+transported smooth structure and no term identity with the baseline's constructed
+flow is claimed — i.e. the route decided in
+[`weighted-recovery-plan.md`](weighted-recovery-plan.md) §2 and the constraint of
+**R7**.
+
+**Checked here.** `SkewSeedRecovery.lean` @ `e7a6d96` concatenated with
+`SkewSeedSkeleton.lean` @ `07132a64`, elaborated as a scratch file against the
+weighted tree at `114d639`: no error, no `sorry`. That commit is an intermediate
+publication of a **mission that is still running**, so these names are cited as
+*published at `07132a64`*, not as the library's final state; the verification
+mission reconciles them with the final-assembly handoff.
 
 **The recorded smooth-structure decision.** Recovery is stated directly for
 `S.toSeed`, with the old loci and the old trapped set transported along
@@ -1039,9 +1073,9 @@ for this source (§5).
 Every entry of the baseline list (**G1**–**G3**, **N1**–**N9**) is re-evaluated
 below for the weighted setting and marked *kept*, *restated* or *retired*, with
 the reason. The findings of the two delivered weighted semantic reviews are added
-as **D1**, **D2** and **R4**–**R7** with their status at `114d639`. Priority:
-open findings first (**R4** > **R6** > **R5** > **R7** > **D1** > **D2**), then
-the closed gaps, then the notes.
+as **D1**, **D2**, **R4**–**R7** and **A1** with their status at `114d639`.
+Priority: open findings first (**R4** > **R6** > **R5** > **R7** > **D1** >
+**D2** > **A1**), then the closed gaps, then the notes.
 
 ### R4 (open, acceptance scope) — the full PDF theorem is four theorems, and two consumer lines are missing
 
@@ -1059,21 +1093,42 @@ not a weighted regression, but **the final consumer and any statement review mus
 cite all four**, not `FirstGeometricTarget` alone. The clause-to-declaration map
 of [`target-theorem.md`](target-theorem.md) is the list to cite.
 
-*Also open.* Roadmap acceptance check 3 asks for a **consumer** instantiating the
-final theorem on the non-skew input. The line
+One convenience of the stratified clause, noted by the final statement review:
+`CapStrata.coordinateCap_eq_iUnion_lambdaStratum` is **flow-free**, so the
+stratified form follows for *any* witness the target's existential produces; a
+consumer never has to reach inside the target to recover
+`NativeCompleteFlow.completeFlow`.
+`FullSkeleton.trappedSet_eq_iUnion_lambdaStratum` is the packaged form for the
+canonical witness, with `FullSkeleton.liouvilleData_flow` being `rfl`.
+
+*The consumer side has since been landed.* Roadmap acceptance check 3 asks for a
+**consumer** instantiating the final theorem on the non-skew input. At `114d639`
+the line
 
 ```lean
 theorem Examples.nonSkewSeed_target : LiouvilleSkeletonTarget Examples.nonSkewSeed :=
   FullSkeleton.liouvilleSkeletonTarget Examples.nonSkewSeed Examples.nonSkewSeed_unimodular
 ```
 
-typechecks at `114d639` (verified in scratch, in both the
-`FirstGeometricTarget`-applied and the direct form) but is **not** a declaration
-in the library. Likewise recovery clause (a) of §1.11. Both belong to the
-final-assembly mission; neither is a mathematical gap.
+typechecks (verified in scratch, in both the `FirstGeometricTarget`-applied and
+the direct form) but is not a declaration. The running final-assembly mission
+`3e612104` published the module `ClusterSkeleton/Examples/NonSkewSkeleton.lean`
+at verified commit `07132a64143f7525e13b9b5f3a540f4602fd0319`, containing
+`Examples.nonSkewSeed_side_checks` (the roadmap's side conditions in literal
+form: the three data, `det E = 1`, positivity, entrywise skew-symmetry of `E·D`,
+acyclicity of the mutable block, and the failure of skew-symmetry of `E`),
+`Examples.nonSkewSeed_liouvilleSkeletonTarget`,
+`Examples.nonSkewSeed_target_of_firstGeometricTarget` (the same statement read
+off the quantified theorem at `d = 4`), `Examples.nonSkewSeed_trappedSet` and
+`Examples.nonSkewSeed_trappedSet_iUnion`. That module was elaborated here against
+the tree at `114d639` (`Examples/NonSkew.lean` is byte-identical at both commits)
+and compiles with no error. Recovery clause (a) is likewise landed, as
+`SkewSeedSkeleton.liouvilleSkeletonTarget` (§1.11).
 
-*Status.* **Open**, not blocking: no statement is wrong, and nothing has to be
-proved.
+*Status.* **Open only as a citation discipline**: the clause split is real and the
+four theorems must all be cited, but nothing is wrong and nothing has to be
+proved. The consumer lines exist at `07132a64`, a publication of a mission that is
+still running.
 
 ### R6 (open, consumption discipline) — `exists_global_primitive` says nothing about the near-node shape
 
@@ -1178,6 +1233,26 @@ docstring already says the right thing.
 *Status.* **Open at `114d639`; readability only**, no mathematical consequence.
 Corrected on the recovery-scaffold branch at `e7a6d96` (docstrings only; the
 names are deliberately kept because renaming ripples into other modules).
+
+### A1 (open, verification coverage) — `verification/AxiomAudit.lean` no longer covers four modules
+
+*Source.* Final statement review item 8, defect A1
+(`24b7bef8aaea7fd098e8ccd10474502d5a7320fa`).
+
+*Content.* The `modules` array of `verification/AxiomAudit.lean` is
+byte-identical to `e62c101` and lists the 58-module baseline inventory. The four
+modules new at `114d639` — `ClusterSkeleton.SkewSeed`,
+`ClusterSkeleton.SymmetrizerAlgebra`, `ClusterSkeleton.SeedAlgebra`,
+`ClusterSkeleton.Examples.NonSkew` — are therefore not audited, and because the
+loop errors only on a *listed* module with zero declarations, the audit would
+still pass while silently under-covering four of the library's modules. The
+review lists the module names to add and the `#print axioms` roots the weighted
+theorem needs, including the `Seed`, `SeedAlgebra` and `SymmetrizerAlgebra`
+facts, the separate clauses of **R4**, and — once landed — the recovery theorem
+and the non-skew consumer.
+
+*Status.* **Open, and outside this guide's scope.** `verification/` belongs to
+the closing verification/receipts mission, which is also the owner of §5.
 
 ### G1 — **closed, and unaffected by the weights**: the cap is stated as `⋃_{I independent} Λ_I`
 
@@ -1468,8 +1543,22 @@ this guide:
   [`../verification/README.md`](../verification/README.md),
   [`../verification/statement-review.md`](../verification/statement-review.md)
   and [`../verification/publication-check.json`](../verification/publication-check.json);
-* a Lean declaration for either of the two consumer lines of **R4**, or for
-  recovery clause (a) of §1.11.
+* the weighted module list of `verification/AxiomAudit.lean`, which still names
+  the 58-module baseline inventory and therefore audits neither `SkewSeed`,
+  `SymmetrizerAlgebra`, `SeedAlgebra` nor `Examples.NonSkew` — finding **A1**;
+* a weighted `verification/statement-review.md`; the final statement review at
+  `24b7bef8aaea7fd098e8ccd10474502d5a7320fa` supplies replacement text for it in
+  its Appendix B.
+
+Not on the base commit, but published by the still-running final-assembly mission
+at verified commit `07132a64143f7525e13b9b5f3a540f4602fd0319` and elaborated
+against this tree here: the recovery module `ClusterSkeleton/SkewSeedSkeleton.lean`
+(clause (a) and `SkewSeed.skeleton_recovery`), the consumer module
+`ClusterSkeleton/Examples/NonSkewSkeleton.lean`, the import of
+`ClusterSkeleton.SkewSeedRecovery` and `ClusterSkeleton.SkewSeedSkeleton` into
+`ClusterSkeleton.lean`, and therefore also two of the modules **A1** must add.
+Their names in this guide are those of that publication, which is not that
+mission's final handoff.
 
 The closing verification mission produces these and finalizes the scope line at
 the top of this file, the *Verification method* paragraph's compilation sentence,

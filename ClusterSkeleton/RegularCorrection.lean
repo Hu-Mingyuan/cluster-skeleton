@@ -19,9 +19,11 @@ def surviving (I : Finset (Fin d)) : Finset S.Mutable :=
     j ∈ surviving S I ↔ (j : Fin d) ∉ I ∧ ∀ i ∈ I, S.B j i = 0 := by
   simp [surviving]
 
-/-- The existing literal corrections, with no modified boundary convention. -/
+/-- The existing literal corrections, with no modified boundary convention.
+Each summand carries the symmetrizer weight `d_j` of the weighted
+`TorusCorrection.H`; the scalar `correction` itself is unweighted. -/
 def regularH (I : Finset (Fin d)) (ε κ δ : ℝ) (p : S.Point) : ℝ :=
-  ∑ j ∈ surviving S I, correction ε κ δ j p
+  ∑ j ∈ surviving S I, (S.D j : ℝ) * correction ε κ δ j p
 
 theorem support_nonzero {I : Finset (Fin d)} {j : S.Mutable}
     (hj : j ∈ surviving S I) {p : S.Point} (hp : p ∈ candidateChartLocus S I) :
@@ -37,7 +39,7 @@ theorem character_nonzero {I : Finset (Fin d)} {j : S.Mutable}
   apply Finset.prod_ne_zero_iff.mpr
   intro k _
   by_cases h : S.B j k = 0
-  · simp [h]
+  · simp [show S.E k j = 0 from h]
   · exact zpow_ne_zero _ ((support_nonzero S hj hp).2 k h)
 
 variable (hdet : S.Unimodular)
@@ -97,7 +99,7 @@ theorem contMDiffAt_character {I : Finset (Fin d)} {j : S.Mutable}
     apply Finset.prod_ne_zero_iff.mpr
     intro k _
     by_cases h : S.B j k = 0
-    · simp [h]
+    · simp [show S.E k j = 0 from h]
     · exact pow_ne_zero _ ((support_nonzero S hj hp).2 k h)
   exact ((hP.contDiffAt.div hQ.contDiffAt hn).restrict_scalars ℝ).comp_contMDiffAt
     (TorusNondegeneracy.original_smooth S (SmoothAtlas.presentation S hdet) p)
@@ -128,7 +130,8 @@ theorem contMDiffOn_regularH (I : Finset (Fin d)) (_hI : S.Independent I)
       (candidateChartLocus S I) := by
   letI := SmoothAtlas.charts S hdet
   intro p hp
-  exact (ContMDiffAt.sum fun j hj => contMDiffAt_correction S hdet hj hp ε κ hδ).contMDiffWithinAt
+  exact (ContMDiffAt.sum fun j hj =>
+    contMDiffAt_const.mul (contMDiffAt_correction S hdet hj hp ε κ hδ)).contMDiffWithinAt
 
 /-- Local chart calculus uses only regularity on the open locus. -/
 theorem contDiffAt_differential_inChart (I : Finset (Fin d)) (f : S.Point → ℝ) :
@@ -183,19 +186,22 @@ theorem regularForm_smooth (I : Finset (Fin d)) (hI : S.Independent I)
 
 variable {S}
 
-/-- The original H and the existing localization corrections agree literally. -/
+/-- The original H and the existing localization corrections agree literally,
+each weighted by its symmetrizer entry `d_j`. -/
 theorem H_eq_sum (ε κ δ : ℝ) (p : S.Point) :
-    TorusCorrection.H S ε κ δ p = ∑ j : S.Mutable, correction ε κ δ j p := by
+    TorusCorrection.H S ε κ δ p =
+      ∑ j : S.Mutable, (S.D j : ℝ) * correction ε κ δ j p := by
   classical
   simp only [TorusCorrection.H, correction, TorusCorrection.A, logNorms,
     TorusCorrection.rowLog, PrimitiveLocalization.rowLog, TorusCorrection.angular,
     angle, Complex.log_im]
   exact Finset.sum_subtype S.mutable (fun _ => Iff.rfl) _
 
-/-- The affine zero-index sum, with the accepted normalized-node logarithm. -/
+/-- The affine zero-index sum, with the accepted normalized-node logarithm and
+the same symmetrizer weights as `regularH`. -/
 def singularH (I : Finset (Fin d)) (κ : ℝ) (p : S.Point) : ℝ :=
   ∑ j ∈ (Finset.univ.filter fun j : S.Mutable => (j : Fin d) ∈ I),
-    affineCorrection κ j p
+    (S.D j : ℝ) * affineCorrection κ j p
 
 /-- The exact three-way partition: zero, adjacent (zero correction), surviving. -/
 theorem H_split {ε κ δ : ℝ} (hε : 0 < ε) (hκ : 2 * ε + 1 ≤ κ) (hδ : 0 < δ)
@@ -212,7 +218,7 @@ theorem H_split {ε κ δ : ℝ} (hε : 0 < ε) (hκ : 2 * ε + 1 ≤ κ) (hδ :
   by_cases hj : (j : Fin d) ∈ p.zeroSet
   · have hnot : j ∉ surviving S p.zeroSet := by simp [hj]
     simp only [hj, hnot, if_true, if_false, add_zero]
-    exact (correction_eventuallyEq hε hκ hδ hq ht j hj).self_of_nhds
+    rw [(correction_eventuallyEq hε hκ hδ hq ht j hj).self_of_nhds]
   · by_cases hs : j ∈ surviving S p.zeroSet
     · simp [hj, hs]
     · have hadj : ∃ i ∈ p.zeroSet, S.B i j ≠ 0 := by
@@ -222,9 +228,9 @@ theorem H_split {ε κ δ : ℝ} (hε : 0 < ε) (hκ : 2 * ε + 1 ≤ κ) (hδ :
         obtain ⟨i, hi, hij⟩ := hn
         refine ⟨i, hi, ?_⟩
         intro h
-        exact hij (by rw [S.skew j i, h, neg_zero])
+        exact hij ((S.B_eq_zero_iff i j).mp h)
       simp only [hj, hs, if_false, add_zero]
-      exact (adjacent_correction_eventuallyEq hε hq ht j hadj).self_of_nhds
+      rw [(adjacent_correction_eventuallyEq hε hq ht j hadj).self_of_nhds, mul_zero]
 
 /-- A genuine germ at every torus point of the already constructed open U_p. -/
 theorem H_eventuallyEq {ε κ δ : ℝ} (hε : 0 < ε) (hκ : 2 * ε + 1 ≤ κ) (hδ : 0 < δ)
@@ -256,11 +262,11 @@ theorem regularH_no_survivors (I : Finset (Fin d)) (h : surviving S I = ∅)
   simp [regularH, h]
 
 theorem literal_formula (I : Finset (Fin d)) (ε κ δ : ℝ) (p : S.Point) :
-    regularH S I ε κ δ p = ∑ j ∈ surviving S I,
-      radial ε κ (Real.log ‖p.a j‖) *
+    regularH S I ε κ δ p = ∑ j ∈ surviving S I, (S.D j : ℝ) *
+      (radial ε κ (Real.log ‖p.a j‖) *
       dominance S ε j (fun k => Real.log ‖p.a k‖) *
       rho (∑ k : Fin d, (S.B j k : ℝ) * Real.log ‖p.a k‖) *
-      vartheta δ (Complex.arg (-exchangeCharacter p j)) := by
+      vartheta δ (Complex.arg (-exchangeCharacter p j))) := by
   simp only [regularH, correction, PrimitiveLocalization.rowLog, logNorms, angle, Complex.log_im]
   rfl
 

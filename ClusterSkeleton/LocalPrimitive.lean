@@ -46,11 +46,18 @@ theorem covers (ε κ : ℝ) {δ : ℝ} (hδ : 0 < δ) :
     ∀ q : S.Point, ∃ p, q ∈ neighborhood S ε κ δ p :=
   fun q => ⟨q, mem_neighborhood S ε κ hδ q⟩
 
-/-- The actual native residual plus regular node block minus surviving correction. -/
+/-- The actual native residual minus the regular node block plus the surviving
+correction. Both signs are forced by the settled stage-B2 convention
+`TorusPrimitive.alpha = beta + dH`: `beta` contributes the `I`-block as
+`-∑_{i∈I} d_i (u_i dη_i - v_i dθ_i)` (`PrimitiveResidual.beta_decomposition`),
+the weighted `NativeNodePrimitive.block` is `∑_{i∈I} d_i λ_i` with
+`λ_i = u_i dη_i - v_i dθ_i - d((u_i+κ)(η_i-π))`, and the affine differentials
+cancel against the singular part of `dH`. With `D = 1` the baseline had the two
+opposite signs, because its `H` was the negative of the reference `H`. -/
 def eta (ε κ δ : ℝ) (p : S.Point) :
     (SmoothAtlas.presentation S hdet).manifold.Form 1 :=
-  PrimitiveResidual.residual S hdet p.zeroSet +
-    NativeNodePrimitive.block S hdet κ p.zeroSet p.zeroSet_independent -
+  PrimitiveResidual.residual S hdet p.zeroSet -
+    NativeNodePrimitive.block S hdet κ p.zeroSet p.zeroSet_independent +
     RegularCorrection.regularForm S hdet p.zeroSet ε κ δ
 
 /-- Smoothness in every native chart, only over the constructed domain. -/
@@ -60,9 +67,9 @@ theorem locallySmooth_eta (ε κ : ℝ) {δ : ℝ} (hδ : 0 < δ) (p : S.Point) 
   letI := SmoothAtlas.charts S hdet
   intro a y hy hp
   simp only [eta, SmoothManifold.formInChart_sub, SmoothManifold.formInChart_add]
-  exact ((PrimitiveResidual.contDiffAt_residual_inChart S hdet p.zeroSet a y hy hp.2.1).add
+  exact ((PrimitiveResidual.contDiffAt_residual_inChart S hdet p.zeroSet a y hy hp.2.1).sub
     (NativeNodePrimitive.contDiffAt_block_inChart S hdet κ p.zeroSet
-      p.zeroSet_independent a y hy hp.2)).sub
+      p.zeroSet_independent a y hy hp.2)).add
     (RegularCorrection.regularForm_smooth S hdet p.zeroSet p.zeroSet_independent
       ε κ hδ a y hy hp.2.1)
 
@@ -88,7 +95,7 @@ theorem mdifferentiableAt_affine (κ : ℝ) {I : Finset (Fin d)} (hI : S.Indepen
 
 /-- Reindex the accepted filtered mutable sum without dropping any summand. -/
 theorem singularH_eq_sum (I : Finset (Fin d)) (hI : S.Independent I) (κ : ℝ) (q : S.Point) :
-    RegularCorrection.singularH I κ q = ∑ i : I,
+    RegularCorrection.singularH I κ q = ∑ i : I, (S.D i.val : ℝ) *
       PrimitiveLocalization.affineCorrection κ ⟨i.val, hI.1 i.property⟩ q := by
   classical
   unfold RegularCorrection.singularH
@@ -109,7 +116,8 @@ theorem differential_H_eq_sum {ε κ δ : ℝ} (hε : 0 < ε)
     (hq : q ∈ neighborhood S ε κ δ p) (ht : q ∈ initialTorus S) :
     differentialCovector (SmoothAtlas.presentation S hdet).manifold
       (TorusCorrection.H S ε κ δ) q =
-      (∑ i : p.zeroSet, differentialCovector (SmoothAtlas.presentation S hdet).manifold
+      (∑ i : p.zeroSet, (S.D i.val : ℝ) •
+        differentialCovector (SmoothAtlas.presentation S hdet).manifold
         (PrimitiveLocalization.affineCorrection κ
           ⟨i.val, p.zeroSet_independent.1 i.property⟩) q) +
       differentialCovector (SmoothAtlas.presentation S hdet).manifold
@@ -122,15 +130,16 @@ theorem differential_H_eq_sum {ε κ δ : ℝ} (hε : 0 < ε)
       ((isOpen_candidateChartLocus S p.zeroSet).mem_nhds hq.2.1)).mdifferentiableAt (by simp)
   have hs := HasMFDerivAt.sum (t := Finset.univ) (fun (i : p.zeroSet) _ =>
     (mdifferentiableAt_affine S hdet κ p.zeroSet_independent
-      ⟨i.val, p.zeroSet_independent.1 i.property⟩ i.property q hq.2 ht).hasMFDerivAt)
+      ⟨i.val, p.zeroSet_independent.1 i.property⟩ i.property q hq.2 ht).hasMFDerivAt.const_smul
+      (S.D i.val : ℝ))
   have he : RegularCorrection.singularH p.zeroSet κ =
-      fun r => ∑ i : p.zeroSet, PrimitiveLocalization.affineCorrection κ
+      fun r => ∑ i : p.zeroSet, (S.D i.val : ℝ) • PrimitiveLocalization.affineCorrection κ
         ⟨i.val, p.zeroSet_independent.1 i.property⟩ r :=
     funext (singularH_eq_sum S p.zeroSet p.zeroSet_independent κ)
   rw [he]
-  have hf : (∑ i : p.zeroSet, PrimitiveLocalization.affineCorrection κ
+  have hf : (∑ i : p.zeroSet, (S.D i.val : ℝ) • PrimitiveLocalization.affineCorrection κ
       ⟨i.val, p.zeroSet_independent.1 i.property⟩) =
-      fun r => ∑ i : p.zeroSet, PrimitiveLocalization.affineCorrection κ
+      fun r => ∑ i : p.zeroSet, (S.D i.val : ℝ) • PrimitiveLocalization.affineCorrection κ
         ⟨i.val, p.zeroSet_independent.1 i.property⟩ r := by
     funext r
     simp
@@ -149,31 +158,34 @@ theorem eta_eq_torus {ε κ δ : ℝ} (hε : 0 < ε)
     p.zeroSet_independent q hq.2 ht
   have hd := differential_H_eq_sum S hdet hε hκ hδ p q hq ht
   ext v
-  change (PrimitiveResidual.residual S hdet p.zeroSet q v +
-    NativeNodePrimitive.block S hdet κ p.zeroSet p.zeroSet_independent q v) -
+  change (PrimitiveResidual.residual S hdet p.zeroSet q v -
+    NativeNodePrimitive.block S hdet κ p.zeroSet p.zeroSet_independent q v) +
     RegularCorrection.regularForm S hdet p.zeroSet ε κ δ q v = _
   rw [hn]
-  change _ = TorusPrimitive.beta S hdet q v -
+  change _ = TorusPrimitive.beta S hdet q v +
     differentialCovector (SmoothAtlas.presentation S hdet).manifold
       (TorusCorrection.H S ε κ δ) q (v 0)
   rw [hb, hd]
-  change PrimitiveResidual.residual S hdet p.zeroSet q v +
-      (∑ i : p.zeroSet, (Real.log ‖q.a i.val‖ • PrimitiveResidual.tau S hdet i.val q -
+  change (PrimitiveResidual.residual S hdet p.zeroSet q v -
+      (∑ i : p.zeroSet, (S.D i.val : ℝ) •
+        (Real.log ‖q.a i.val‖ • PrimitiveResidual.tau S hdet i.val q -
         PrimitiveResidual.logRow S i.val q • TorusPrimitive.angleCovector S hdet i.val q -
         differentialCovector (SmoothAtlas.presentation S hdet).manifold
-          (PrimitiveLocalization.affineCorrection κ ⟨i.val, p.zeroSet_independent.1 i.property⟩) q)) (v 0) -
+          (PrimitiveLocalization.affineCorrection κ ⟨i.val, p.zeroSet_independent.1 i.property⟩) q)) (v 0)) +
       differentialCovector (SmoothAtlas.presentation S hdet).manifold
         (RegularCorrection.regularH S p.zeroSet ε κ δ) q (v 0) =
     PrimitiveResidual.residual S hdet p.zeroSet q v +
-      (∑ i ∈ p.zeroSet, (Real.log ‖q.a i‖ • PrimitiveResidual.tau S hdet i q -
-        PrimitiveResidual.logRow S i q • TorusPrimitive.angleCovector S hdet i q)) (v 0) -
-      ((∑ i : p.zeroSet, differentialCovector (SmoothAtlas.presentation S hdet).manifold
+      (∑ i ∈ p.zeroSet, (-(S.D i : ℝ)) •
+        (Real.log ‖q.a i‖ • PrimitiveResidual.tau S hdet i q -
+        PrimitiveResidual.logRow S i q • TorusPrimitive.angleCovector S hdet i q)) (v 0) +
+      ((∑ i : p.zeroSet, (S.D i.val : ℝ) •
+          differentialCovector (SmoothAtlas.presentation S hdet).manifold
           (PrimitiveLocalization.affineCorrection κ ⟨i.val, p.zeroSet_independent.1 i.property⟩) q) +
         differentialCovector (SmoothAtlas.presentation S hdet).manifold
           (RegularCorrection.regularH S p.zeroSet ε κ δ) q) (v 0)
   simp only [ContinuousLinearMap.sum_apply, ContinuousLinearMap.sub_apply,
     ContinuousLinearMap.add_apply, ContinuousLinearMap.smul_apply, smul_eq_mul,
-    Finset.sum_sub_distrib]
+    mul_sub, neg_mul, Finset.sum_sub_distrib, Finset.sum_neg_distrib]
   rw [Finset.sum_subtype p.zeroSet (fun _ => Iff.rfl),
     Finset.sum_subtype p.zeroSet (fun _ => Iff.rfl)]
   ring
@@ -184,8 +196,8 @@ theorem evalOne_eta {ε κ δ : ℝ} (hε : 0 < ε)
     (hq : q ∈ neighborhood S ε κ δ p) (ht : q ∈ initialTorus S)
     (v : (SmoothAtlas.presentation S hdet).manifold.Tangent q) :
     SmoothManifold.evalOne (eta S hdet ε κ δ p) q v =
-      (∑ i : Fin d, ∑ j : Fin d, (S.B i j : ℝ) * Real.log ‖q.a i‖ *
-        ((SmoothAtlas.presentation S hdet).coordinateDifferential j q v / q.a j).im) -
+      (∑ i : Fin d, ∑ j : Fin d, (S.K i j : ℝ) * Real.log ‖q.a i‖ *
+        ((SmoothAtlas.presentation S hdet).coordinateDifferential j q v / q.a j).im) +
       differentialCovector (SmoothAtlas.presentation S hdet).manifold
         (TorusCorrection.H S ε κ δ) q v := by
   change eta S hdet ε κ δ p q (fun _ => v) = _
@@ -207,21 +219,22 @@ theorem node_domains {ε κ δ : ℝ} {p q : S.Point}
 /-- The local block vanishes at a zero stratum with all normalized partners zero. -/
 theorem eta_zero_partners (ε κ δ : ℝ) (p : S.Point)
     (hp : ∀ i : S.Mutable, (i : Fin d) ∈ p.zeroSet → normalizedPartner p i = 0) :
-    eta S hdet ε κ δ p p = PrimitiveResidual.residual S hdet p.zeroSet p -
+    eta S hdet ε κ δ p p = PrimitiveResidual.residual S hdet p.zeroSet p +
       RegularCorrection.regularForm S hdet p.zeroSet ε κ δ p := by
   have hb : NativeNodePrimitive.block S hdet κ p.zeroSet p.zeroSet_independent p = 0 := by
     ext v
-    change (∑ i : p.zeroSet, NativeNodePrimitive.lambda S hdet κ
+    change (∑ i : p.zeroSet, (S.D i.val : ℝ) • NativeNodePrimitive.lambda S hdet κ
       ⟨i.val, p.zeroSet_independent.1 i.property⟩ p) (v 0) = 0
     rw [ContinuousLinearMap.sum_apply]
     apply Finset.sum_eq_zero
     intro i _
-    rw [NativeNodePrimitive.lambda_boundary S hdet κ p.zeroSet_independent _ i.property
+    rw [ContinuousLinearMap.smul_apply,
+      NativeNodePrimitive.lambda_boundary S hdet κ p.zeroSet_independent _ i.property
       p (PrimitiveLocalization.mem_zero_locus p) ((p.mem_zeroSet i.val).mp i.property).2,
       hp _ i.property]
     simp
-  change _ + NativeNodePrimitive.block S hdet κ p.zeroSet p.zeroSet_independent p - _ = _
-  rw [hb, add_zero]
+  change _ - NativeNodePrimitive.block S hdet κ p.zeroSet p.zeroSet_independent p + _ = _
+  rw [hb, sub_zero]
 
 /-- The constructed family supplies exactly the open-cover input for later gluing. -/
 theorem local_cover {ε κ δ : ℝ} (hε : 0 < ε) (hκ : 2 * ε + 1 ≤ κ)

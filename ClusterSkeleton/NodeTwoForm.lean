@@ -3,11 +3,24 @@ import ClusterSkeleton.FormExtensionUniqueness
 import Mathlib.Analysis.Calculus.Deriv.ZPow
 
 /-!
-# The complete node two-form
+# The complete node two-form, weighted case
 
-The exponent matrix is the accepted inverse matrix T, not its transpose.
-The residual coefficient matrix is Tᵀ B[outside,outside] T. Node characters
-are q = uv - 1. All formulas below use the full node domain, including u = 0.
+The exponent matrix is the accepted inverse matrix T, not its transpose; the
+integer-inverse role is **not** weighted, so `T` stays integral.
+The residual coefficient matrix is `Tᵀ K[outside,outside] T`, with the weighted
+form matrix `K = E * D`; its entries are rational. Node characters are
+`q = uv - 1`, and `rawParameters (inl i) = q_i` is the reference character `t_i`.
+
+The node coefficient carries the symmetrizer weight: entrywise
+`K i j = -(d i) * B i j` (`Seed.K_eq_neg_D_mul_B`), i.e.
+`∑_j K_ij dlog z_j = -d_i dlog t_i`, so that
+
+```
+Ω = ∑_{i ∈ I} d_i dlog t_i ∧ dlog x_i + Ω₀(t,s),
+    d_i dlog t_i ∧ dlog x_i = -(d_i / q_i) du_i ∧ dv_i.
+```
+
+All formulas below use the full node domain, including u = 0.
 -/
 noncomputable section
 set_option backward.isDefEq.respectTransparency false
@@ -86,14 +99,42 @@ def logParameter (x : Vector S I) : IndependentRowBasisIndex S I → (Vector S I
 
 variable (hdet : S.Unimodular) (hI : S.Independent I)
 
-/-- All B-dependent residual coefficients, over the integers, in the accepted basis. -/
-def residualMatrix : Matrix (IndependentRowBasisIndex S I) (IndependentRowBasisIndex S I) ℤ :=
-  (independentRowInverseMatrix S I hdet hI).transpose *
-    (S.B.submatrix (fun j : {j : Fin d // j ∉ I} => j.val) (fun k : {j : Fin d // j ∉ I} => k.val)) * independentRowInverseMatrix S I hdet hI
+/-- The `J × J` block of the weighted form matrix `K = E * D`, where `J` is the
+complement of `I`. Rational, not integral. -/
+def outsideBlock : Matrix {j : Fin d // j ∉ I} {j : Fin d // j ∉ I} ℚ :=
+  S.K.submatrix (fun j : {j : Fin d // j ∉ I} => j.val) (fun k : {j : Fin d // j ∉ I} => k.val)
+
+@[simp] theorem outsideBlock_apply (j k : {j : Fin d // j ∉ I}) :
+    outsideBlock S I j k = S.K j k := rfl
+
+/-- The same block over the complex numbers; it is the `J × J` submatrix of
+`TorusNondegeneracy.complexMatrix`. -/
+def complexOutsideBlock : Matrix {j : Fin d // j ∉ I} {j : Fin d // j ∉ I} ℂ :=
+  fun j k => (S.K j k : ℂ)
+
+@[simp] theorem complexOutsideBlock_apply (j k : {j : Fin d // j ∉ I}) :
+    complexOutsideBlock S I j k = (S.K j k : ℂ) := rfl
+
+theorem complexOutsideBlock_eq_submatrix :
+    complexOutsideBlock S I = (TorusNondegeneracy.complexMatrix S).submatrix
+      (fun j : {j : Fin d // j ∉ I} => j.val) (fun k : {j : Fin d // j ∉ I} => k.val) := rfl
+
+/-- The integer inverse matrix of the accepted basis, over the rationals. The
+integer-inverse role (f) is not weighted: `T` itself stays integral. -/
+def rationalInverseMatrix :
+    Matrix {j : Fin d // j ∉ I} (IndependentRowBasisIndex S I) ℚ :=
+  (independentRowInverseMatrix S I hdet hI).map (fun x : ℤ => (x : ℚ))
+
+/-- All `K`-dependent residual coefficients in the accepted basis: `Tᵀ K_J T`.
+Rational, because `K` is. -/
+def residualMatrix : Matrix (IndependentRowBasisIndex S I) (IndependentRowBasisIndex S I) ℚ :=
+  (rationalInverseMatrix S I hdet hI).transpose *
+    outsideBlock S I * rationalInverseMatrix S I hdet hI
 
 /-- The full complex form on the literal node vector space. Its geometric domain is `domain S I`. -/
 def complexForm (x : Vector S I) : Vector S I [⋀^Fin 2]→L[ℂ] ℂ :=
-  (∑ i, (rawParameters S I x (Sum.inl i))⁻¹ • wedge (du S I i) (dv S I i)) +
+  (∑ i : {i : Fin d // i ∈ I}, (-(S.D i : ℂ) * (rawParameters S I x (Sum.inl i))⁻¹) •
+    wedge (du S I i) (dv S I i)) +
   (1 / 2 : ℂ) • ∑ k, ∑ l, (residualMatrix S I hdet hI k l : ℂ) •
     wedge (logParameter S I x k) (logParameter S I x l)
 
@@ -170,8 +211,8 @@ theorem contDiffAt_complexForm {x : Vector S I} (hx : x ∈ domain S I) :
   apply ContDiffAt.add
   · apply ContDiffAt.sum
     intro i _
-    exact (((contDiff_rawParameters S I (Sum.inl i)).contDiffAt).inv
-      (rawParameters_ne_zero S I hx _)).smul contDiffAt_const
+    exact (contDiffAt_const.mul (((contDiff_rawParameters S I (Sum.inl i)).contDiffAt).inv
+      (rawParameters_ne_zero S I hx _))).smul contDiffAt_const
   · apply ContDiffAt.const_smul
     apply ContDiffAt.sum
     intro k _
@@ -205,6 +246,26 @@ theorem row_outsideLog (x t : Vector S I) (i : {i : Fin d // i ∈ I}) :
     exact_mod_cast row_inverse S I hdet hI i k
   simp_rw [h]
   simp
+
+/-- **The weighted node coefficient in the node chart.** Entrywise
+`K i j = -(d i) * B i j`, so the `K`-row against the recovered outside
+logarithms is `-d_i` times the logarithmic differential of the character
+`q_i = rawParameters (inl i)`. This is the reference identity
+`∑_j K_ij dlog z_j = -d_i dlog t_i`; only here does the symmetrizer enter the
+node form. -/
+theorem row_outsideLog_weighted (x t : Vector S I) (i : {i : Fin d // i ∈ I}) :
+    (∑ j : {j : Fin d // j ∉ I}, (S.K i j : ℂ) * outsideLog S I hdet hI x j t) =
+      -(S.D i : ℂ) * logParameter S I x (Sum.inl i) t := by
+  have hK : ∀ j : {j : Fin d // j ∉ I},
+      (S.K i j : ℂ) = -(S.D i : ℂ) * (S.B i j : ℂ) := by
+    intro j
+    have h := S.K_eq_neg_D_mul_B i j
+    rw [show ((S.K i j : ℚ) : ℂ) = ((-(S.D i) * (S.B i j : ℚ) : ℚ) : ℂ) from
+      congrArg (fun r : ℚ => (r : ℂ)) h]
+    push_cast
+    ring
+  rw [← row_outsideLog S I hdet hI x t i, Finset.mul_sum]
+  exact Finset.sum_congr rfl fun j _ => by rw [hK j, mul_assoc]
 
 /-- A product rule in logarithmic form; the inputs are actual native derivatives. -/
 theorem hasFDerivAt_product_log {E κ : Type*} [NormedAddCommGroup E] [NormedSpace ℂ E]
@@ -308,21 +369,20 @@ theorem matrixValue_skew {κ : Type*} [Fintype κ] (B : Matrix κ κ ℂ)
 
 
 include hI in
-/-- Expansion into the independent incident rows and the entire outside block. -/
+/-- Expansion into the independent incident rows and the entire outside block.
+The coefficient is the weighted matrix `K`; the `I × I` block vanishes because
+`K i j = E i j * D j` and `E i j = 0` on an independent set. -/
 theorem matrixValue_split (a b : Fin d → ℂ) :
     matrixValue (TorusNondegeneracy.complexMatrix S) a b =
       (∑ i : {i : Fin d // i ∈ I},
-        (a i * (∑ j : {j : Fin d // j ∉ I}, (S.B i j : ℂ) * b j) -
-        b i * (∑ j : {j : Fin d // j ∉ I}, (S.B i j : ℂ) * a j))) +
-      matrixValue (TorusNondegeneracy.complexMatrix S |>.submatrix
-        (fun j : {j : Fin d // j ∉ I} => j.val) (fun j : {j : Fin d // j ∉ I} => j.val))
-        (fun j => a j) (fun j => b j) := by
+        (a i * (∑ j : {j : Fin d // j ∉ I}, (S.K i j : ℂ) * b j) -
+        b i * (∑ j : {j : Fin d // j ∉ I}, (S.K i j : ℂ) * a j))) +
+      matrixValue (complexOutsideBlock S I) (fun j => a j) (fun j => b j) := by
   classical
-  have hsk (i j : Fin d) : (S.B i j : ℂ) = -(S.B j i : ℂ) := by
-    rw [S.skew i j, Int.cast_neg]
+  have hsk (i j : Fin d) : (S.K i j : ℂ) = -(S.K j i : ℂ) := by
+    rw [S.K_skew i j, Rat.cast_neg]
   rw [matrixValue_skew (TorusNondegeneracy.complexMatrix S) hsk a b,
-    matrixValue_skew ((TorusNondegeneracy.complexMatrix S).submatrix
-      (fun j : {j : Fin d // j ∉ I} => j.val) (fun j : {j : Fin d // j ∉ I} => j.val))
+    matrixValue_skew (complexOutsideBlock S I)
       (fun i j => hsk i j) (fun j => a j) (fun j => b j)]
   have part (f : Fin d → ℂ) : (∑ i, f i) =
       (∑ i : {i : Fin d // i ∈ I}, f i) + ∑ j : {j : Fin d // j ∉ I}, f j :=
@@ -333,21 +393,24 @@ theorem matrixValue_split (a b : Fin d → ℂ) :
         apply Finset.sum_congr
         · ext i; simp
         · intro i _; rfl
-  simp only [TorusNondegeneracy.complexMatrix, Matrix.submatrix_apply]
+  simp only [TorusNondegeneracy.complexMatrix, complexOutsideBlock]
   rw [part]
   simp_rw [part, Finset.sum_add_distrib]
+  have hKzero (i j : Fin d) (hij : S.E i j = 0) : (S.K i j : ℂ) = 0 := by
+    rw [Seed.K_apply, hij]
+    simp
   have hii : (∑ i : {i : Fin d // i ∈ I}, ∑ j : {j : Fin d // j ∈ I},
-      (S.B i j : ℂ) * (a i * b j)) = 0 := by
+      (S.K i j : ℂ) * (a i * b j)) = 0 := by
     apply Finset.sum_eq_zero
     intro i _
     apply Finset.sum_eq_zero
     intro j _
-    rw [hI.2 i i.property j j.property]
+    rw [hKzero i j (hI.2 i i.property j j.property)]
     simp
   rw [hii, zero_add]
   have hc : (∑ j : {j : Fin d // j ∉ I}, ∑ i : {i : Fin d // i ∈ I},
-      (S.B j i : ℂ) * (a j * b i)) =
-      -(∑ i : {i : Fin d // i ∈ I}, b i * ∑ j : {j : Fin d // j ∉ I}, (S.B i j : ℂ) * a j) := by
+      (S.K j i : ℂ) * (a j * b i)) =
+      -(∑ i : {i : Fin d // i ∈ I}, b i * ∑ j : {j : Fin d // j ∉ I}, (S.K i j : ℂ) * a j) := by
     rw [Finset.sum_comm]
     simp only [← Finset.sum_neg_distrib, Finset.mul_sum]
     apply Finset.sum_congr rfl
@@ -359,8 +422,8 @@ theorem matrixValue_split (a b : Fin d → ℂ) :
   rw [hc]
   simp only [Finset.sum_sub_distrib, Finset.mul_sum]
   have ha : (∑ i : {i : Fin d // i ∈ I}, ∑ j : {j : Fin d // j ∉ I},
-      (S.B i j : ℂ) * (a i * b j)) =
-      ∑ i : {i : Fin d // i ∈ I}, ∑ j : {j : Fin d // j ∉ I}, a i * ((S.B i j : ℂ) * b j) := by
+      (S.K i j : ℂ) * (a i * b j)) =
+      ∑ i : {i : Fin d // i ∈ I}, ∑ j : {j : Fin d // j ∉ I}, a i * ((S.K i j : ℂ) * b j) := by
     apply Finset.sum_congr rfl
     intro i _
     apply Finset.sum_congr rfl
@@ -369,29 +432,29 @@ theorem matrixValue_split (a b : Fin d → ℂ) :
   rw [ha]
   ring
 
-/-- The integer congruence matrix casts to the same complex congruence matrix. -/
+/-- The congruence matrix casts to the same complex congruence matrix. Only the
+middle factor is weighted; `T` is the unchanged integer inverse matrix. -/
 theorem residualMatrix_cast :
     (fun k l => (residualMatrix S I hdet hI k l : ℂ)) =
       (independentRowInverseMatrix S I hdet hI |>.map (Int.castRingHom ℂ)).transpose *
-      (S.B.submatrix (fun j : {j : Fin d // j ∉ I} => j.val)
-        (fun j : {j : Fin d // j ∉ I} => j.val) |>.map (Int.castRingHom ℂ)) *
+      (complexOutsideBlock S I) *
       (independentRowInverseMatrix S I hdet hI |>.map (Int.castRingHom ℂ)) := by
   ext k l
-  simp [residualMatrix, Matrix.mul_apply, Matrix.transpose_apply]
+  simp only [residualMatrix, rationalInverseMatrix, Matrix.mul_apply, Matrix.transpose_apply,
+    Matrix.map_apply, Int.coe_castRingHom, outsideBlock_apply, complexOutsideBlock_apply]
+  push_cast
+  rfl
 
 /-- The full expression in the original outside covectors. -/
 theorem complexForm_apply (x : Vector S I) (t : Fin 2 → Vector S I) :
     complexForm S I hdet hI x t =
-      (∑ i, (((t 0).1 i |>.1) * ((t 1).1 i |>.2) /
-        rawParameters S I x (Sum.inl i) -
-        ((t 1).1 i |>.1) * ((t 0).1 i |>.2) / rawParameters S I x (Sum.inl i))) +
-      matrixValue (S.B.submatrix (fun j : {j : Fin d // j ∉ I} => j.val)
-        (fun j : {j : Fin d // j ∉ I} => j.val) |>.map (Int.castRingHom ℂ))
+      (∑ i : {i : Fin d // i ∈ I}, -(S.D i : ℂ) * ((((t 0).1 i |>.1) * ((t 1).1 i |>.2) -
+        ((t 1).1 i |>.1) * ((t 0).1 i |>.2)) / rawParameters S I x (Sum.inl i))) +
+      matrixValue (complexOutsideBlock S I)
         (fun j => outsideLog S I hdet hI x j (t 0))
         (fun j => outsideLog S I hdet hI x j (t 1)) := by
   have h := matrixValue_congruence
-    (S.B.submatrix (fun j : {j : Fin d // j ∉ I} => j.val)
-      (fun j : {j : Fin d // j ∉ I} => j.val) |>.map (Int.castRingHom ℂ))
+    (complexOutsideBlock S I)
     (independentRowInverseMatrix S I hdet hI |>.map (Int.castRingHom ℂ))
     (fun k => logParameter S I x k (t 0)) (fun k => logParameter S I x k (t 1))
   rw [← residualMatrix_cast S I hdet hI] at h
@@ -402,7 +465,10 @@ theorem complexForm_apply (x : Vector S I) (t : Fin 2 → Vector S I) :
   apply congrArg₂ (· + ·)
   · apply Finset.sum_congr rfl
     intro i _
-    simp [du, dv, div_eq_mul_inv]
+    simp only [du, dv, ContinuousLinearMap.coe_comp', Function.comp_apply,
+      ContinuousLinearMap.coe_fst', ContinuousLinearMap.coe_snd',
+      ContinuousLinearMap.proj_apply]
+    rw [div_eq_mul_inv]
     ring
   · congr 1 <;> funext j <;>
       simp [outsideLog, Matrix.mulVec, dotProduct, smul_eq_mul]
@@ -471,14 +537,15 @@ theorem complexForm_torus {x : Vector S I} (hx : x ∈ domain S I)
   have hout (j : {j : Fin d // j ∉ I}) (v : Vector S I) :
       originalLog S I hdet hI x v j = outsideLog S I hdet hI x j v := by
     simp only [originalLog, dite_eq_right j.property]
-  simp_rw [hin, hout, row_outsideLog]
+  simp_rw [hin, hout, row_outsideLog_weighted]
   congr 1
   apply Finset.sum_congr rfl
   intro i _
   simp only [Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val_fin_one,
     logParameter_inl, rawParameters, Sum.elim_inl]
-  rw [← sub_div]
-  exact (node_cancellation _ _ _ _ _ _ (hu i) (rawParameters_ne_zero S I hx (Sum.inl i))).symm
+  have hc := node_cancellation ((x.1 i).1) ((x.1 i).2) ((a.1 i).1) ((a.1 i).2)
+    ((b.1 i).1) ((b.1 i).2) (hu i) (rawParameters_ne_zero S I hx (Sum.inl i))
+  linear_combination (S.D i : ℂ) * hc
 
 /-- The exact real torus form on the actual accepted manifold. -/
 theorem localForm_torus (p : S.Point) (hp : p ∈ initialTorus S)
@@ -528,7 +595,8 @@ theorem logParameter_eq_boundaryLog (x t : Vector S I) (hz : ∀ i, (x.1 i).1 = 
 /-- Boundary specialization with all residual blocks retained; no nondegeneracy premise. -/
 theorem complexForm_boundary (x a b : Vector S I) (hz : ∀ i, (x.1 i).1 = 0) :
     complexForm S I hdet hI x ![a,b] =
-      -(∑ i, ((a.1 i).1 * (b.1 i).2 - (b.1 i).1 * (a.1 i).2)) +
+      (∑ i : {i : Fin d // i ∈ I},
+        (S.D i : ℂ) * ((a.1 i).1 * (b.1 i).2 - (b.1 i).1 * (a.1 i).2)) +
       matrixValue (fun k l => (residualMatrix S I hdet hI k l : ℂ))
         (boundaryLog S I x a) (boundaryLog S I x b) := by
   simp only [complexForm, ContinuousAlternatingMap.add_apply,
@@ -536,12 +604,19 @@ theorem complexForm_boundary (x a b : Vector S I) (hz : ∀ i, (x.1 i).1 = 0) :
     wedge_apply, Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val_fin_one,
     logParameter_eq_boundaryLog S I x _ hz]
   congr 1
-  simp [rawParameters, hz, du, dv, ← Finset.sum_neg_distrib]
+  -- at a center `q_i = u_i v_i - 1 = -1`, so `-(d_i) * q_i⁻¹ = d_i`
+  apply Finset.sum_congr rfl
+  intro i _
+  simp only [rawParameters, Sum.elim_inl, hz i, du, dv, ContinuousLinearMap.coe_comp',
+    Function.comp_apply, ContinuousLinearMap.coe_fst', ContinuousLinearMap.coe_snd',
+    ContinuousLinearMap.proj_apply, zero_mul, zero_sub, inv_neg, inv_one, neg_neg,
+    mul_neg, neg_mul, mul_one]
 
 /-- Real boundary specialization in node coordinates. -/
 theorem realForm_boundary (x a b : Vector S I) (hz : ∀ i, (x.1 i).1 = 0) :
     realForm S I hdet hI x ![a,b] =
-      (-(∑ i, ((a.1 i).1 * (b.1 i).2 - (b.1 i).1 * (a.1 i).2)) +
+      ((∑ i : {i : Fin d // i ∈ I},
+          (S.D i : ℂ) * ((a.1 i).1 * (b.1 i).2 - (b.1 i).1 * (a.1 i).2)) +
         matrixValue (fun k l => (residualMatrix S I hdet hI k l : ℂ))
           (boundaryLog S I x a) (boundaryLog S I x b)).im :=
   congrArg Complex.im (complexForm_boundary S I hdet hI x a b hz)
@@ -557,7 +632,8 @@ theorem localForm_boundary (p : S.Point) (hz : ∀ i : {i : Fin d // i ∈ I}, p
     let A := tangentMap S I hdet hI p a
     let B := tangentMap S I hdet hI p b
     SmoothManifold.evalTwo (localForm S I hdet hI) p a b =
-      (-(∑ i, ((A.1 i).1 * (B.1 i).2 - (B.1 i).1 * (A.1 i).2)) +
+      ((∑ i : {i : Fin d // i ∈ I},
+          (S.D i : ℂ) * ((A.1 i).1 * (B.1 i).2 - (B.1 i).1 * (A.1 i).2)) +
         matrixValue (fun k l => (residualMatrix S I hdet hI k l : ℂ))
           (boundaryLog S I x A) (boundaryLog S I x B)).im := by
   dsimp only

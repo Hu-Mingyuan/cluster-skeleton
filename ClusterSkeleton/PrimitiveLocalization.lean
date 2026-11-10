@@ -47,7 +47,7 @@ theorem rowLog_eq_log_re {p : S.Point} (hp : p ∈ initialTorus S) (i : Fin d) :
     rowLog p i = (Complex.log (-exchangeCharacter p i)).re := by
   rw [Complex.log_re, norm_neg, exchangeCharacter_eq_zpow_product, norm_prod]
   rw [Real.log_prod (fun j _ => norm_ne_zero_iff.mpr (zpow_ne_zero _ (hp j)))]
-  simp only [norm_zpow, Real.log_zpow, rowLog, logNorms]
+  simp only [norm_zpow, Real.log_zpow, rowLog, logNorms, Seed.B_apply]
 
 theorem continuous_negativeMonomial (i : Fin d) :
     Continuous (fun p : S.Point => S.negativeMonomial p.a i) := by

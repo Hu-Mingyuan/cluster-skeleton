@@ -1,4 +1,5 @@
 import ClusterSkeleton.TorusCorrection
+import ClusterSkeleton.SeedAlgebra
 import Mathlib.Analysis.Normed.Module.Alternating.Curry
 import Mathlib.Analysis.InnerProductSpace.Dual
 
@@ -115,10 +116,10 @@ theorem logarithmic_angularTangent (p : S.Point) (hp : p ∈ initialTorus S)
 theorem omega_real (p : S.Point) (hp : p ∈ initialTorus S)
     (v w : (SmoothAtlas.presentation S hdet).manifold.Tangent p) :
     SmoothManifold.evalTwo (GlobalTwoForm.omega S hdet) p v w =
-      (∑ i : Fin d, ∑ j : Fin d, (S.B i j : ℝ) *
+      (∑ i : Fin d, ∑ j : Fin d, (S.K i j : ℝ) *
         ((SmoothAtlas.presentation S hdet).coordinateDifferential i p v / p.a i).re *
         ((SmoothAtlas.presentation S hdet).coordinateDifferential j p w / p.a j).im) -
-      (∑ i : Fin d, ∑ j : Fin d, (S.B i j : ℝ) *
+      (∑ i : Fin d, ∑ j : Fin d, (S.K i j : ℝ) *
         ((SmoothAtlas.presentation S hdet).coordinateDifferential i p w / p.a i).re *
         ((SmoothAtlas.presentation S hdet).coordinateDifferential j p v / p.a j).im) := by
   rw [GlobalTwoForm.omega_torus S hdet p hp]
@@ -131,8 +132,8 @@ theorem omega_real (p : S.Point) (hp : p ∈ initialTorus S)
 /-- The angular equation of (2.9), with the actual differential and tangent. -/
 theorem angular_equation (ε κ : ℝ) {δ : ℝ} (hδ : 0 < δ)
     (p : S.Point) (hp : p ∈ initialTorus S) (i : Fin d) :
-    (∑ j : Fin d, (S.B i j : ℝ) * (logarithmicComponents S hdet ε κ δ p j).im) =
-      differentialCovector (SmoothAtlas.presentation S hdet).manifold
+    (∑ j : Fin d, (S.K i j : ℝ) * (logarithmicComponents S hdet ε κ δ p j).im) =
+      -differentialCovector (SmoothAtlas.presentation S hdet).manifold
         (TorusCorrection.H S ε κ δ) p (radialTangent S hdet p hp i) := by
   classical
   have h := contraction S hdet ε κ hδ p hp (radialTangent S hdet p hp i)
@@ -319,7 +320,7 @@ theorem differential_H (ε κ : ℝ) {δ : ℝ} (hδ : 0 < δ)
     (v : (SmoothAtlas.presentation S hdet).manifold.Tangent p) :
     differentialCovector (SmoothAtlas.presentation S hdet).manifold
       (TorusCorrection.H S ε κ δ) p v =
-      ∑ i ∈ S.mutable, (
+      ∑ i ∈ S.mutable, (S.D i : ℝ) * (
         amplitude S ε κ i (TorusCorrection.A S p) *
           (deriv (PrimitiveCutoffs.vartheta δ) (Complex.arg (-exchangeCharacter p i)) *
             ∑ j : Fin d, (S.B i j : ℝ) *
@@ -333,12 +334,12 @@ theorem differential_H (ε κ : ℝ) {δ : ℝ} (hδ : 0 < δ)
   have hG (i : Fin d) := (TorusCorrection.contMDiffAt_angular S hdet hδ p hp i).mdifferentiableAt
     (by simp)
   have hsum := HasMFDerivAt.sum (t := S.mutable)
-    (fun i _ => (hF i).hasMFDerivAt.mul (hG i).hasMFDerivAt)
-  have hfun : (∑ i ∈ S.mutable,
-      (amplitude S ε κ i ∘ TorusCorrection.A S) *
-        (fun q => TorusCorrection.angular S δ q i)) = TorusCorrection.H S ε κ δ := by
+    (fun i _ => ((hF i).hasMFDerivAt.mul (hG i).hasMFDerivAt).const_smul ((S.D i : ℝ)))
+  have hfun : (∑ i ∈ S.mutable, (S.D i : ℝ) •
+      ((amplitude S ε κ i ∘ TorusCorrection.A S) *
+        (fun q => TorusCorrection.angular S δ q i))) = TorusCorrection.H S ε κ δ := by
     funext q
-    simp [TorusCorrection.H, amplitude, TorusCorrection.rowLog]
+    simp [TorusCorrection.H, amplitude, TorusCorrection.rowLog, mul_assoc]
   rw [hfun] at hsum
   have he := congrArg (fun L => L v) hsum.mfderiv
   change differentialCovector (SmoothAtlas.presentation S hdet).manifold
@@ -347,6 +348,7 @@ theorem differential_H (ε κ : ℝ) {δ : ℝ} (hδ : 0 < δ)
   simp only [sum_apply, add_apply, smul_apply, smul_eq_mul]
   apply Finset.sum_congr rfl
   intro i _
+  congr 1
   change amplitude S ε κ i (TorusCorrection.A S p) *
     differentialCovector (SmoothAtlas.presentation S hdet).manifold
       (fun q => TorusCorrection.angular S δ q i) p v +
@@ -373,24 +375,39 @@ theorem differential_H_angular (ε κ : ℝ) {δ : ℝ} (hδ : 0 < δ)
     (p : S.Point) (hp : p ∈ initialTorus S) (j : Fin d) :
     differentialCovector (SmoothAtlas.presentation S hdet).manifold
       (TorusCorrection.H S ε κ δ) p (angularTangent S hdet p hp j) =
-      ∑ i ∈ S.mutable, amplitude S ε κ i (TorusCorrection.A S p) *
+      ∑ i ∈ S.mutable, (S.D i : ℝ) * (amplitude S ε κ i (TorusCorrection.A S p) *
         deriv (PrimitiveCutoffs.vartheta δ) (Complex.arg (-exchangeCharacter p i)) *
-          (S.B i j : ℝ) := by
+          (S.B i j : ℝ)) := by
   rw [differential_H S hdet ε κ hδ p hp]
   simp [logarithmic_angularTangent, Pi.single_apply, apply_ite, mul_assoc]
   simp only [← Pi.zero_def, map_zero, mul_zero, add_zero]
+
+/-- The weighted angular derivative of `H` in the form coefficient `K`. The
+weight `d_i` of each `H` summand is absorbed by `K_{ij} = -d_i B_{ij}`
+(`SeedAlgebra.K_eq_neg_D_mul_B`), at the price of an overall minus sign. -/
+theorem differential_H_angular_K (ε κ : ℝ) {δ : ℝ} (hδ : 0 < δ)
+    (p : S.Point) (hp : p ∈ initialTorus S) (j : Fin d) :
+    differentialCovector (SmoothAtlas.presentation S hdet).manifold
+      (TorusCorrection.H S ε κ δ) p (angularTangent S hdet p hp j) =
+      -∑ i ∈ S.mutable, amplitude S ε κ i (TorusCorrection.A S p) *
+        deriv (PrimitiveCutoffs.vartheta δ) (Complex.arg (-exchangeCharacter p i)) *
+          (S.K i j : ℝ) := by
+  rw [differential_H_angular S hdet ε κ hδ p hp j, ← Finset.sum_neg_distrib]
+  refine Finset.sum_congr rfl fun i _ => ?_
+  rw [SeedAlgebra.K_eq_neg_D_mul_B S i j]
+  ring
 
 theorem differential_H_radial (ε κ : ℝ) {δ : ℝ} (hδ : 0 < δ)
     (p : S.Point) (hp : p ∈ initialTorus S) (j : Fin d) :
     differentialCovector (SmoothAtlas.presentation S hdet).manifold
       (TorusCorrection.H S ε κ δ) p (radialTangent S hdet p hp j) =
-      ∑ i ∈ S.mutable, TorusCorrection.angular S δ p i *
-        fderiv ℝ (amplitude S ε κ i) (TorusCorrection.A S p) (Pi.single j 1) := by
+      ∑ i ∈ S.mutable, (S.D i : ℝ) * (TorusCorrection.angular S δ p i *
+        fderiv ℝ (amplitude S ε κ i) (TorusCorrection.A S p) (Pi.single j 1)) := by
   rw [differential_H S hdet ε κ hδ p hp]
   simp [logarithmic_radialTangent, Pi.single_apply, apply_ite]
   apply Finset.sum_congr rfl
   intro i _
-  congr 2
+  congr 3
   ext k
   simp [Pi.single_apply]
 
@@ -401,40 +418,34 @@ def radialCorrection (ε κ δ : ℝ) (p : S.Point) (i : Fin d) : ℝ :=
 
 theorem radial_matrix_equation (ε κ : ℝ) {δ : ℝ} (hδ : 0 < δ)
     (p : S.Point) (hp : p ∈ initialTorus S) (j : Fin d) :
-    (∑ i : Fin d, (S.B i j : ℝ) * (logarithmicComponents S hdet ε κ δ p i).re) =
-      (∑ i : Fin d, (S.B i j : ℝ) * TorusCorrection.A S p i) -
+    (∑ i : Fin d, (S.K i j : ℝ) * (logarithmicComponents S hdet ε κ δ p i).re) =
+      (∑ i : Fin d, (S.K i j : ℝ) * TorusCorrection.A S p i) -
       ∑ i ∈ S.mutable, amplitude S ε κ i (TorusCorrection.A S p) *
         deriv (PrimitiveCutoffs.vartheta δ) (Complex.arg (-exchangeCharacter p i)) *
-          (S.B i j : ℝ) := by
+          (S.K i j : ℝ) := by
   classical
   have h := contraction S hdet ε κ hδ p hp (angularTangent S hdet p hp j)
   rw [omega_real S hdet p hp, TorusCorrection.evalOne_alpha,
-    differential_H_angular S hdet ε κ hδ p hp j] at h
+    differential_H_angular_K S hdet ε κ hδ p hp j] at h
   simpa [logarithmic_angularTangent, Pi.single_apply, apply_ite,
-    logarithmicComponents, TorusCorrection.A] using h
+    logarithmicComponents, TorusCorrection.A, sub_eq_add_neg] using h
 
-/-- Cancelling the full determinant-one matrix computes every radial component
+/-- Cancelling the full weighted form matrix computes every radial component
 of the native Liouville vector. -/
 theorem real_logarithmicComponents (ε κ : ℝ) {δ : ℝ} (hδ : 0 < δ)
     (p : S.Point) (hp : p ∈ initialTorus S) (i : Fin d) :
     (logarithmicComponents S hdet ε κ δ p i).re =
       TorusCorrection.A S p i - radialCorrection S ε κ δ p i := by
   classical
-  let R : Matrix (Fin d) (Fin d) ℝ := fun i j => (S.B i j : ℝ)
-  have hd : R.det = 1 := by
-    have h := (Int.castRingHom ℝ).map_det S.B
-    change (S.B.det : ℝ) = R.det at h
-    rw [hdet, Int.cast_one] at h
-    exact h.symm
-  have he : Matrix.vecMul (fun i => (logarithmicComponents S hdet ε κ δ p i).re) R =
-      Matrix.vecMul (fun i => TorusCorrection.A S p i - radialCorrection S ε κ δ p i) R := by
+  have he : Matrix.vecMul (fun i => (logarithmicComponents S hdet ε κ δ p i).re)
+        (SeedAlgebra.Kreal S) =
+      Matrix.vecMul (fun i => TorusCorrection.A S p i - radialCorrection S ε κ δ p i)
+        (SeedAlgebra.Kreal S) := by
     funext j
     have h := radial_matrix_equation S hdet ε κ hδ p hp j
-    simpa [Matrix.vecMul, dotProduct, R, sub_mul, Finset.sum_sub_distrib,
+    simpa [Matrix.vecMul, dotProduct, sub_mul, Finset.sum_sub_distrib,
       radialCorrection, ite_mul, Finset.sum_ite_mem, mul_comm] using h
-  have hinj := Matrix.vecMul_injective_of_isUnit
-    ((Matrix.isUnit_iff_isUnit_det R).mpr (by rw [hd]; exact isUnit_one))
-  exact congrFun (hinj he) i
+  exact congrFun (SeedAlgebra.Kreal_vecMul_injective S hdet he) i
 
 theorem mutable_radial_equation (ε κ : ℝ) {δ : ℝ} (hδ : 0 < δ)
     (p : S.Point) (hp : p ∈ initialTorus S) (i : Fin d) (hi : i ∈ S.mutable) :
@@ -509,9 +520,10 @@ theorem arg_product_angle {ι : Type*} (s : Finset ι) (x : ι → ℂ)
 /-- A literal Hamiltonian in logarithmic coordinates centered at an actual
 torus point. The second argument is a real vector space of complex logarithms. -/
 def logarithmicHamiltonian (ε κ δ : ℝ) (p : S.Point) (z : Fin d → ℂ) : ℝ :=
-  ∑ i ∈ S.mutable, amplitude S ε κ i (fun j => TorusCorrection.A S p j + (z j).re) *
-    PrimitiveCutoffs.vartheta δ
-      (Complex.arg (-exchangeCharacter p i) + ∑ j : Fin d, (S.B i j : ℝ) * (z j).im)
+  ∑ i ∈ S.mutable, (S.D i : ℝ) *
+    (amplitude S ε κ i (fun j => TorusCorrection.A S p j + (z j).re) *
+      PrimitiveCutoffs.vartheta δ
+        (Complex.arg (-exchangeCharacter p i) + ∑ j : Fin d, (S.B i j : ℝ) * (z j).im))
 
 theorem angular_logarithmic_identity (δ : ℝ) (p q : S.Point)
     (hp : p ∈ initialTorus S) (hq : q ∈ initialTorus S) (i : Fin d) :
@@ -546,8 +558,8 @@ theorem H_logarithmic_identity (ε κ δ : ℝ) (p q : S.Point)
       (GlobalTwoForm.normalizedLog p.a q.a j).re := by
     funext j
     exact TorusPrimitive.log_norm_normalized (p.a j) (q.a j) (hp j) (hq j)
-  change (∑ i ∈ S.mutable, amplitude S ε κ i (TorusCorrection.A S q) *
-    TorusCorrection.angular S δ q i) = _
+  change (∑ i ∈ S.mutable, (S.D i : ℝ) * (amplitude S ε κ i (TorusCorrection.A S q) *
+    TorusCorrection.angular S δ q i)) = _
   unfold logarithmicHamiltonian
   apply Finset.sum_congr rfl
   intro i _
@@ -582,6 +594,7 @@ theorem logarithmicHamiltonian_smooth (ε κ : ℝ) {δ : ℝ} (hδ : 0 < δ) (p
     ContDiff ℝ ∞ (logarithmicHamiltonian S ε κ δ p) := by
   apply ContDiff.sum
   intro i _
+  apply ContDiff.mul contDiff_const
   apply ContDiff.mul
   · apply (amplitude_smooth S ε κ i).comp
     apply contDiff_pi.mpr
@@ -618,7 +631,7 @@ theorem mfderiv_localLog (p : S.Point) (hp : p ∈ initialTorus S)
 theorem fderiv_logarithmicHamiltonian (ε κ : ℝ) {δ : ℝ} (hδ : 0 < δ)
     (p : S.Point) (u : Fin d → ℂ) :
     fderiv ℝ (logarithmicHamiltonian S ε κ δ p) 0 u =
-      ∑ i ∈ S.mutable, (
+      ∑ i ∈ S.mutable, (S.D i : ℝ) * (
         amplitude S ε κ i (TorusCorrection.A S p) *
           (deriv (PrimitiveCutoffs.vartheta δ) (Complex.arg (-exchangeCharacter p i)) *
             ∑ j : Fin d, (S.B i j : ℝ) * (u j).im) +
@@ -637,11 +650,12 @@ theorem fderiv_logarithmicHamiltonian (ε κ : ℝ) {δ : ℝ} (hδ : 0 < δ)
     (by simp) (Complex.arg (-exchangeCharacter p i) + row i 0)).hasDerivAt).comp_hasFDerivAt
       0 (f := fun z : Fin d → ℂ => Complex.arg (-exchangeCharacter p i) + row i z)
       ((row i).hasFDerivAt.const_add _)
-  have h := HasFDerivAt.sum (u := S.mutable) (fun i _ => (ha i).mul (ht i))
-  have hf : (∑ i ∈ S.mutable,
-      (amplitude S ε κ i ∘ (fun z : Fin d → ℂ => TorusCorrection.A S p + re z)) *
+  have h := HasFDerivAt.sum (u := S.mutable)
+    (fun i _ => ((ha i).mul (ht i)).const_smul ((S.D i : ℝ)))
+  have hf : (∑ i ∈ S.mutable, (S.D i : ℝ) •
+      ((amplitude S ε κ i ∘ (fun z : Fin d → ℂ => TorusCorrection.A S p + re z)) *
         (PrimitiveCutoffs.vartheta δ ∘ (fun z : Fin d → ℂ =>
-          Complex.arg (-exchangeCharacter p i) + row i z))) =
+          Complex.arg (-exchangeCharacter p i) + row i z)))) =
       logarithmicHamiltonian S ε κ δ p := by
     funext z
     simp [logarithmicHamiltonian, re, row]
@@ -650,6 +664,7 @@ theorem fderiv_logarithmicHamiltonian (ε κ : ℝ) {δ : ℝ} (hδ : 0 < δ)
   rw [h.fderiv]
   simp [re, row, smul_eq_mul, TorusCorrection.angular]
   simp only [← Pi.zero_def, add_zero]
+  exact Finset.sum_congr rfl fun i _ => by ring
 
 /-- The native differential equals the ordinary lifted derivative. The
 smooth logarithmic germ and its native derivative are proved above; both sides
@@ -667,18 +682,18 @@ theorem differential_H_logarithmic (ε κ : ℝ) {δ : ℝ} (hδ : 0 < δ)
 literal Hamiltonian in smooth local logarithmic coordinates. -/
 theorem angular_equation_logarithmic (ε κ : ℝ) {δ : ℝ} (hδ : 0 < δ)
     (p : S.Point) (hp : p ∈ initialTorus S) (i : Fin d) :
-    (∑ j : Fin d, (S.B i j : ℝ) * (logarithmicComponents S hdet ε κ δ p j).im) =
-      fderiv ℝ (logarithmicHamiltonian S ε κ δ p) 0 (Pi.single i 1) := by
+    (∑ j : Fin d, (S.K i j : ℝ) * (logarithmicComponents S hdet ε κ δ p j).im) =
+      -fderiv ℝ (logarithmicHamiltonian S ε κ δ p) 0 (Pi.single i 1) := by
   rw [angular_equation S hdet ε κ hδ p hp i,
     differential_H_logarithmic S hdet ε κ hδ p hp]
-  congr 1
+  congr 2
   funext j
   exact logarithmic_radialTangent S hdet p hp i j
 
 theorem angular_equation_partial_deriv (ε κ : ℝ) {δ : ℝ} (hδ : 0 < δ)
     (p : S.Point) (hp : p ∈ initialTorus S) (i : Fin d) :
-    (∑ j : Fin d, (S.B i j : ℝ) * (logarithmicComponents S hdet ε κ δ p j).im) =
-      deriv (fun t : ℝ => logarithmicHamiltonian S ε κ δ p
+    (∑ j : Fin d, (S.K i j : ℝ) * (logarithmicComponents S hdet ε κ δ p j).im) =
+      -deriv (fun t : ℝ => logarithmicHamiltonian S ε κ δ p
         (t • (Pi.single i 1 : Fin d → ℂ))) 0 := by
   rw [angular_equation_logarithmic S hdet ε κ hδ p hp i]
   have hd : HasDerivAt (fun t : ℝ => t • (Pi.single i 1 : Fin d → ℂ))
@@ -686,6 +701,7 @@ theorem angular_equation_partial_deriv (ε κ : ℝ) {δ : ℝ} (hδ : 0 < δ)
     simpa using (hasDerivAt_id (0 : ℝ)).smul_const (Pi.single i 1 : Fin d → ℂ)
   have h := ((logarithmicHamiltonian_smooth S ε κ hδ p).differentiable
     (by simp) (0 • (Pi.single i 1 : Fin d → ℂ))).hasFDerivAt.comp_hasDerivAt 0 hd
+  congr 1
   simpa only [Function.comp_def, zero_smul] using h.deriv.symm
 
 theorem amplitude_abs_le {ε κ : ℝ} (hε : 0 < ε) (hκ : 2 * ε < κ)
@@ -694,12 +710,17 @@ theorem amplitude_abs_le {ε κ : ℝ} (hε : 0 < ε) (hκ : 2 * ε < κ)
   have hd1 := DominanceCutoff.dominance_le_one S ε i a
   have hr0 := PrimitiveCutoffs.rho_nonneg (∑ j : Fin d, (S.B i j : ℝ) * a j)
   have hr1 := PrimitiveCutoffs.rho_le_one (∑ j : Fin d, (S.B i j : ℝ) * a j)
-  have h1 := mul_le_mul_of_nonneg_left hd1 (abs_nonneg (PrimitiveCutoffs.radial ε κ (a i)))
-  have h2 := mul_le_mul_of_nonneg_left hr1
-    (mul_nonneg (abs_nonneg (PrimitiveCutoffs.radial ε κ (a i))) hd0)
   have h3 : |amplitude S ε κ i a| ≤ |PrimitiveCutoffs.radial ε κ (a i)| := by
-    simpa [amplitude, abs_mul, abs_of_nonneg hd0, abs_of_nonneg hr0] using
-      h2.trans (by simpa using h1)
+    unfold amplitude
+    rw [abs_mul, abs_mul, abs_of_nonneg hd0, abs_of_nonneg hr0]
+    have h1 : |PrimitiveCutoffs.radial ε κ (a i)| * DominanceCutoff.dominance S ε i a ≤
+        |PrimitiveCutoffs.radial ε κ (a i)| := by
+      simpa using mul_le_mul_of_nonneg_left hd1
+        (abs_nonneg (PrimitiveCutoffs.radial ε κ (a i)))
+    have h2 : (0 : ℝ) ≤ |PrimitiveCutoffs.radial ε κ (a i)| *
+        DominanceCutoff.dominance S ε i a := mul_nonneg (abs_nonneg _) hd0
+    have h3 := mul_le_mul_of_nonneg_left hr1 h2
+    linarith
   exact h3.trans (PrimitiveCutoffs.radial_abs_le hε hκ (a i))
 
 theorem real_components_growth {ε κ δ : ℝ} (hε : 0 < ε) (hκ : 2 * ε < κ) (hδ : 0 < δ) :
@@ -729,45 +750,15 @@ theorem real_components_growth {ε κ δ : ℝ} (hε : 0 < ε) (hκ : 2 * ε < �
     _ = _ := (Finset.mul_sum ..).symm
 
 include hdet in
-/-- A fixed inverse of the entire integer matrix gives a uniform one-norm
-bound. In particular this does not discard frozen columns or require d>0. -/
+/-- A fixed inverse of the entire weighted form matrix gives a uniform one-norm
+bound. In particular this does not discard frozen columns or require d>0. The
+weighted matrix is `K = E · diag D`, whose determinant is `∏ d_i` rather than
+`1`; only `IsUnit` is needed, and that is `SeedAlgebra.isUnit_det_Kreal`. -/
 theorem full_matrix_inverse_bound : ∃ C : ℝ, 0 ≤ C ∧
     ∀ (y b : Fin d → ℝ),
-      (∀ i, ∑ j : Fin d, (S.B i j : ℝ) * y j = b i) →
-      (∑ j : Fin d, |y j|) ≤ C * ∑ j : Fin d, |b j| := by
-  let R : Matrix (Fin d) (Fin d) ℝ := fun i j => (S.B i j : ℝ)
-  have hd : R.det = 1 := by
-    have h := (Int.castRingHom ℝ).map_det S.B
-    change (S.B.det : ℝ) = R.det at h
-    rw [hdet, Int.cast_one] at h
-    exact h.symm
-  have hu : IsUnit R.det := by rw [hd]; exact isUnit_one
-  let C : ℝ := ∑ i : Fin d, ∑ j : Fin d, |R⁻¹ i j|
-  have hC : 0 ≤ C := Finset.sum_nonneg fun i _ => Finset.sum_nonneg fun j _ => abs_nonneg _
-  refine ⟨C, hC, fun y b h => ?_⟩
-  have he : R.mulVec y = b := by funext i; exact h i
-  have hy : y = R⁻¹.mulVec b := by
-    rw [← he, Matrix.mulVec_mulVec, Matrix.nonsing_inv_mul R hu, Matrix.one_mulVec]
-  rw [hy]
-  have hentry (i j : Fin d) : |R⁻¹ i j| ≤ C :=
-    (Finset.single_le_sum (fun k _ => abs_nonneg (R⁻¹ i k)) (Finset.mem_univ j)).trans
-      (Finset.single_le_sum
-        (fun k _ => Finset.sum_nonneg fun l _ => abs_nonneg (R⁻¹ k l)) (Finset.mem_univ i))
-  calc
-    (∑ i : Fin d, |R⁻¹.mulVec b i|) ≤
-        ∑ i : Fin d, ∑ j : Fin d, |R⁻¹ i j| * |b j| := by
-      apply Finset.sum_le_sum
-      intro i _
-      simpa only [Matrix.mulVec, dotProduct, abs_mul] using
-        (Finset.abs_sum_le_sum_abs (s := Finset.univ) (f := fun j => R⁻¹ i j * b j))
-    _ ≤ ∑ i : Fin d, ∑ j : Fin d, |R⁻¹ i j| * (∑ k : Fin d, |b k|) := by
-      apply Finset.sum_le_sum
-      intro i _
-      apply Finset.sum_le_sum
-      intro j _
-      exact mul_le_mul_of_nonneg_left
-        (Finset.single_le_sum (fun k _ => abs_nonneg (b k)) (Finset.mem_univ j)) (abs_nonneg _)
-    _ = C * ∑ j : Fin d, |b j| := by simp [C, Finset.sum_mul]
+      (∀ i, ∑ j : Fin d, (S.K i j : ℝ) * y j = b i) →
+      (∑ j : Fin d, |y j|) ≤ C * ∑ j : Fin d, |b j| :=
+  SeedAlgebra.exists_inverse_bound_Kreal S hdet
 
 theorem chi_deriv_compactSupport {ε : ℝ} (hε : 0 < ε) :
     HasCompactSupport (deriv (DominanceCutoff.chi ε)) := by
@@ -958,28 +949,36 @@ theorem imaginary_components_growth {ε κ δ : ℝ}
   obtain ⟨V, hV, hVbound⟩ := PrimitiveCutoffs.vartheta_iteratedDeriv_bound hδ 0
   simp only [iteratedDeriv_zero] at hVbound
   obtain ⟨N, hN, hNbound⟩ := full_matrix_inverse_bound S hdet
-  let W : ℝ := ∑ _i : Fin d, V * K
-  have hW : 0 ≤ W := Finset.sum_nonneg fun _ _ => mul_nonneg hV hK
-  refine ⟨N * (∑ _j : Fin d, W), by positivity, fun p hp => ?_⟩
+  let W : ℝ := ∑ i : Fin d, (S.D i : ℝ) * (V * K)
+  have hW : 0 ≤ W :=
+    Finset.sum_nonneg fun i _ =>
+      mul_nonneg (le_of_lt (by exact_mod_cast S.D_pos i)) (mul_nonneg hV hK)
+  refine ⟨N * (∑ _j : Fin d, W), mul_nonneg hN (Finset.sum_nonneg fun _ _ => hW),
+    fun p hp => ?_⟩
   let U : ℝ := 1 + ∑ j : Fin d, |TorusCorrection.A S p j|
   have hU : 0 ≤ U := by dsimp [U]; positivity
-  let b (j : Fin d) := differentialCovector (SmoothAtlas.presentation S hdet).manifold
+  let b (j : Fin d) := -differentialCovector (SmoothAtlas.presentation S hdet).manifold
     (TorusCorrection.H S ε κ δ) p (radialTangent S hdet p hp j)
   have hb (j : Fin d) : |b j| ≤ W * U := by
     dsimp [b]
-    rw [differential_H_radial S hdet ε κ hδ p hp j]
+    rw [abs_neg, differential_H_radial S hdet ε κ hδ p hp j]
     calc
-      _ ≤ ∑ i ∈ S.mutable, |TorusCorrection.angular S δ p i *
-          fderiv ℝ (amplitude S ε κ i) (TorusCorrection.A S p) (Pi.single j 1)| :=
+      _ ≤ ∑ i ∈ S.mutable, |(S.D i : ℝ) * (TorusCorrection.angular S δ p i *
+          fderiv ℝ (amplitude S ε κ i) (TorusCorrection.A S p) (Pi.single j 1))| :=
         Finset.abs_sum_le_sum_abs _ _
-      _ ≤ ∑ _i ∈ S.mutable, (V * K) * U := by
+      _ ≤ ∑ i ∈ S.mutable, (S.D i : ℝ) * ((V * K) * U) := by
         apply Finset.sum_le_sum
         intro i _
-        rw [abs_mul, mul_assoc]
-        exact mul_le_mul (hVbound _) (hKbound _ i j) (abs_nonneg _) hV
-      _ ≤ ∑ _i : Fin d, (V * K) * U :=
-        Finset.sum_le_univ_sum_of_nonneg (fun _ => by positivity)
-      _ = W * U := by simp only [W, Finset.sum_mul]
+        have hDi : (0 : ℝ) ≤ (S.D i : ℝ) := le_of_lt (by exact_mod_cast S.D_pos i)
+        rw [abs_mul, abs_of_nonneg hDi, abs_mul, mul_assoc]
+        exact mul_le_mul_of_nonneg_left
+          (mul_le_mul (hVbound _) (hKbound _ i j) (abs_nonneg _) hV) hDi
+      _ ≤ ∑ i : Fin d, (S.D i : ℝ) * ((V * K) * U) :=
+        Finset.sum_le_univ_sum_of_nonneg (fun i => by
+          have hDi : (0 : ℝ) ≤ (S.D i : ℝ) := le_of_lt (by exact_mod_cast S.D_pos i)
+          have : (0 : ℝ) ≤ U := hU
+          positivity)
+      _ = W * U := by simp only [W, Finset.sum_mul, mul_assoc]
   calc
     _ ≤ N * ∑ j : Fin d, |b j| := hNbound _ b
       (fun j => angular_equation S hdet ε κ hδ p hp j)

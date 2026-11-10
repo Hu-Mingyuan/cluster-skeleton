@@ -1,0 +1,119 @@
+{
+  "run_id": "b5fe8abb-b31e-4e78-9f51-37fd3f24129f",
+  "status": "completed",
+  "delivery_head": "efb0d0d53fb2ee75f8934972f08cb0bb7a818a79",
+  "accepted_library_commit": "a575aa236b485672f0606bba6ebc80571671f8a9",
+  "phase_history": [
+    {
+      "accepted_by": "3c690153-2529-4724-90e2-545a540cf064",
+      "evidence": [
+        {
+          "id": "42b2d824-dc5d-48f0-9ecb-5de15d018246",
+          "kind": "publication"
+        },
+        {
+          "id": "5577df58-5a2b-4b46-bb3d-3e7040947a36",
+          "kind": "publication"
+        },
+        {
+          "id": "6c6ad068-0464-4b8b-a4fe-e322cc0a6039",
+          "kind": "obligation"
+        },
+        {
+          "id": "9d3fd248-28f2-4276-a5f6-afaec09a437e",
+          "kind": "assignment"
+        },
+        {
+          "id": "be094f4d-6510-4cfd-9695-5468230d42a2",
+          "kind": "mission"
+        },
+        {
+          "id": "f3df52a2-d01f-47e4-888f-4a8ab3c9cac3",
+          "kind": "mission"
+        },
+        {
+          "id": "7d3240fc-f412-49c4-88c8-a9d1a5a1bdaf",
+          "kind": "document"
+        },
+        {
+          "kind": "file",
+          "path": "verification/publication-check.json",
+          "repository_id": "5d09d029-b179-4dfa-b2a7-b86b437b1a02"
+        },
+        {
+          "kind": "file",
+          "path": "verification/accepted-library.json",
+          "repository_id": "5d09d029-b179-4dfa-b2a7-b86b437b1a02"
+        },
+        {
+          "kind": "file",
+          "path": "verification/AxiomAudit.lean",
+          "repository_id": "5d09d029-b179-4dfa-b2a7-b86b437b1a02"
+        },
+        {
+          "kind": "file",
+          "path": "verification/FullSkeletonConsumer.lean",
+          "repository_id": "5d09d029-b179-4dfa-b2a7-b86b437b1a02"
+        },
+        {
+          "kind": "file",
+          "path": "verification/statement-review.md",
+          "repository_id": "5d09d029-b179-4dfa-b2a7-b86b437b1a02"
+        },
+        {
+          "kind": "file",
+          "path": "scripts/verify.py",
+          "repository_id": "5d09d029-b179-4dfa-b2a7-b86b437b1a02"
+        },
+        {
+          "kind": "file",
+          "path": "ClusterSkeleton/GeometryTarget.lean",
+          "repository_id": "5d09d029-b179-4dfa-b2a7-b86b437b1a02"
+        },
+        {
+          "kind": "file",
+          "path": "ClusterSkeleton/FullSkeleton.lean",
+          "repository_id": "5d09d029-b179-4dfa-b2a7-b86b437b1a02"
+        },
+        {
+          "kind": "file",
+          "path": "ClusterSkeleton/SkewSeedSkeleton.lean",
+          "repository_id": "5d09d029-b179-4dfa-b2a7-b86b437b1a02"
+        },
+        {
+          "kind": "file",
+          "path": "ClusterSkeleton/Examples/NonSkew.lean",
+          "repository_id": "5d09d029-b179-4dfa-b2a7-b86b437b1a02"
+        },
+        {
+          "kind": "file",
+          "path": "ClusterSkeleton/Seed.lean",
+          "repository_id": "5d09d029-b179-4dfa-b2a7-b86b437b1a02"
+        },
+        {
+          "kind": "file",
+          "path": "docs/reviews/final-statement-review.md",
+          "repository_id": "5d09d029-b179-4dfa-b2a7-b86b437b1a02"
+        },
+        {
+          "kind": "file",
+          "path": "docs/reviews/recovery-nonskew-review.md",
+          "repository_id": "5d09d029-b179-4dfa-b2a7-b86b437b1a02"
+        },
+        {
+          "kind": "file",
+          "path": "docs/roadmap.md",
+          "repository_id": "5d09d029-b179-4dfa-b2a7-b86b437b1a02"
+        }
+      ],
+      "note": "ACCEPTED - formalization phase of objective 7d3240fc-f412-49c4-88c8-a9d1a5a1bdaf revision 2 (docs/roadmap.md @ e62c10176919227d13a901b383cd2c2ef13e72f7), run b5fe8abb, the skew-symmetrizable generalization. Decided by the bounded maintenance session a1c55090 (mission 70c6d323), role maintainer.\n\nSOURCE BOUND AT DECISION TIME (rechecked immediately before this command)\n- Base: repository 5d09d029 branch main head = e62c101, i.e. the objective's own source commit, unchanged.\n- Accepted library commit a575aa236b485672f0606bba6ebc80571671f8a9, verified publication 5577df58, ref head re-read as a575aa2.\n- Delivered commit efb0d0d53fb2ee75f8934972f08cb0bb7a818a79, verified publication 42b2d824, ref head re-read as efb0d0d (closing verification mission be094f4d / assignment 9d3fd248, obligation 6c6ad068 done).\n- Receipt verification/publication-check.json re-fetched at efb0d0d and re-hashed now: sha256 1aebfec20a7ff7d3fc758a71e74b8b14b27bd345881147b78990a1dd97b3dc63.\n\nMAINTAINER RE-VERIFICATION (performed in this session, not taken from the handoff)\n1. All 73 receipt source_sha256 inputs were fetched at efb0d0d through the repository file API and re-hashed: 73/73 equal.\n2. All 66 library paths (ClusterSkeleton.lean + 65 modules) at efb0d0d are byte-identical to a575aa2, and the 66 receipt library inputs equal the complete ClusterSkeleton tree of a575aa2 with empty symmetric difference - the verified library is exactly the reviewed library, with nothing added or omitted.\n3. verification/accepted-library.json: accepted_commit = a575aa2, file_count 65, and its 65 sha256 values equal the 65 library files at a575aa2 (computed locally from the Git objects).\n4. All four evidence logs re-hashed at efb0d0d and equal to the receipt's evidence_sha256. build.log has 0 'error' lines and ends 'Build completed successfully (9029 jobs)' (217 style-linter warnings only). final-consumer.log is empty, which is sha256 of the empty string and is documented in verification/README.md as a successful Lean check; a sorry in the consumer would have produced a warning line there, and the consumer source has no sorry. axioms.log contains 72 'depends on axioms' root entries, 65 AUDITED module lines, TOTAL_AUDITED 1811, both generated-declaration supplements, and zero roots reporting 'does not depend on any axioms'.\n5. Forbidden-token grep over all 66 library paths at a575aa2 and over verification/AxiomAudit.lean and verification/FullSkeletonConsumer.lean at efb0d0d for sorry|admit|axiom|opaque|native_decide|implemented_by|unsafe: no hit outside the audit's own \"Forbidden axiom ...\" error strings and one prose sentence.\n6. scripts/verify.py was read in full: it builds the library, elaborates the consumer, runs the audit, requires the '#print axioms' root set to equal the roots declared in AxiomAudit.lean and to contain the final target, requires SkewSeed.skeleton_recovery and Examples.nonSkewSeed_target_of_firstGeometricTarget by name, enforces the three-axiom allowlist, the module-set-equals-file-set check, equality with the accepted-library manifest, the axiom/opaque source grep, the dependency pins and clean dependency worktrees before and after, and input-hash stability; it writes status running first so an interrupted run cannot masquerade as a success. No pre-existing check was weakened.\n\nACCEPTANCE CHECKS OF docs/roadmap.md @ e62c101\n1. PASS (read from source this pass): ClusterSkeleton.FirstGeometricTarget := forall (d : Nat) (S : Seed d), S.Unimodular -> LiouvilleSkeletonTarget S, proved by FullSkeleton.firstGeometricTarget with no binder and no instance argument. Seed carries an integral E that is not assumed skew, an arbitrary positive rational D with D_pos and skewSymmetrizable (E i j * D j = -(E j i * D i)) and an acyclic mutable block; no field forces D = I or equal weights. The exchange monomials use column exponents (Seed.B := E transpose, B_apply by rfl) and SmoothPresentation.logarithmicImaginaryValue carries S.K i j = (E i j) * D j, i.e. K = E D, with the factor 1/2 and the manuscript's sign. Confirmed in detail by the final statement review (items 1-5, 7 PASS).\n2. PASS: SkewSeed.skeleton_recovery, quantified over every SkewSeed d with det B = 1 as its only hypothesis, gives density of the old initial torus, the anchored two-form written with the old integer matrix S.B (no transpose, no sign change, no extra factor) and the skeleton identity on the old carrier in both cap and stratified form for the conjugated constructed flow. Recovery review item 2 PASS with risk R-N1.\n3. PASS: Examples.nonSkewSeed is exactly the roadmap's E = [[0,1,-1,0],[-2,0,0,-1],[1,0,0,0],[0,1,0,0]], D = diag(1,2,1,2), M = {0,1} in zero-based indexing, with nonSkewSeed_unimodular (det E = 1), D_pos, skewSymmetrizable, acyclic and nonSkewSeed_not_skew (E 0 1 = 1 vs E 1 0 = -2); Examples.nonSkewSeed_target_of_firstGeometricTarget reads the target off the universal theorem. It supplements and does not replace the quantified statement (FullSkeletonConsumer.original_general_target : FirstGeometricTarget is retained). Recovery review item 3 PASS.\n4. PASS: full build and consumers on the pinned Lean 4.34.1 / Mathlib d13f23b7 / FsFltz 1a3d387c, axioms exactly propext, Classical.choice, Quot.sound across 72 roots and all 1811 audited declarations, no sorry, no project axiom or opaque, no modified dependency, no dummy carrier, no assumed flow and no assumed skeleton equality.\n5. PASS: the exact generalized type was reviewed against the PDFs (docs/reviews/final-statement-review.md @ 24b7bef8aaea7fd098e8ccd10474502d5a7320fa) and the recovery and non-skew statements separately (docs/reviews/recovery-nonskew-review.md @ 1dead1173f55ad85f21f4d2a6471ad11abd02951), both integrated byte-identically at efb0d0d. The audit was expanded, not weakened: 58 -> 65 modules and 11 -> 72 roots, closing the review's DEFECT A1 and the recovery review's RISK R-N2 (every root they named is present and conforming). The accepted-source manifest was bound only after reviewed integration.\n6. PASS: new receipts and logs are bound to the new accepted source a575aa2; the superseded baseline receipt was replaced, not kept, and no status document relies on the old G1/G2 audit.\n\nCARRIED, NON-BLOCKING, AND THEIR OWNERS\n- R-N1 (recovery stated on two carriers: smooth presentation and Liouville datum on S.toSeed.Point; density, cap, strata and compactness on the old S.Point). Accepted as a documented presentation boundary, not an unmet criterion: the module docstring of ClusterSkeleton/SkewSeedSkeleton.lean and docs/weighted-recovery-plan.md section 2 state it explicitly, the smooth structure is existential exactly as docs/tex/target-theorem.tex quantifies it, and the stage-A and stage-B audits prescribed this route. Closing it would be new Lean work (about 12-20 lines for an old-torus anchor clause, 300-600 for full transport) and would require re-verification. No repair is dispatched and the Lean source stays unchanged, per operator notice 1cc9c774. If a future maintainer wants it, it belongs in a new objective, not in this accepted one.\n- R4 is closed at consumer level by the new PdfTargetConsumer.pdf_target, which states density, the presentation/Liouville datum, Skel = C_E, the stratified form for the same witness, per-stratum compactness and the node-chart rank facts in one Lean type for an arbitrary unimodular seed, proved from FullSkeleton.firstGeometricTarget and the flow-free coordinateCap_eq_iUnion_lambdaStratum. What remains is the shape of FirstGeometricTarget itself, i.e. a citation discipline, recorded in verification/statement-review.md and docs/skeleton-audit.md section 3.\n- Node chart delivered as a homeomorphism with the smooth structure carried separately; R5 (PrimitiveCutoffs.rho_neg / vartheta_neg absent), R6 (exists_global_primitive existential), R7 (no stronger pointwise old-carrier claim) and N1/G3 (det E = 1 from det K read on the manuscript's authority) remain recorded in verification/statement-review.md. None is a roadmap acceptance check; none is dispatched.\n- docs/tex and both root PDFs: untouched and self-consistent (all five document-check.json hashes re-verified correct at efb0d0d this pass), but factually stale in two places - the abstract of docs/tex/target-theorem.tex and its section \"Lean correspondence and acceptance\" still say the Lean library proves only D = I, that Seed.skew exists and that the general statement is not a claim of completed verification, and docs/tex/proof-blueprint.tex opens the same way. Both understate the delivered state. OWNER: the outer operator, per operator notices 636223d7 and 1cc9c774, which commit it to rebuilding both PDFs without document dates, refreshing their formalization-status wording and the document-check hashes, and publishing to public GitHub main after acceptance. Acceptance does not wait on that host-only work and no LaTeX toolchain exists on this host.\n- One residual documentation inconsistency found by this maintainer pass, non-blocking and requiring no ClusterSkeleton/ change: in docs/skeleton-audit.md at efb0d0d the summary sentence near line 39, the three-column table row for t_i near line 829, and the section-3 preamble still describe D1 and D2 as surviving or as \"status at 114d639\", while the authoritative section-3 entries of the same file record both as closed in the accepted source - which this pass verified directly against ClusterSkeleton/NodeCoordinates.lean and ClusterSkeleton/ZeroSet.lean at a575aa2. The wording understates the delivered state and claims nothing false about completeness. OWNER: the outer operator's post-acceptance documentation and publication pass, recorded with the same detail in the closure note of mission a8b95b9c.\n\nRUN STATE AT ACCEPTANCE\nAll eleven delivered work missions of this objective were accepted and closed in this session with source-bound closure notes (ad5b06e1, cacf0389, ddffeedc, 44e0072b, 2b94152e, e6bc9a42, f3df52a2, 7988c318, a8b95b9c, e755eaea, be094f4d). No assignment of the run is live except this maintenance session and the planner successor 15b9889f, which this acceptance supersedes. All four control notices of the run are handled. No status document in the delivered commit claims acceptance; this command is the acceptance record. requested_phases is [\"formalization\"] only, so no next phase is supplied and nothing further is queued.",
+      "objective_commit": "e62c10176919227d13a901b383cd2c2ef13e72f7",
+      "phase": {
+        "kind": "formalization",
+        "orchestrated": false,
+        "roadmap_snapshot_id": null
+      }
+    }
+  ],
+  "publication_followup": "The publication updates both existing PDFs and their document receipt, removes obsolete working plans, and corrects D1/D2 status wording. All Lean verification inputs and logs remain byte-identical to the accepted receipt. The phase-history note is preserved verbatim as the decision at the delivered commit."
+}

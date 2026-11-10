@@ -1,6 +1,6 @@
 # Verify the formalization
 
-The receipts below certify the skew-symmetrizable (weighted) library: integral `E` with `det E = 1`, an arbitrary positive rational diagonal `D` with `K = E D` skew-symmetric, column exchange exponents `P_i^± = ∏_j z_j^{[±E_ji]_+}`. Verified at accepted source commit `a575aa236b485672f0606bba6ebc80571671f8a9`, receipts of 10 November 2026. This records a verified result, not an acceptance decision.
+The receipts below certify the skew-symmetrizable (weighted) library: integral `E` with `det E = 1`, an arbitrary positive rational diagonal `D` with `K = E D` skew-symmetric, column exchange exponents `P_i^± = ∏_j z_j^{[±E_ji]_+}`. Verified at accepted source commit `a575aa236b485672f0606bba6ebc80571671f8a9`, receipts of 10 November 2026. Archon subsequently accepted the formalization phase and completed the run; the [acceptance record](archon-acceptance.json) preserves the source-bound decision.
 
 From the repository root on Linux or Ubuntu under WSL, with Elan (`lake` and `lean` on `PATH`), Git, Python 3, and Bash 4 or newer installed:
 
@@ -59,4 +59,4 @@ The receipt and matching logs are retained in the repository. Re-running the ver
 
 The [statement review](statement-review.md) checks the definitions, quantifiers, and constructed witnesses against the intended real-geometric target. It distinguishes that review from compilation and from a line-by-line independent reproof of every lemma. The [theorem guide](../docs/target-theorem.md) and [proof map](../docs/proof-blueprint.md) identify the implemented claims.
 
-The [document check](document-check.json) binds the current PDFs to their editable LaTeX sources and records document compilation and visual inspection. It is not a Lean proof receipt. The generalized target is in [the theorem guide](../docs/target-theorem.md); the Lean statements it asks for are verified by the receipt above, and acceptance of the objective remains a maintainer's decision.
+The [document check](document-check.json) binds the current PDFs to their editable LaTeX sources and records document compilation and visual inspection. It is not a Lean proof receipt. The generalized target is in [the theorem guide](../docs/target-theorem.md); the Lean statements it asks for are verified by the receipt above, and the completed acceptance is recorded separately in [archon-acceptance.json](archon-acceptance.json).

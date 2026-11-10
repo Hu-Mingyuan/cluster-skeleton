@@ -35,9 +35,10 @@ with the stratified cap identity `coordinateCap_eq_iUnion_lambdaStratum` /
 `IndependentNodeSmooth.complementRank_eq_sub_two_mul_card`. Entries **G1** and
 **G2** of §3 give the exact declarations; **G3** is an optional determinant
 convention, outside the required statement. The convention comparisons
-**N1–N9** require no additional Lean changes; **R4–R7** are the open findings of
-the two weighted semantic reviews, and **D1**, **D2** are two surviving
-docstrings that contradict their own statements.
+**N1–N9** require no additional Lean changes. **R4** is closed at consumer
+level, with the statement-citation boundary recorded below; **R5–R7** remain
+documented scope notes. The docstring defects **D1**, **D2** are closed in the
+accepted source.
 
 Four facts fix every sign in the weighted translation, and each of them is the
 opposite of what the baseline recorded:
@@ -139,9 +140,8 @@ in full. The files
 [`../verification/publication-check.json`](../verification/publication-check.json)
 and
 [`../verification/accepted-library.json`](../verification/accepted-library.json)
-are bound to that commit and are evidence for the weighted theorem. Verifying
-the statements is not accepting the objective, which is a maintainer's
-decision.
+are bound to that commit and are evidence for the weighted theorem. Formal acceptance is recorded separately in
+[archon-acceptance.json](../verification/archon-acceptance.json).
 
 **Citation convention.** Declarations are cited as `File.name`, where `File` is
 the module file under `ClusterSkeleton/`. The full Lean name is usually
@@ -316,7 +316,7 @@ independent locus, where both monomials are units
 (`NodeCoordinates.positiveMonomial_ne_zero_on_independent_locus`,
 `negativeMonomial_ne_zero_on_independent_locus`).
 
-> **D1 (documentation defect, still present at `114d639`).** The docstring of
+> **D1 (documentation defect at `114d639`, closed in the accepted source).** The old docstring of
 > `NodeCoordinates.exchangeCharacter_eq_zpow_product` says "the reference's
 > inverse character `1/t_i`", which is the *baseline's* relation and the opposite
 > of what its own statement proves. See §3.
@@ -827,7 +827,7 @@ where the baseline conventions are stated, and they are stated as history.**
 | exponent matrix | rows `S.B i j` | columns `[±E_{ji}]_+` | `S.B i j := S.E j i` (`S.B = S.Eᵀ`, `Seed.B_apply` by `rfl`) |
 | `P_i^+` | `∏ j, a j ^ (B i j).toNat` = reference `P_i^-` (**interchanged**) | `∏_j z_j^{[E_{ji}]_+}` | `∏ j, a j ^ (E j i).toNat` = reference `P_i^+`, **no interchange** |
 | carrier | reference variety of `B`, monomials swapped | `X_E` | `X_E` literally |
-| `t_i` | `exchangeCharacter p i = 1/t_i` | `t_i = P_i^+/P_i^- = z^{c_i}`, `c_i = E e_i` | `exchangeCharacter p i = t_i` (docstring still says `1/t_i`: **D1**) |
+| `t_i` | `exchangeCharacter p i = 1/t_i` | `t_i = P_i^+/P_i^- = z^{c_i}`, `c_i = E e_i` | `exchangeCharacter p i = t_i` (docstring corrected in the accepted source: **D1 closed**) |
 | node partner `y` | `normalizedPartner = y/t_i` | `y = z_i'/P_i^-` | `normalizedPartner = y` |
 | node equation | `x·(y t) = 1 + 1/t` (reciprocal node) | `x y = 1 + t` | `NodeCoordinates.normalized_node_equation`, the reference node |
 | `v_i` | `rowLog = ∑_j B_{ij} u_j = -v_i` | `v_i = log\|t_i\| = c_i(u) = ∑_j E_{ji} u_j` | `rowLog = +v_i` (text unchanged, meaning flipped) |
@@ -1092,11 +1092,12 @@ axiom audit are the receipt of §5.
 Every entry of the baseline list (**G1**–**G3**, **N1**–**N9**) is re-evaluated
 below for the weighted setting and marked *kept*, *restated* or *retired*, with
 the reason. The findings of the two delivered weighted semantic reviews are added
-as **D1**, **D2**, **R4**–**R7** and **A1** with their status at `114d639`.
-Priority: open findings first (**R4** > **R6** > **R5** > **R7** > **D1** >
-**D2** > **A1**), then the closed gaps, then the notes.
+as **D1**, **D2**, **R4**–**R7** and **A1**, with the original observations at
+`114d639` distinguished from their final status. **D1**, **D2** and **A1** are
+closed; **R4** is closed at consumer level. **R5–R7** remain scope notes rather
+than unmet acceptance criteria. The original ordering is retained for citations.
 
-### R4 (open, acceptance scope) — the full PDF theorem is four theorems, and two consumer lines are missing
+### R4 (closed at consumer level; citation boundary retained) — the full PDF theorem assembles separate proved clauses
 
 *Source.* Stage-A review item 5, risk R4 (`4fe1632`).
 
@@ -1220,7 +1221,8 @@ reference node coordinates), so `Tangent p` is not the same type.
 *Status.* **Open as a wording constraint, settled as a route.** Recovery is
 stated for `S.toSeed` directly, with the old loci transported topologically; no
 smooth structure is transported and none is claimed, per the recorded decision in
-the proved recovery in `SkewSeedRecovery.lean` and `SkewSeedSkeleton.lean` §2 and §1.11 above. Any
+the module docstrings of `SkewSeedRecovery.lean` and `SkewSeedSkeleton.lean`,
+and §1.11 above. Any
 future text must not upgrade "the same flow" to a Lean term identity.
 
 ### D1 (closed in the accepted source) — `exchangeCharacter_eq_zpow_product`'s docstring asserted the opposite of its statement
@@ -1617,6 +1619,7 @@ recovery is stated on two carriers, with the smooth structure existential), and
 `det K = det E · ∏ d_i > 0` is carried by no Lean declaration). None requires a
 change to a statement proved here.
 
-**This is a verified result, not an acceptance decision.** Accepting the phase
-and the objective is the maintainer's call; the superseded baseline receipts at
+**Archon accepted the formalization phase and completed the run.** The
+[acceptance record](../verification/archon-acceptance.json) preserves the
+source-bound decision and its scope notes. The superseded baseline receipts at
 `4c02c1e5bbc68907552632344ae04017d82a30b4` are replaced, not retained.

@@ -205,8 +205,8 @@ hashed in
 [`publication-check.json`](../verification/publication-check.json) with
 `status: passed`: 65 modules, 1811 audited declarations, 72 `#print axioms`
 roots each depending on exactly `propext`, `Classical.choice`, `Quot.sound`, and
-73 hashed inputs. Receipts of 10 November 2026. Verifying the statements is not
-accepting the objective, which is the maintainer's decision; the residual notes
+73 hashed inputs. Receipts of 10 November 2026. Archon subsequently accepted the formalization phase; see the
+[acceptance record](../verification/archon-acceptance.json). The residual notes
 are in [`statement-review.md`](../verification/statement-review.md), and the
 corresponding sections of [`target-theorem.md`](target-theorem.md) and
 [`skeleton-audit.md`](skeleton-audit.md) carry the same counts.

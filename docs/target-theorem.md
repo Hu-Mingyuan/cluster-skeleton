@@ -265,5 +265,6 @@ What now exists for this source:
   which also lists the residual notes (R4 and the one-place consumer, the node
   chart being a homeomorphism, R-N1 on the two carriers of the recovery, R5–R7).
 
-This is a verified result, not an acceptance decision: accepting the phase and
-the objective is the maintainer's call.
+Archon accepted the formalization phase and completed the run. The
+[acceptance record](../verification/archon-acceptance.json) binds that decision
+to the reviewed source and the delivered verification receipt.

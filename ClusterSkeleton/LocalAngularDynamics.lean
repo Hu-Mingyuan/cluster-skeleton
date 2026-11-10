@@ -1,4 +1,5 @@
 import ClusterSkeleton.NormalizedPartnerNormDrift
+import ClusterSkeleton.SeedAlgebra
 
 /-! Smooth angular coefficients and complex normalized-partner dynamics for the
 actual global Liouville field, on every open node neighborhood. -/
@@ -59,7 +60,7 @@ theorem amplitude_fderiv_congr (ε κ : ℝ) (i : Fin d) (a a' u : Fin d → ℝ
     apply Finset.sum_congr rfl
     intro k _
     by_cases hk : S.B i k = 0
-    · simp [hk]
+    · simp [show S.E k i = 0 from hk]
     · rw [hr k hk]
   rw [fderiv_amplitude_apply, fderiv_amplitude_apply, hi, hd, hD, hrow]
 
@@ -100,18 +101,21 @@ theorem survivingAngular_smooth (I : Finset (Fin d)) {δ : ℝ} (hδ : 0 < δ)
 /-- The radial Hamiltonian derivative, with singular and adjacent terms removed
 by their actual local germs and surviving terms evaluated on masked logs. -/
 def angularRhs (ε κ δ : ℝ) (p q : S.Point) (j : Fin d) : ℝ :=
-  ∑ i : S.Mutable,
-    if (i : Fin d) ∈ p.zeroSet then
+  ∑ i : S.Mutable, (S.D (i : Fin d) : ℝ) *
+    (if (i : Fin d) ∈ p.zeroSet then
       (PrimitiveLocalization.nodeLog q i).im * (Pi.single j 1 : Fin d → ℝ) i
     else if i ∈ RegularCorrection.surviving S p.zeroSet then
       TorusCorrection.angular S δ q i *
         fderiv ℝ (amplitude S ε κ i) (maskedLogs S p.zeroSet q) (Pi.single j 1)
-    else 0
+    else 0)
 
-/-- The inverse is of the FULL real matrix, including the frozen rows/columns. -/
+/-- The inverse is of the FULL weighted form matrix `K = E · diag D`, including
+the frozen rows/columns. Only `IsUnit (det K) = ∏ d_i ≠ 0` is used
+(`SeedAlgebra.isUnit_det_Kreal`); there is no `det = 1`. The minus sign is the
+one of the angular equation `∑_j K_{ij} θ̇_j = -∂_{u_i} H`. -/
 def nu (ε κ δ : ℝ) (p q : S.Point) : Fin d → ℝ :=
-  Matrix.mulVec ((fun i j => (S.B i j : ℝ)) : Matrix (Fin d) (Fin d) ℝ)⁻¹
-    (angularRhs S ε κ δ p q)
+  Matrix.mulVec (SeedAlgebra.Kreal S)⁻¹
+    (fun i => -angularRhs S ε κ δ p q i)
 
 theorem angularRhs_smooth (ε κ : ℝ) {δ : ℝ} (hδ : 0 < δ)
     (p q : S.Point) (hq : q ∈ LocalPrimitive.neighborhood S ε κ δ p) (j : Fin d) :
@@ -122,6 +126,7 @@ theorem angularRhs_smooth (ε κ : ℝ) {δ : ℝ} (hδ : 0 < δ)
   unfold angularRhs
   apply ContMDiffAt.sum
   intro i _
+  apply ContMDiffAt.mul contMDiffAt_const
   by_cases hi : (i : Fin d) ∈ p.zeroSet
   · simp only [hi, ite_true]
     exact (Complex.imCLM.contDiff.contDiffAt.contMDiffAt.comp q
@@ -143,7 +148,7 @@ theorem nu_smooth (ε κ : ℝ) {δ : ℝ} (hδ : 0 < δ) (p : S.Point) (j : Fin
   apply ContMDiffAt.contMDiffWithinAt
   unfold nu Matrix.mulVec dotProduct
   exact ContMDiffAt.sum fun k _ => contMDiffAt_const.mul
-    (angularRhs_smooth S hdet ε κ hδ p q hq k)
+    (angularRhs_smooth S hdet ε κ hδ p q hq k).neg
 
 include hdet in
 theorem amplitude_partial_zeroIndex {ε κ δ : ℝ} (hε : 0 < ε) (hκ : 2 * ε + 1 ≤ κ)
@@ -196,6 +201,7 @@ theorem angularRhs_eq_radial {ε κ δ : ℝ} (hε : 0 < ε) (hκ : 2*ε+1 ≤ �
   unfold angularRhs
   apply Finset.sum_congr rfl
   intro i _
+  congr 1
   by_cases hi : (i : Fin d) ∈ p.zeroSet
   · simp only [hi, ite_true]
     rw [amplitude_partial_zeroIndex S hdet hε hκ hδ hq ht i hi j]
@@ -222,21 +228,16 @@ theorem nu_eq_torus {ε κ δ : ℝ} (hε : 0 < ε) (hκ : 2*ε+1 ≤ κ)
     (hδ : 0 < δ) (p q : S.Point)
     (hq : q ∈ LocalPrimitive.neighborhood S ε κ δ p) (ht : q ∈ initialTorus S) :
     nu S ε κ δ p q = fun j => (GlobalLiouvilleField.logarithmicComponents S hdet ε κ hδ q j).im := by
-  let R : Matrix (Fin d) (Fin d) ℝ := fun i j => (S.B i j : ℝ)
-  have hd : R.det = 1 := by
-    have h := (Int.castRingHom ℝ).map_det S.B
-    change (S.B.det : ℝ) = R.det at h
-    rw [hdet, Int.cast_one] at h
-    exact h.symm
-  have hu : IsUnit R.det := by rw [hd]; exact isUnit_one
-  have he : R.mulVec (fun j => (GlobalLiouvilleField.logarithmicComponents S hdet ε κ hδ q j).im) =
-      angularRhs S ε κ δ p q := by
+  have he : (SeedAlgebra.Kreal S).mulVec
+        (fun j => (GlobalLiouvilleField.logarithmicComponents S hdet ε κ hδ q j).im) =
+      fun i => -angularRhs S ε κ δ p q i := by
     funext j
-    rw [GlobalLiouvilleField.logarithmicComponents_eq_torus S hdet hε hκ hδ q ht]
-    exact (angular_equation S hdet ε κ hδ q ht j).trans
-      (angularRhs_eq_radial S hdet hε hκ hδ p q hq ht j).symm
-  change R⁻¹.mulVec (angularRhs S ε κ δ p q) = _
-  rw [← he, Matrix.mulVec_mulVec, Matrix.nonsing_inv_mul R hu, Matrix.one_mulVec]
+    rw [SeedAlgebra.Kreal_mulVec_apply,
+      GlobalLiouvilleField.logarithmicComponents_eq_torus S hdet hε hκ hδ q ht]
+    rw [angular_equation S hdet ε κ hδ q ht j,
+      angularRhs_eq_radial S hdet hε hκ hδ p q hq ht j]
+  change (SeedAlgebra.Kreal S)⁻¹.mulVec (fun i => -angularRhs S ε κ δ p q i) = _
+  rw [← he, Matrix.mulVec_mulVec, SeedAlgebra.Kreal_inv_mul S hdet, Matrix.one_mulVec]
 
 /-- Agreement at every nonzero coordinate, even when other coordinates vanish.
 Density is used only for equality of continuous functions on an open set. -/

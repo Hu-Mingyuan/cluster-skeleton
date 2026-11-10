@@ -9,6 +9,12 @@ These are the first algebraic steps of Lemma 2.2. Both exchange monomials are
 units on an independent coordinate locus, so the normalization uses no undefined
 boundary ratios. An integral right inverse is proved below; completing the
 rows to an integral basis and constructing the final product chart remain separate.
+
+The monomials are the **column**-convention monomials of `Seed`, so
+`exchangeCharacter` is the reference character `t_i = z^{c_i}` itself and
+`normalizedPartner` is the reference's `y = z_i'/P_i^-`; neither is the
+reciprocal of its baseline counterpart. See
+`exchangeCharacter_eq_zpow_product`.
 -/
 
 open scoped BigOperators
@@ -52,8 +58,18 @@ theorem pow_toNat_div_pow_neg_toNat (z : ℂ) (n : ℤ) :
   | ofNat n => simp
   | negSucc n => simp
 
-/-- The exchange ratio is the Laurent monomial with the actual signed column of
-`E`, i.e. the reference's inverse character `1/t_i`. -/
+/-- The exchange ratio is the Laurent monomial with the actual signed **column**
+of `E`, i.e. the reference character `t_i` itself, not its inverse. With the
+column convention of `Seed.positiveMonomial`/`Seed.negativeMonomial`,
+`exchangeCharacter p i = ∏ j, p.a j ^ (S.E j i) = ∏ j, p.a j ^ (S.B i j)`, which
+is the reference's `t_i = z^{c_i} = P_i^+/P_i^-` with `c_i = E e_i` the `i`-th
+column of `E`. The baseline's row-convention `exchangeCharacter` was the
+inverse character `1/t_i`; the column convention inverts it. Correspondingly
+`normalizedPartner p i = p.b i / negativeMonomial p.a i` is the reference's
+`y = z_i'/P_i^-` (baseline: `y/t_i`), so `normalized_node_equation` is the
+reference node equation `x y = 1 + t` on the nose rather than in reciprocal
+coordinates. Any sign derivation downstream (`TorusCorrection.H`,
+`TorusPrimitive.alpha`) must use this orientation, not the baseline's. -/
 theorem exchangeCharacter_eq_zpow_product (p : S.Point) (i : Fin d) :
     exchangeCharacter p i = ∏ j, p.a j ^ (S.E j i) := by
   unfold exchangeCharacter Seed.positiveMonomial Seed.negativeMonomial

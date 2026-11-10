@@ -19,9 +19,15 @@ namespace ClusterSkeleton.Seed.Point
 
 variable {d : ℕ} {S : Seed d} (p : S.Point)
 
-/-- A zero mutable coordinate has no zero outgoing mutable neighbor. Here
-`0 < S.B i j` is the column exponent condition `0 < S.E j i`, i.e. the
-coordinate `j` occurs in the positive exchange monomial of `i`. -/
+/-- A zero mutable coordinate has no zero mutable **predecessor**. Here
+`0 < S.B i j` is the column exponent condition `0 < S.E j i`, which by the arrow
+convention of `Seed` (`E i j > 0` is an arrow `i → j`) is an arrow `j → i`: the
+coordinate `j` occurs in the positive exchange monomial `P_i^+` of `i`, so `j`
+is an incoming neighbour of `i`, not an outgoing one. This is the blueprint's
+step `B_{j i} > 0 ⇒ P_i^+(p) = 0`. The declaration name `outgoing_ne_zero` is
+retained from the baseline, where the row convention made the same hypothesis an
+outgoing arrow; it is stale and is kept only because renaming would ripple into
+files owned by other missions. -/
 theorem outgoing_ne_zero :
     ∀ i : S.Mutable, p.a i = 0 →
       ∀ j : S.Mutable, 0 < S.B i j → p.a j ≠ 0 := by

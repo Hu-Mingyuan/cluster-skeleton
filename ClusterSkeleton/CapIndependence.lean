@@ -51,7 +51,15 @@ private theorem norm_positiveMonomial_lt_one {p : S.Point}
       mul_le_mul_of_nonneg_right hrest (pow_nonneg (norm_nonneg _) _)
     _ < 1 := by simpa using pow_lt_one₀ (norm_nonneg _) hj hn
 
-/-- A strict-interior mutable coordinate has no strict-interior outgoing neighbor. -/
+/-- A strict-interior mutable coordinate has no strict-interior mutable
+**predecessor**. Here `0 < S.B i j` is the column exponent condition
+`0 < S.E j i`, which by the arrow convention of `Seed` (`E i j > 0` is an arrow
+`i → j`) is an arrow `j → i`: the coordinate `j` occurs in the positive exchange
+monomial `P_i^+` of `i`, so `j` is an incoming neighbour of `i`, not an outgoing
+one. The declaration name `coordinateCap_outgoing_not_interior` is retained from
+the baseline, where the row convention made the same hypothesis an outgoing
+arrow; it is stale and is kept only because renaming would ripple into files
+owned by other missions. -/
 theorem coordinateCap_outgoing_not_interior {p : S.Point}
     (hp : p ∈ coordinateCap S) :
     ∀ i : S.Mutable, ‖p.a i‖ < 1 →

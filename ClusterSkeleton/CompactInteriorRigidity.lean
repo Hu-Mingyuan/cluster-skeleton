@@ -235,7 +235,7 @@ all initially strict-interior coordinates, without a cap or partner-zero premise
 theorem interior_matrix_eq_zero (i j : Fin d)
     (hi : ‖(γ t₀).a i‖ < 1) (hj : ‖(γ t₀).a j‖ < 1) : S.B i j = 0 := by
   obtain ⟨p, _, hp⟩ := exists_limit_zero_at_interior S hdet hε hκ hδ hη hγ hK
-  exact p.matrix_eq_zero_of_coordinates_zero i j (hp i hi) (hp j hj)
+  exact p.matrix_eq_zero_of_coordinates_zero j i (hp j hj) (hp i hi)
 
 /-- All full-row neighbors of an initial strict-interior coordinate have unit norm. -/
 theorem initial_neighbor_unit (i j : Fin d) (hi : ‖(γ t₀).a i‖ < 1)
@@ -288,7 +288,7 @@ theorem negativeMonomial_norm_eq_one (p : S.Point) (i : Fin d)
   apply Finset.prod_eq_one
   intro j _
   by_cases hj : S.B i j = 0
-  · simp [hj]
+  · simp [show S.E j i = 0 from hj]
   · simp [hrow j hj]
 
 /-- Compactness bounds the raw partner. The derived unit denominator transfers that

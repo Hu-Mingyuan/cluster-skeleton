@@ -173,7 +173,7 @@ None is a defect; none requires a change to a Lean statement or proof.
   reads `Skel(Φ) = C_E = ⋃_I Λ_I` with each `Λ_I` compact and the node charts;
   `LiouvilleSkeletonTarget` contains only the first equality. Every remaining
   clause is proved for every weighted seed, and
-  `FullSkeletonConsumer.PdfTargetConsumer.pdf_target` now states all of them in
+  `PdfTargetConsumer.pdf_target` (in `verification/FullSkeletonConsumer.lean`) now states all of them in
   **one** Lean type for an arbitrary unimodular `S : Seed d`, for the same
   presentation, Liouville datum and flow the target's existential produces. R4 is
   therefore a shape-of-the-statement note, not a coverage gap, but a reader of

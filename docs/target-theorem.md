@@ -200,7 +200,7 @@ together with the statement review's own citation list.
   `SkewSeed.pointHomeomorph_val` by `rfl`. The old loci on the old carrier, their
   image/preimage identifications and the flow conjugation are
   `ClusterSkeleton/SkewSeedRecovery.lean`, described in
-  [`weighted-recovery-plan.md`](weighted-recovery-plan.md); the packaged statement
+  [the recovery design note in Git history](https://github.com/Hu-Mingyuan/cluster-skeleton/blob/efb0d0d53fb2ee75f8934972f08cb0bb7a818a79/docs/weighted-recovery-plan.md); the packaged statement
   `SkewSeed.skeleton_recovery` is `ClusterSkeleton/SkewSeedSkeleton.lean`. Both are
   in the accepted source commit `a575aa236b485672f0606bba6ebc80571671f8a9` and are
   audit roots of the receipt. The [audit](skeleton-audit.md) §1.11

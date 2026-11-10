@@ -17,7 +17,7 @@ Two consumers sit beside the universal theorem and never replace it:
 
 `PdfTargetConsumer.pdf_target` of [`verification/FullSkeletonConsumer.lean`](verification/FullSkeletonConsumer.lean) states every clause of the published theorem — density, the presentation and Liouville datum, `Skel(Φ) = C_E`, the stratified form for the same flow, compactness of every stratum, and the node-chart rank facts — in one Lean type for an arbitrary unimodular seed.
 
-This records a verified result; it is not a statement that the objective has been accepted, which is a maintainer's decision. See [the current objective](docs/roadmap.md).
+The [verification receipt](verification/publication-check.json) binds this result to the delivered source. The [statement review](verification/statement-review.md) describes its mathematical scope.
 
 ## Read the mathematics
 

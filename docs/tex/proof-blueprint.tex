@@ -20,9 +20,9 @@
 This document develops the supplied skeleton argument for an integral
 unimodular completion $E$ and arbitrary positive rational diagonal
 $\widetilde D$ with $E\widetilde D$ skew-symmetric. The weights are part
-of the theorem, not shorthand for $\widetilde D=I$. The existing Lean
-library verifies only that specialization; formalization of the weighted
-theorem below is the current task.
+of the theorem, not shorthand for $\widetilde D=I$. The Lean library now verifies the real smooth weighted theorem with
+$\det E=1$, including a complete two-sided flow and the full skeleton
+identity. The formal scope is specified at the end of this document.
 \section{Skeleton in the acyclic case}
 \label{app:acyclic-skeleton}
 
@@ -435,36 +435,45 @@ For the converse equivalence, the indices with $|z_i|<1$ have $z_i'=0$;
 the zero-set argument applied to their exchange relations makes them
 independent (equivalently use the existing strict-cap-independence lemma).
 
-\paragraph{Current formalization obligation.}
-The completed baseline uses a skew-symmetric integral seed and verifies
-the case $\widetilde D=I$ only. Its cap, strata, chart-rank and
-same-flow equality lemmas are reusable starting points. Their old
-verification receipts do not verify the weighted theorem above.
-The new goal quantifies over every integral unimodular $E$ and every
-positive rational diagonal $\widetilde D$ satisfying
-$E\widetilde D+(E\widetilde D)^{\mathsf T}=0$.
-Carry the weights through the atlas, two-form, primitive, vector field,
-completeness and both skeleton inclusions. In particular,
+\paragraph{Verified formalization and scope.}
+The generalized \nolinkurl{Seed} carries an integral $E$, arbitrary
+positive rational $\widetilde D$ and skewness of $E\widetilde D$.
+\nolinkurl{Seed.Unimodular} states $\det E=1$. The column exchange
+exponents are literal; $K=E\widetilde D$ supplies the form coefficients.
+The weights are carried through the node blocks, primitive and dynamics;
 $d_i c_i=Ke_i$ and $c_i^{\mathsf T}K^{-1}=-e_i^{\mathsf T}/d_i$
-explain the cancellations in the flow equations.
+are proved algebraic identities.
 
-The old row-exponent convention agrees with the present column convention
-by monomial interchange only when $\widetilde D=I$. For general weights,
-use column exponents or supply a proved convention equivalence; never
-replace the exchange exponents by entries of $K$. Require the explicit
-non-skew input in the target PDF, as well as the theorem for all inputs
-and recovery of the $\widetilde D=I$ specialization.
+\nolinkurl{FullSkeleton.firstGeometricTarget} constructs the real smooth
+geometry and complete flow for every admissible input.
+\nolinkurl{FullSkeleton.trappedSet_eq_iUnion_lambdaStratum} gives the
+stratified skeleton for that same flow. The node charts, their torus rank,
+and compactness of the individual strata are also checked; the final
+\nolinkurl{PdfTargetConsumer.pdf_target} collects the published clauses.
+No symplectic form, primitive, complete flow or skeleton inclusion is
+assumed as an extra geometric hypothesis.
 
-The real smooth Liouville/skeleton theorem is the formalization target.
-Use native Mathlib geometry and the pinned FsFltz interfaces. Construct
-all witnesses rather than assuming a symplectic extension or complete
-flow. Final verification must compile the entire generalized library,
-check theorem consumers and transitive axioms, and bind new receipts to
-the exact source. Only \nolinkurl{propext}, \nolinkurl{Classical.choice}
-and \nolinkurl{Quot.sound} are permitted. No principal-coefficient
-restriction, extra geometric axiom, or specialization $d_i=1$ may be
-introduced. Unimodularity and mutable acyclicity remain hypotheses;
-categorical HMS is outside this task.
+The old $\widetilde D=I$ case is recovered by a theorem with the same
+coordinate carrier and the old logarithmic matrix with its original sign.
+The smooth witnesses are existential on the weighted reading; no literal
+equality with the former library's constructed atlas or primitive is
+claimed. A checked non-skew seed with unequal weights is a consumer of
+the universal theorem, not its replacement.
+
+The full library, consumers and transitive axiom audit pass: 65 modules,
+1811 declarations and 72 direct roots. The committed receipt binds 73
+inputs to their hashes. The only allowed axioms are
+\nolinkurl{propext}, \nolinkurl{Classical.choice} and \nolinkurl{Quot.sound};
+Mathlib and FsFltz remain at their pinned, unmodified revisions.
+
+The Lean theorem concerns the real smooth form $\Im\Omega$ and its
+Liouville skeleton. It does not separately formalize the holomorphic
+extension argument above. The formal hypothesis is $\det E=1$; its
+equivalence with $E\in GL_n(\mathbb Z)$ in this setting uses the ordinary
+positivity of the determinant of a nonsingular real skew matrix, not a
+separate Lean declaration in this project. Mutable acyclicity and
+variable frozen coordinates are retained. Singular completions, arbitrary
+cyclic seeds, and categorical HMS are outside the theorem.
 
 \begin{thebibliography}{9}
 \bibitem{BFZ-III} A. Berenstein, S. Fomin, A. Zelevinsky,

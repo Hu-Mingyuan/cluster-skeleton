@@ -1,6 +1,6 @@
 {
   "status": "passed",
-  "scope": "Weighted skew-symmetrizable target and proof blueprint; the Lean generalization they state is verified at accepted source commit a575aa236b485672f0606bba6ebc80571671f8a9",
+  "scope": "Verified skew-symmetrizable real Liouville skeleton theorem and weighted proof blueprint; formal scope stated in both PDFs",
   "pages": {
     "target-theorem.pdf": 3,
     "proof-blueprint.pdf": 7
@@ -8,15 +8,15 @@
   "checks": [
     "Both LaTeX documents compile",
     "Both PDFs use the weighted hypotheses and no visible document date",
-    "No overfull boxes, undefined references, or missing characters",
-    "All 10 rendered pages visually inspected; no clipping or overlap",
-    "Document check only; the generalized Lean theorem is verified by verification/publication-check.json, not by this file"
+    "All 10 final pages rendered and visually inspected; no clipping or overlap",
+    "LaTeX logs contain no overfull boxes, undefined references, or missing characters",
+    "All 73 Lean verification inputs and all four evidence logs match the passed Archon receipt"
   ],
   "source_and_output_sha256": {
     "docs/tex/preamble.tex": "f6db2a72071b953d5e04947ad1402bc439089610368b63a991375f65a73efce7",
-    "docs/tex/target-theorem.tex": "42434eb9ed1449047703e473b28b7ce23fa31c710f72be57ff51ee7897879f2b",
-    "docs/tex/proof-blueprint.tex": "66d695b05f05f1c8cfbb46415cb0a0599598664632f73ae8f7f7eb33a03ddfe9",
-    "target-theorem.pdf": "9b31218e4cc8d761bc2e11ddd93fa7313aac86bf6801efafe3111723dcb7967b",
-    "proof-blueprint.pdf": "2f8e589047ba6d1fc3bf48bcacecc4c0969f75dfd3034a6bfb54c77a829fef24"
+    "docs/tex/target-theorem.tex": "55bc0bb47e6f8565db57d5fe5e6e0c0327ec76ff3c6a61d96cf446a4e2ab8cf6",
+    "docs/tex/proof-blueprint.tex": "9592edf7ba568475bd22d4661cd2640f996369aeb7bce252b63a831ac7e703a3",
+    "target-theorem.pdf": "03f0abd3ae1b972c2a289bbea8ae6774824c5d73d80a8c4ac22d3d8253657781",
+    "proof-blueprint.pdf": "fdcd439ea5245ad5aa9d99d712f26b183ec8b2d0de3b568c9982ba1a5a47a3c3"
   }
 }

@@ -181,7 +181,7 @@ The scaffolding of recovery — the old loci `SkewSeed.initialTorus`,
 image/preimage identifications, the flow conjugation `SkewSeed.conjFlow` and
 `SkewSeed.trappedSet_conjFlow_eq_coordinateCap` — is the module
 `ClusterSkeleton/SkewSeedRecovery.lean`, documented in
-[`weighted-recovery-plan.md`](weighted-recovery-plan.md); the packaged statement
+[the recovery design note in Git history](https://github.com/Hu-Mingyuan/cluster-skeleton/blob/efb0d0d53fb2ee75f8934972f08cb0bb7a818a79/docs/weighted-recovery-plan.md); the packaged statement
 `SkewSeed.skeleton_recovery` (with
 `skeleton_recovery_of_parameters`, `liouvilleSkeletonTarget`,
 `dense_initialTorus`, `liouvilleData_torus_anchor_old_matrix` and

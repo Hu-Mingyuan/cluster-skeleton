@@ -1,22 +1,22 @@
 \input{preamble.tex}
-\title{The Liouville skeleton in the skew-symmetrizable acyclic case\\[5pt]\large Hypotheses, geometric target, and formalization scope}
+\title{The Liouville skeleton in the skew-symmetrizable acyclic case\\[5pt]\large Definitions, theorem, and verified Lean correspondence}
 \author{Cluster skeleton formalization project}
 \date{}
 \begin{document}\maketitle
 \begin{abstract}
-We specify the skeleton theorem for an integral unimodular completion
-$E$ equipped with a positive rational diagonal matrix $\widetilde D$ such
-that $K=E\widetilde D$ is skew-symmetric. The accompanying blueprint gives
-the weighted geometric argument. The existing Lean library proves the
-special case $\widetilde D=I$; the general statement below is the current
-formalization target, not a claim of completed Lean verification.
+We state the skeleton theorem for an integral matrix $E$ with determinant
+one and an arbitrary positive rational diagonal matrix $\widetilde D$ such
+that $K=E\widetilde D$ is skew-symmetric. The Lean formalization constructs
+the real smooth Liouville geometry and proves the full dynamical skeleton
+identity for all these inputs. The accompanying blueprint gives the
+weighted geometric argument and explains the scope of the formal result.
 \end{abstract}
 
 \section{Input data and exchange space}
 Let $n\ge0$, let $M\subseteq\{1,\ldots,n\}$ be mutable, and let $F$ be
 its complement. Fix
 \[
- E\in GL_n(\Z),\qquad
+ E\in M_n(\Z),\quad \det E=1,\qquad
  \widetilde D=\operatorname{diag}(d_1,\ldots,d_n),\quad
  d_j\in\mathbb Q_{>0},\qquad
  K=E\widetilde D,\quad K^{\mathsf T}=-K.
@@ -26,7 +26,7 @@ Require the mutable block $B=E_{M,M}$ to be acyclic: the arrows
 $i\to j$ with $B_{ij}>0$ have no directed cycle. No acyclicity is
 required on the full set of indices. The unimodular completion is part of
 the input; existence of such a completion for every exchange matrix is
-not asserted. In fact $\det E=1$: a nonsingular real skew-symmetric matrix
+not asserted. Equivalently one may require $E\in GL_n(\Z)$: a nonsingular real skew-symmetric matrix
 has positive determinant, so $\det E=\det K/\det\widetilde D>0$,
 while unimodularity gives $\det E=\pm1$.
 
@@ -69,8 +69,8 @@ For a real flow $\Phi$ on $X_E$, independently define
 \]
 The closure is taken in the actual exchange space.
 
-\section{The weighted geometric target}
-\begin{theorem}[Skew-symmetrizable skeleton target]\label{thm:target}
+\section{The weighted geometric theorem}
+\begin{theorem}[Skew-symmetrizable skeleton theorem]\label{thm:target}
 For every $(n,E,\widetilde D,M)$ satisfying the hypotheses above, the
 fixed space $X_E$ admits a smooth real manifold structure of dimension
 $2n$, a smooth real one-form $\lambda$, a smooth vector field $Z$, and
@@ -99,7 +99,7 @@ $\mathcal N=\{(x,y,t):xy=1+t,\ t\ne0\}$; in particular $2|I|\le n$.
 The quantifier order is $\forall(n,E,\widetilde D,M)\ \exists
 (\text{smooth structure},\lambda,Z,\Phi)$. No flow, primitive,
 completeness, nondegeneracy, or skeleton inclusion is supplied as an
-additional hypothesis. The real smooth theorem is the Lean objective;
+additional hypothesis. The real smooth theorem is proved in Lean;
 the blueprint also explains the local extension of $\Omega_T$.
 
 \section{Why the weights cannot be discarded}
@@ -121,7 +121,7 @@ because the weights cancel, not because $d_i$ is assumed to be one.
 Every node symplectic block and its primitive carries the factor $d_i$.
 Positivity of $d_i$ and invertibility of $K$ enter the construction.
 
-A concrete input that the general theorem must accept is
+A concrete non-skew input covered by the universal theorem is
 \[
  E=\begin{pmatrix}
  0&1&-1&0\\-2&0&0&-1\\1&0&0&0\\0&1&0&0
@@ -133,36 +133,50 @@ quiver is acyclic, but $E_{12}=1\ne2=-E_{21}$. This example checks
 that the input is genuinely broader; it does not replace the theorem
 quantified over all admissible inputs.
 
-\section{Lean correspondence and acceptance}
-The existing source is the starting library. Its current
-\lean{Seed.skew} requires a skew-symmetric integer matrix, and
-\lean{FullSkeleton.firstGeometricTarget} proves that specialization.
-Existing verification receipts therefore certify only that baseline.
-They must not be reported as verification of Theorem~\ref{thm:target}.
+\section{Lean correspondence and verification}
+\lean{Seed} contains the integral $E$, positive rational weights $d_i$,
+weighted skew-symmetry, mutable indices and mutable acyclicity.
+\lean{Seed.Unimodular} means $\det E=1$.
+\lean{FullSkeleton.firstGeometricTarget} proves the universally quantified
+existence theorem. The exchange monomials use column exponents
+definitionally, and the torus form uses $K=E\widetilde D$ with the sign
+and factor $1/2$ displayed above.
 
-The generalized seed must distinguish integral exchange data $E$ from
-the weighted form $K=E\widetilde D$. The existing modules for zero
-sets, independent charts, smooth forms, cutoffs, global primitives,
-complete flows and both skeleton inclusions must be adapted on the same
-actual exchange space. Reuse existing constructions and proofs wherever
-valid; replacing the entire geometry by an assumed witness is not a proof.
+The library proves both the cap and stratified skeleton identities,
+constructs the node charts and smooth structure, and proves the chart
+rank and dimension bound.
+\lean{PdfTargetConsumer.pdf_target}, in
+\lean{verification/FullSkeletonConsumer.lean}, assembles the published
+clauses into one checked statement. The repository's proof-to-code map
+lists the individual declarations.
 
-The old code uses row exchange exponents. For $\widetilde D=I$, row
-and column conventions only interchange the two monomials. For general
-$\widetilde D$, this argument fails: the magnitudes can differ.
-The implementation must use the column convention above, or prove an
-explicit transpose/convention equivalence preserving the exchange
-space, the sign of the form, and the same-flow skeleton identity.
+The $\widetilde D=I$ specialization is recovered by
+\lean{SkewSeed.skeleton_recovery}. On the old exchange-point carrier it
+gives the original torus and cap descriptions and the skeleton of the
+conjugate flow at the same times. The identification of carriers is the
+identity on ambient coordinates; the logarithmic form uses the old
+matrix $B$ with no sign change. Smooth witnesses are existential on the
+weighted reading of that space. No term identity with the former
+library's particular atlas, primitive or flow is asserted.
 
-Acceptance requires the quantified weighted theorem, recovery of the
-old specialization, the non-skew example above, full library and final
-consumer compilation, and a transitive axiom audit allowing only
+The displayed non-skew example and its side conditions are checked in
+\lean{Examples}; its geometry is an instance of the universal theorem.
+
+The committed verification receipt checks 65 modules, 1811 declarations,
+72 named audit roots and 73 hashed inputs, including the final
+consumers. The only permitted transitive axioms are
 \lean{propext}, \lean{Classical.choice}, and \lean{Quot.sound}.
-No \lean{sorry}, added geometric axiom, modified dependency, or
-assumption equivalent to the desired theorem is allowed. Updated
-receipts must bind the new source and the generalized theorem types.
+The pinned dependencies are unmodified. The exact source hashes, logs and
+statement review are in \lean{verification/}.
 
-This target retains unimodularity and mutable acyclicity. It makes no
-claim for singular completions, arbitrary cyclic seeds, generalized
-cocores, or categorical mirror symmetry.
+\section{Scope}
+The formal input uses $\det E=1$ explicitly. The elementary equivalence
+with an integral unimodular completion under the weighted skewness
+hypothesis is explained in Section~1; the determinant-positivity argument
+itself is not a separate theorem in this library.
+The result concerns real smooth Liouville geometry. It does not claim a
+separately formalized holomorphic extension of $\Omega_T$, singular
+completions, arbitrary cyclic seeds, cap-product descriptions, generalized
+cocores, or categorical mirror symmetry. Frozen coordinates remain
+variable and no principal-coefficient restriction is imposed.
 \end{document}

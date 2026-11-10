@@ -58,8 +58,9 @@ radial equation and survive only in the angular one, as `η̇_i = (1/d_i) ∂_{u
 Inputs compared:
 
 * reference proof: [`tex/proof-blueprint.tex`](tex/proof-blueprint.tex) and
-  [`tex/target-theorem.tex`](tex/target-theorem.tex) (both weighted; unchanged
-  since `e62c101`), with [`target-theorem.md`](target-theorem.md) and
+  [`tex/target-theorem.tex`](tex/target-theorem.tex) (the weighted mathematical
+  target at `e62c101`, with final verification status and scope clarified for
+  publication), with [`target-theorem.md`](target-theorem.md) and
   [`proof-blueprint.md`](proof-blueprint.md);
 * Lean source: the accepted source commit
   `a575aa236b485672f0606bba6ebc80571671f8a9`, whose 65 library files are hashed
@@ -83,9 +84,9 @@ Inputs compared:
   `24b7bef8aaea7fd098e8ccd10474502d5a7320fa` (the PDF-clause-to-declaration map
   of its item 6, the byte-level baseline diff of its item 7, and findings R4, A1,
   D1, D2), published while this rewrite was being written;
-* the stage-C site inventory [`weighted-stage-c-map.md`](weighted-stage-c-map.md)
-  (all 152 matrix-role sites of the dynamics modules, roles (a)–(h)) and the
-  recovery route [`weighted-recovery-plan.md`](weighted-recovery-plan.md).
+* the matrix-role analysis in this audit (all 152 matrix-role sites of the
+  dynamics modules, roles (a)–(h)), and the proved recovery in
+  `SkewSeedRecovery.lean` and `SkewSeedSkeleton.lean`.
 
 **Verification method.** Declaration names and types were checked with
 `lake env lean Scratch.lean` at the repository root in the pinned
@@ -691,7 +692,7 @@ vanish) is the matching statement on the divisor.
   left and a leading minus on the right. The second half of
   `eq:acyclic-angle-flow`, `v̇_i = v_i - ∑_{k∈M} B_{ki} a_k`, is the `S.B`-row sum
   of the radial equation and needs no matrix algebra (role (d) of
-  [`weighted-stage-c-map.md`](weighted-stage-c-map.md) §1.7).
+  the matrix-role analysis in this audit §1.7).
 * **`θ̇ = -K^{-1} ∂_u H`** is not stated separately; see **N4**. The identities
   that make it readable are in `SeedAlgebra`, each the Lean form of a blueprint
   line:
@@ -909,7 +910,7 @@ Finding **R7**.
 delivered in `ClusterSkeleton/SkewSeedRecovery.lean` at commit
 `e7a6d9637ac0acec71639a71731f1d6ca27e2e0c` (branch `weighted/recovery-scaffold`;
 the module is **not** in the tree at `114d639`), documented in
-[`weighted-recovery-plan.md`](weighted-recovery-plan.md):
+the proved recovery in `SkewSeedRecovery.lean` and `SkewSeedSkeleton.lean`:
 
 | clause | content | status |
 | --- | --- | --- |
@@ -977,7 +978,7 @@ along `pointHomeomorph`, has exactly `C_B = ⋃_I Λ_I` as its dynamical skeleto
 Its docstring states that the smooth structure is existential and that no
 transported smooth structure and no term identity with the baseline's constructed
 flow is claimed — i.e. the route decided in
-[`weighted-recovery-plan.md`](weighted-recovery-plan.md) §2 and the constraint of
+the proved recovery in `SkewSeedRecovery.lean` and `SkewSeedSkeleton.lean` §2 and the constraint of
 **R7**.
 
 **Checked here.** `SkewSeedRecovery.lean` concatenated with
@@ -990,7 +991,7 @@ axiom audit with exactly `propext`, `Classical.choice`, `Quot.sound`.
 `S.toSeed`, with the old loci and the old trapped set transported along
 `pointHomeomorph` as *topological* objects. **No transported smooth structure is
 claimed**, and no `SkewSeed.transportPresentation` is delivered. The reason,
-recorded in [`weighted-recovery-plan.md`](weighted-recovery-plan.md) §2: Mathlib
+recorded in the proved recovery in `SkewSeedRecovery.lean` and `SkewSeedSkeleton.lean` §2: Mathlib
 supplies the charted-space push-forward along a local homeomorphism but no
 `IsManifold`/`HasGroupoid` transport for it, so the `smooth` field of
 `SmoothPresentation` would need a from-scratch groupoid-compatibility proof for
@@ -1219,7 +1220,7 @@ reference node coordinates), so `Tangent p` is not the same type.
 *Status.* **Open as a wording constraint, settled as a route.** Recovery is
 stated for `S.toSeed` directly, with the old loci transported topologically; no
 smooth structure is transported and none is claimed, per the recorded decision in
-[`weighted-recovery-plan.md`](weighted-recovery-plan.md) §2 and §1.11 above. Any
+the proved recovery in `SkewSeedRecovery.lean` and `SkewSeedSkeleton.lean` §2 and §1.11 above. Any
 future text must not upgrade "the same flow" to a Lean term identity.
 
 ### D1 (closed in the accepted source) — `exchangeCharacter_eq_zpow_product`'s docstring asserted the opposite of its statement

@@ -79,7 +79,7 @@ weakening of the agreed first-stage real-geometric target was found.
   `LiouvilleSkeletonTarget S.toSeed`, exactly as `target-theorem.tex` quantifies
   it: no transported smooth structure on the old subtype and no term identity
   with the baseline library's constructed flow is claimed, and the recovery
-  module's docstring and `docs/weighted-recovery-plan.md` §2 record that
+  module's docstring and [the recovery design note](https://github.com/Hu-Mingyuan/cluster-skeleton/blob/efb0d0d53fb2ee75f8934972f08cb0bb7a818a79/docs/weighted-recovery-plan.md) §2 record that
   decision and its reason.
 - **A genuinely non-skew input is covered by the same universal theorem.**
   `Examples.nonSkewSeed` is defined by the manuscript's literals
@@ -196,7 +196,7 @@ None is a defect; none requires a change to a Lean statement or proof.
   target also quantifies existentially; the anchor clause quantifies over
   `initialTorus S.toSeed` while the density conjunct is on the old carrier, and no
   single Lean `Prop` is "the baseline target for `S : SkewSeed d`". The recovery
-  module's docstring and `docs/weighted-recovery-plan.md` §2 state this and do not
+  module's docstring and [the recovery design note](https://github.com/Hu-Mingyuan/cluster-skeleton/blob/efb0d0d53fb2ee75f8934972f08cb0bb7a818a79/docs/weighted-recovery-plan.md) §2 state this and do not
   leave the old smooth structure implicitly claimed. The cheapest strengthening,
   if a maintainer wants the anchor on the old torus too, is roughly 12–20 lines
   from `SkewSeed.liouvilleData_torus_anchor_old_matrix` and

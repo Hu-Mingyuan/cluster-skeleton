@@ -18,6 +18,24 @@ Only Lean's standard foundational axioms are allowed. -/
 #print axioms ClusterSkeleton.coordinateCap_eq_iUnion_lambdaStratum
 #print axioms ClusterSkeleton.IndependentNodeChart.complementRank_eq_sub_two_mul_card
 
+-- The recovery of the old `D = I` theorem (acceptance check 2).
+#print axioms ClusterSkeleton.SkewSeed.liouvilleSkeletonTarget
+#print axioms ClusterSkeleton.SkewSeed.skeleton_recovery
+#print axioms ClusterSkeleton.SkewSeed.skeleton_recovery_of_parameters
+#print axioms ClusterSkeleton.SkewSeed.dense_initialTorus
+#print axioms ClusterSkeleton.SkewSeed.torus_anchor_old_matrix
+#print axioms ClusterSkeleton.SkewSeed.liouvilleData_torus_anchor_old_matrix
+#print axioms ClusterSkeleton.SkewSeed.trappedSet_conjFlow_eq_coordinateCap
+#print axioms ClusterSkeleton.SkewSeed.liouvilleData_trappedSet_conjFlow
+#print axioms ClusterSkeleton.SkewSeed.liouvilleData_trappedSet_conjFlow_iUnion
+
+-- The genuinely non-skew instance (acceptance check 3).
+#print axioms ClusterSkeleton.Examples.nonSkewSeed_side_checks
+#print axioms ClusterSkeleton.Examples.nonSkewSeed_liouvilleSkeletonTarget
+#print axioms ClusterSkeleton.Examples.nonSkewSeed_target_of_firstGeometricTarget
+#print axioms ClusterSkeleton.Examples.nonSkewSeed_trappedSet
+#print axioms ClusterSkeleton.Examples.nonSkewSeed_trappedSet_iUnion
+
 open Lean Elab Command in
 run_cmd do
   let env ← getEnv
@@ -34,6 +52,8 @@ run_cmd do
     `ClusterSkeleton.CoordinateLoci,
     `ClusterSkeleton.DominanceCutoff,
     `ClusterSkeleton.Examples.A2,
+    `ClusterSkeleton.Examples.NonSkew,
+    `ClusterSkeleton.Examples.NonSkewSkeleton,
     `ClusterSkeleton.FiniteTimeConfinement,
     `ClusterSkeleton.FormExtensionUniqueness,
     `ClusterSkeleton.FullSkeleton,
@@ -68,7 +88,12 @@ run_cmd do
     `ClusterSkeleton.RegularCorrection,
     `ClusterSkeleton.ScalarOrbitDynamics,
     `ClusterSkeleton.Seed,
+    `ClusterSkeleton.SeedAlgebra,
+    `ClusterSkeleton.SkewSeed,
+    `ClusterSkeleton.SkewSeedRecovery,
+    `ClusterSkeleton.SkewSeedSkeleton,
     `ClusterSkeleton.SmoothAtlas,
+    `ClusterSkeleton.SymmetrizerAlgebra,
     `ClusterSkeleton.TorusChart,
     `ClusterSkeleton.TorusCorrection,
     `ClusterSkeleton.TorusLiouvilleDynamics,

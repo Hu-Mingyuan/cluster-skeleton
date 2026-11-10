@@ -24,8 +24,9 @@ theorem initial_neighbor_unit {p : S.Point} (hp : p ∈ coordinateCap S)
     ‖p.a j‖ = 1 := by
   apply CapAngularTangency.norm_eq_one_of_not_strict S hp j
   intro hj
-  exact hij ((coordinateCap_strictCapIndices_independent hp).2 i
-    ((p.mem_strictCapIndices i).mpr ⟨i.property, hi⟩) j hj)
+  exact hij ((S.E_eq_zero_iff (i : Fin d) j).mp
+    ((coordinateCap_strictCapIndices_independent hp).2 i
+      ((p.mem_strictCapIndices i).mpr ⟨i.property, hi⟩) j hj))
 
 variable (hdet : S.Unimodular)
 
@@ -67,7 +68,7 @@ theorem negativeMonomial_ne_zero (p : S.Point) (i : Fin d)
   apply Finset.prod_ne_zero_iff.mpr
   intro j _
   by_cases h : S.B i j = 0
-  · simp [h]
+  · simp [show S.E j i = 0 from h]
   · exact pow_ne_zero _ (hn j h)
 
 /-- The actual exchange equation recovers the actual partner; unrelated
@@ -105,9 +106,9 @@ theorem hasFDerivAt_character_row (x : Fin d → ℂ) (i : Fin d)
   by_cases hj : S.B i j = 0
   · convert! (hasFDerivAt_const (𝕜 := ℂ) (1 : ℂ) x) using 1
     · funext y
-      simp [hj]
+      simp [show S.E j i = 0 from hj]
     · ext y
-      simp [hj, smul_eq_mul]
+      simp [show S.E j i = 0 from hj, smul_eq_mul]
   · refine NodeTwoForm.hasFDerivAt_zpow_log (E := Fin d → ℂ)
       (f := fun y => y j) (l := (x j)⁻¹ • (ContinuousLinearMap.proj j)) ?_
       (hx j hj) (S.B i j)
@@ -166,10 +167,10 @@ theorem angularRhs_eq_self_of_unit_neighbors {ε κ : ℝ}
     (hε : 0 < ε) (hκ : 2 * ε < κ) (δ : ℝ)
     (p : S.Point) (i : S.Mutable) (hi : p.a i ≠ 0)
     (hrow : ∀ j, S.B i j ≠ 0 → ‖p.a j‖ = 1) :
-    angularRhs S ε κ δ p p i =
-      TorusCorrection.angular S δ p i *
+    angularRhs S ε κ δ p p i = (S.D (i : Fin d) : ℝ) *
+      (TorusCorrection.angular S δ p i *
         fderiv ℝ (amplitude S ε κ i) (Pi.single i (GlobalLiouvilleField.A S p i))
-          (Pi.single i 1) := by
+          (Pi.single i 1)) := by
   classical
   have hiZ : (i : Fin d) ∉ p.zeroSet := fun h => hi ((p.mem_zeroSet i).mp h).2
   have hs : i ∈ RegularCorrection.surviving S p.zeroSet := by
@@ -233,25 +234,37 @@ theorem differential_character_of_unit_neighbors {ε κ δ : ℝ}
     · simpa using hr j hj
     · simpa using (nu_eq_logarithmicComponents S hdet hε hκ hδ p p
         (LocalPrimitive.mem_neighborhood S ε κ hδ p) j (hn j hj)).symm
+  have hrowsum : (∑ j : Fin d, (S.B i j : ℝ) * nu S ε κ δ p p j) =
+      TorusCorrection.angular S δ p i *
+        fderiv ℝ (amplitude S ε κ i) (Pi.single i (GlobalLiouvilleField.A S p i))
+          (Pi.single i 1) := by
+    have h := AllStrataGrowth.row_nu_equation S hdet ε κ δ p p i
+    rw [angularRhs_eq_self_of_unit_neighbors S hε (by linarith) δ p i hi hrow] at h
+    have hD : ((S.D (i : Fin d) : ℚ) : ℝ) ≠ 0 := by
+      have := S.D_pos (i : Fin d)
+      exact_mod_cast this.ne'
+    exact mul_left_cancel₀ hD h
   have hsum : (∑ j : Fin d, (S.B i j : ℂ) *
       GlobalLiouvilleField.logarithmicComponents S hdet ε κ hδ p j) =
-        Complex.I * (angularRhs S ε κ δ p p i : ℂ) := by
+        Complex.I * ((TorusCorrection.angular S δ p i *
+          fderiv ℝ (amplitude S ε κ i) (Pi.single i (GlobalLiouvilleField.A S p i))
+            (Pi.single i 1) : ℝ) : ℂ) := by
     calc
       _ = ∑ j : Fin d, Complex.I * ((S.B i j : ℝ) * nu S ε κ δ p p j : ℝ) := by
         apply Finset.sum_congr rfl
         intro j _
         by_cases hj : S.B i j = 0
-        · simp [hj]
+        · simp [show S.E j (i : Fin d) = 0 from hj]
         · rw [hnu j hj]
           push_cast
           ring
       _ = Complex.I * (∑ j : Fin d, (S.B i j : ℝ) * nu S ε κ δ p p j : ℝ) := by
         rw [Complex.ofReal_sum, Finset.mul_sum]
-      _ = _ := by rw [AllStrataGrowth.full_matrix_nu_equation S hdet ε κ δ p p i]
+      _ = _ := by rw [hrowsum]
   rw [differential_character_row S hdet p i hn]
   change exchangeCharacter p i * (∑ j : Fin d, (S.B i j : ℂ) *
     GlobalLiouvilleField.logarithmicComponents S hdet ε κ hδ p j) = _
-  rw [hsum, angularRhs_eq_self_of_unit_neighbors S hε (by linarith) δ p i hi hrow]
+  rw [hsum]
   push_cast
   ring
 

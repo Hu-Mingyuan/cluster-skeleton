@@ -91,6 +91,8 @@ theorem angularRhs_eq_zero {ε κ : ℝ} (hε : 0 < ε) (hκ : 2 * ε < κ)
   rw [AllStrataGrowth.angularRhs_center S ε κ δ p j]
   apply Finset.sum_eq_zero
   intro i _
+  rw [mul_eq_zero]
+  refine Or.inr ?_
   split_ifs with hs
   · by_cases hi : ‖p.a i‖ < 1
     · rw [angular_eq_zero_of_interior S δ hp i hi, zero_mul]
@@ -105,7 +107,7 @@ theorem nu_eq_zero {ε κ : ℝ} (hε : 0 < ε) (hκ : 2 * ε < κ)
     nu S ε κ δ p p = 0 := by
   have he : angularRhs S ε κ δ p p = 0 :=
     funext (angularRhs_eq_zero S hε hκ δ hp)
-  simp [nu, he]
+  simp [nu, he, Matrix.mulVec_zero, show (fun _ : Fin d => (0 : ℝ)) = 0 from rfl]
 
 variable (hdet : S.Unimodular)
 

@@ -241,7 +241,7 @@ theorem row_real_drift_torus {ε κ δ : ℝ} (hε : 0 < ε)
   intro j _
   rw [TorusLiouvilleDynamics.real_logarithmicComponents S hdet ε κ hδ q ht j]
   by_cases hij : S.B i j = 0
-  · simp [hij]
+  · simp [show S.E j (i : Fin d) = 0 from hij]
   · have hc : TorusLiouvilleDynamics.radialCorrection S ε κ δ q j = 0 := by
       by_cases hj : j ∈ S.mutable
       · have hd := PrimitiveLocalization.adjacent_dominance_zero hε hq.1 ht ⟨j,hj⟩
@@ -267,7 +267,7 @@ theorem amplitude_partial_nonadjacent (ε κ : ℝ) (a : Fin d → ℝ) (i j : F
       exact ((DominanceCutoff.mem_mutableNeighbors S j k).mp hk).2 (by simpa only [h] using hB)
     simp [hji, hki]
   rw [fderiv_amplitude_apply S ε κ j a (Pi.single i 1), hd]
-  simp [Pi.single_apply, hji, hB]
+  simp [Pi.single_apply, hji, show S.E i j = 0 from hB]
 
 open TorusLiouvilleDynamics in
 theorem differential_amplitude_radial (ε κ : ℝ) (q : S.Point) (ht : q ∈ initialTorus S)
@@ -357,7 +357,7 @@ theorem local_H_radial {ε κ δ : ℝ} (hε : 0 < ε) (hκ : 2 * ε + 1 ≤ κ)
     (i : S.Mutable) (hi : (i : Fin d) ∈ p.zeroSet) :
     differentialCovector (SmoothAtlas.presentation S hdet).manifold
       (TorusCorrection.H S ε κ δ) q (radialTangent S hdet q ht i) =
-        (PrimitiveLocalization.nodeLog q i).im := by
+        (S.D (i : Fin d) : ℝ) * (PrimitiveLocalization.nodeLog q i).im := by
   classical
   rw [differential_H_radial S hdet ε κ hδ q ht i]
   have hangle : TorusCorrection.angular S δ q i = (PrimitiveLocalization.nodeLog q i).im := by
@@ -368,10 +368,10 @@ theorem local_H_radial {ε κ δ : ℝ} (hε : 0 < ε) (hκ : 2 * ε + 1 ≤ κ)
   · rw [amplitude_partial_self S hdet hε hκ hδ hq ht i hi, mul_one, hangle]
   · intro j hj hji
     by_cases hij : S.B i j = 0
-    · have hjiB : S.B j i = 0 := by rw [S.skew j i, hij, neg_zero]
-      rw [amplitude_partial_nonadjacent S ε κ _ i.val j hji hjiB, mul_zero]
+    · have hjiB : S.B j i = 0 := (S.B_eq_zero_iff i j).mp hij
+      rw [amplitude_partial_nonadjacent S ε κ _ i.val j hji hjiB, mul_zero, mul_zero]
     · rw [amplitude_partial_adjacent S hdet hε hq ht i.val ⟨j, hj⟩ ⟨i.val, hi, hij⟩,
-        mul_zero]
+        mul_zero, mul_zero]
   · exact fun h => (h i.property).elim
 
 /-- The native complex logarithmic drift on the torus part of the open node neighborhood. -/
@@ -389,10 +389,13 @@ theorem nodeLog_drift_torus {ε κ δ : ℝ} (hε : 0 < ε) (hκ : 2 * ε + 1 �
   apply Complex.ext
   · simpa only [Complex.re_sum, Complex.mul_re, Complex.intCast_re, Complex.intCast_im,
       zero_mul, sub_zero] using row_real_drift_torus S hdet hε hκ hδ hq ht i hi
-  · simpa only [Complex.im_sum, Complex.mul_im, Complex.intCast_re, Complex.intCast_im,
-      zero_mul, add_zero] using
-      (TorusLiouvilleDynamics.angular_equation S hdet ε κ hδ q ht i).trans
-        (local_H_radial S hdet hε hκ hδ hq ht i hi)
+  · have hrow := TorusLiouvilleDynamics.angular_equation_row S hdet ε κ hδ q ht i
+    rw [local_H_radial S hdet hε hκ hδ hq ht i hi] at hrow
+    have hD : ((S.D (i : Fin d) : ℚ) : ℝ) ≠ 0 := by
+      have := S.D_pos (i : Fin d)
+      exact_mod_cast this.ne'
+    simpa only [Complex.im_sum, Complex.mul_im, Complex.intCast_re, Complex.intCast_im,
+      zero_mul, add_zero] using mul_left_cancel₀ hD hrow
 
 
 /-- The actual local logarithmic drift extends across all zeros on the OPEN neighborhood. -/

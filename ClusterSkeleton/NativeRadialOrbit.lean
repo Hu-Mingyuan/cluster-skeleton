@@ -28,13 +28,16 @@ theorem amplitude_abs_le_radial (ε κ : ℝ) (a : Fin d → ℝ) (j : Fin d) :
   have hd1 := DominanceCutoff.dominance_le_one S ε j a
   have hr0 := PrimitiveCutoffs.rho_nonneg (∑ k : Fin d, (S.B j k : ℝ) * a k)
   have hr1 := PrimitiveCutoffs.rho_le_one (∑ k : Fin d, (S.B j k : ℝ) * a k)
-  have h1 := mul_le_mul_of_nonneg_left hd1
-    (abs_nonneg (PrimitiveCutoffs.radial ε κ (a j)))
-  have h2 := mul_le_mul_of_nonneg_left hr1
-    (mul_nonneg (abs_nonneg (PrimitiveCutoffs.radial ε κ (a j))) hd0)
-  simpa [TorusLiouvilleDynamics.amplitude, abs_mul,
-    abs_of_nonneg hd0, abs_of_nonneg hr0] using
-      h2.trans (by simpa using h1)
+  unfold TorusLiouvilleDynamics.amplitude
+  rw [abs_mul, abs_mul, abs_of_nonneg hd0, abs_of_nonneg hr0]
+  have h1 : |PrimitiveCutoffs.radial ε κ (a j)| * DominanceCutoff.dominance S ε j a ≤
+      |PrimitiveCutoffs.radial ε κ (a j)| := by
+    simpa using mul_le_mul_of_nonneg_left hd1
+      (abs_nonneg (PrimitiveCutoffs.radial ε κ (a j)))
+  have h2 : (0 : ℝ) ≤ |PrimitiveCutoffs.radial ε κ (a j)| *
+      DominanceCutoff.dominance S ε j a := mul_nonneg (abs_nonneg _) hd0
+  have h3 := mul_le_mul_of_nonneg_left hr1 h2
+  linarith
 
 /-- A single constant controls the correction on every selected-coordinate nonzero locus.
 Other coordinates may vanish. -/

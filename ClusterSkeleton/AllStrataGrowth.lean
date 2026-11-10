@@ -1,4 +1,5 @@
 import ClusterSkeleton.LocalAngularDynamics
+import ClusterSkeleton.SeedAlgebra
 import ClusterSkeleton.NativeRadialOrbit
 
 /-! Uniform pointwise growth of the actual native Liouville field on every
@@ -93,14 +94,16 @@ theorem normalizedLog_hasDerivWithinAt (ε κ : ℝ) {δ : ℝ} (hδ : 0 < δ)
 /-- Singular summands vanish at the actual center, without restricting the zero set. -/
 theorem angularRhs_center (ε κ δ : ℝ) (p : S.Point) (j : Fin d) :
     angularRhs S ε κ δ p p j =
-      ∑ i : S.Mutable, if i ∈ RegularCorrection.surviving S p.zeroSet then
-        TorusCorrection.angular S δ p i *
-          fderiv ℝ (amplitude S ε κ i) (maskedLogs S p.zeroSet p) (Pi.single j 1)
-      else 0 := by
+      ∑ i : S.Mutable, (S.D (i : Fin d) : ℝ) *
+        (if i ∈ RegularCorrection.surviving S p.zeroSet then
+          TorusCorrection.angular S δ p i *
+            fderiv ℝ (amplitude S ε κ i) (maskedLogs S p.zeroSet p) (Pi.single j 1)
+        else 0) := by
   classical
   unfold angularRhs
   apply Finset.sum_congr rfl
   intro i _
+  congr 1
   by_cases hi : (i : Fin d) ∈ p.zeroSet
   · have ha : p.a i = 0 := ((p.mem_zeroSet i).mp hi).2
     have hs : i ∉ RegularCorrection.surviving S p.zeroSet :=
@@ -109,21 +112,29 @@ theorem angularRhs_center (ε κ δ : ℝ) (p : S.Point) (j : Fin d) :
   · simp only [hi, ite_false]
 
 include hdet in
-/-- Multiplication by the full matrix undoes the full inverse in nu. -/
+/-- Multiplication by the full weighted form matrix undoes the full inverse in
+`nu`. The minus sign is the one carried by `nu`'s definition, i.e. by the
+angular equation `∑_k K_{jk} θ̇_k = -∂_{u_j} H`. -/
 theorem full_matrix_nu_equation (ε κ δ : ℝ) (p q : S.Point) (j : Fin d) :
-    (∑ k : Fin d, (S.B j k : ℝ) * nu S ε κ δ p q k) =
+    (∑ k : Fin d, (S.K j k : ℝ) * nu S ε κ δ p q k) =
+      -angularRhs S ε κ δ p q j := by
+  have he : (SeedAlgebra.Kreal S).mulVec (nu S ε κ δ p q) =
+      fun i => -angularRhs S ε κ δ p q i := by
+    change (SeedAlgebra.Kreal S).mulVec
+      ((SeedAlgebra.Kreal S)⁻¹.mulVec (fun i => -angularRhs S ε κ δ p q i)) = _
+    rw [Matrix.mulVec_mulVec, SeedAlgebra.Kreal_mul_inv S hdet, Matrix.one_mulVec]
+  exact (SeedAlgebra.Kreal_mulVec_apply S _ j).symm.trans (congrFun he j)
+
+include hdet in
+/-- The row (character) form of the `nu` equation: `d_j · c_j(θ̇) = ∂_{u_j} H`,
+i.e. the weight appears in the angular equation, exactly as in
+`TorusLiouvilleDynamics.angular_equation_row`. -/
+theorem row_nu_equation (ε κ δ : ℝ) (p q : S.Point) (j : Fin d) :
+    (S.D j : ℝ) * (∑ k : Fin d, (S.B j k : ℝ) * nu S ε κ δ p q k) =
       angularRhs S ε κ δ p q j := by
-  let M : Matrix (Fin d) (Fin d) ℝ := fun i j => (S.B i j : ℝ)
-  have hd : M.det = 1 := by
-    have h := (Int.castRingHom ℝ).map_det S.B
-    change (S.B.det : ℝ) = M.det at h
-    rw [hdet, Int.cast_one] at h
-    exact h.symm
-  have hu : IsUnit M.det := by rw [hd]; exact isUnit_one
-  have he : M.mulVec (nu S ε κ δ p q) = angularRhs S ε κ δ p q := by
-    change M.mulVec (M⁻¹.mulVec (angularRhs S ε κ δ p q)) = _
-    rw [Matrix.mulVec_mulVec, Matrix.mul_nonsing_inv M hu, Matrix.one_mulVec]
-  exact congrFun he j
+  have h := full_matrix_nu_equation S hdet ε κ δ p q j
+  rw [SeedAlgebra.sum_K_row S _ j] at h
+  linarith
 
 /-- A uniform bound for every radial Hamiltonian derivative at each center. -/
 theorem angularRhs_center_bound {ε κ δ : ℝ}
@@ -133,25 +144,31 @@ theorem angularRhs_center_bound {ε κ δ : ℝ}
   obtain ⟨K, hK, hKb⟩ := amplitude_partial_bound S hε hκ
   obtain ⟨V, hV, hVb⟩ := PrimitiveCutoffs.vartheta_iteratedDeriv_bound hδ 0
   simp only [iteratedDeriv_zero] at hVb
-  let C : ℝ := ∑ _i : S.Mutable, V * K
-  have hC : 0 ≤ C := Finset.sum_nonneg fun _ _ => mul_nonneg hV hK
+  have hD (i : S.Mutable) : (0 : ℝ) ≤ (S.D (i : Fin d) : ℝ) :=
+    le_of_lt (by exact_mod_cast S.D_pos (i : Fin d))
+  let C : ℝ := ∑ i : S.Mutable, (S.D (i : Fin d) : ℝ) * (V * K)
+  have hC : 0 ≤ C :=
+    Finset.sum_nonneg fun i _ => mul_nonneg (hD i) (mul_nonneg hV hK)
   refine ⟨C, hC, fun p j => ?_⟩
   have hU : 0 ≤ 1 + R S p := by have := R_nonneg S p; positivity
   rw [angularRhs_center S ε κ δ p j]
   calc
-    _ ≤ ∑ i : S.Mutable, |if i ∈ RegularCorrection.surviving S p.zeroSet then
-        TorusCorrection.angular S δ p i *
-          fderiv ℝ (amplitude S ε κ i) (maskedLogs S p.zeroSet p) (Pi.single j 1)
-      else 0| := Finset.abs_sum_le_sum_abs _ _
-    _ ≤ ∑ _i : S.Mutable, (V * K) * (1 + R S p) := by
+    _ ≤ ∑ i : S.Mutable, |(S.D (i : Fin d) : ℝ) *
+        (if i ∈ RegularCorrection.surviving S p.zeroSet then
+          TorusCorrection.angular S δ p i *
+            fderiv ℝ (amplitude S ε κ i) (maskedLogs S p.zeroSet p) (Pi.single j 1)
+        else 0)| := Finset.abs_sum_le_sum_abs _ _
+    _ ≤ ∑ i : S.Mutable, (S.D (i : Fin d) : ℝ) * ((V * K) * (1 + R S p)) := by
       apply Finset.sum_le_sum
       intro i _
+      rw [abs_mul, abs_of_nonneg (hD i)]
+      refine mul_le_mul_of_nonneg_left ?_ (hD i)
       split_ifs with hs
       · rw [abs_mul, mul_assoc]
         exact mul_le_mul (hVb _) (hKb _ i j) (abs_nonneg _) hV
       · simp only [abs_zero]
         exact mul_nonneg (mul_nonneg hV hK) hU
-    _ = C * (1 + R S p) := by simp only [C, Finset.sum_mul]
+    _ = C * (1 + R S p) := by simp only [C, Finset.sum_mul, mul_assoc]
 
 include hdet in
 /-- All entries of the center angular vector have uniform linear growth. -/
@@ -163,10 +180,11 @@ theorem nu_center_growth {ε κ δ : ℝ}
   obtain ⟨N, hN, hNb⟩ := full_matrix_inverse_bound S hdet
   refine ⟨N * (∑ _j : Fin d, K), by positivity, fun p => ?_⟩
   calc
-    _ ≤ N * ∑ j : Fin d, |angularRhs S ε κ δ p p j| :=
+    _ ≤ N * ∑ j : Fin d, |-angularRhs S ε κ δ p p j| :=
       hNb _ _ (fun j => full_matrix_nu_equation S hdet ε κ δ p p j)
     _ ≤ N * ∑ _j : Fin d, K * (1 + R S p) :=
-      mul_le_mul_of_nonneg_left (Finset.sum_le_sum fun j _ => hKb p j) hN
+      mul_le_mul_of_nonneg_left
+        (Finset.sum_le_sum fun j _ => by rw [abs_neg]; exact hKb p j) hN
     _ = _ := by rw [← Finset.sum_mul]; ring
 
 /-- The coefficient estimate is purely algebraic and never divides by a partner. -/

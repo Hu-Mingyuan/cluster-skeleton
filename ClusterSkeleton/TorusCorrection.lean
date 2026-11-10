@@ -74,18 +74,23 @@ def rowLog (p : S.Point) (i : Fin d) : ℝ := ∑ j : Fin d, (S.B i j : ℝ) * A
 def angular (δ : ℝ) (p : S.Point) (i : Fin d) : ℝ :=
   PrimitiveCutoffs.vartheta δ (Complex.arg (-exchangeCharacter p i))
 
-/-- A totalized finite expression, with no regularity assertion off the torus. -/
+/-- A totalized finite expression, with no regularity assertion off the torus.
+
+This is the weighted correction `H = ∑_{i∈M} d_i h(u_i) χ_i ρ(v_i) β(η_i)` of
+`proof-blueprint.tex`: **every summand carries the symmetrizer weight `d_i`**,
+while the exponent sum inside `ρ` stays the integral exponent row `B = Eᵀ`
+(`rowLog p i = v_i`). With `D = 1` it degenerates to the baseline formula. -/
 def H (ε κ δ : ℝ) (p : S.Point) : ℝ :=
-  ∑ i ∈ S.mutable, PrimitiveCutoffs.radial ε κ (A S p i) *
+  ∑ i ∈ S.mutable, (S.D i : ℝ) * (PrimitiveCutoffs.radial ε κ (A S p i) *
     DominanceCutoff.dominance S ε i (A S p) * PrimitiveCutoffs.rho (rowLog S p i) *
-      angular S δ p i
+      angular S δ p i)
 
 theorem manuscript_formula (ε κ δ : ℝ) (p : S.Point) (_hp : p ∈ initialTorus S) :
-    H S ε κ δ p = ∑ i ∈ S.mutable,
-      PrimitiveCutoffs.radial ε κ (Real.log ‖p.a i‖) *
+    H S ε κ δ p = ∑ i ∈ S.mutable, (S.D i : ℝ) *
+      (PrimitiveCutoffs.radial ε κ (Real.log ‖p.a i‖) *
       DominanceCutoff.dominance S ε i (fun j => Real.log ‖p.a j‖) *
       PrimitiveCutoffs.rho (∑ j : Fin d, (S.B i j : ℝ) * Real.log ‖p.a j‖) *
-      PrimitiveCutoffs.vartheta δ (Complex.arg (-exchangeCharacter p i)) := rfl
+      PrimitiveCutoffs.vartheta δ (Complex.arg (-exchangeCharacter p i))) := rfl
 
 theorem H_empty_mutable (ε κ δ : ℝ) (hM : S.mutable = ∅) :
     H S ε κ δ = fun _ => 0 := by
@@ -156,10 +161,11 @@ theorem contMDiffOn_H (ε κ : ℝ) {δ : ℝ} (hδ : 0 < δ) :
   intro i _
   have hA := contMDiffAt_A S hdet p hp
   have hi := contMDiffAt_pi_space.mp hA i
-  exact (((PrimitiveCutoffs.radial_smooth ε κ).comp_contMDiffAt hi).mul
-    ((DominanceCutoff.contDiff_dominance S ε i).comp_contMDiffAt hA) |>.mul
-    (PrimitiveCutoffs.rho_smooth.comp_contMDiffAt (contMDiffAt_rowLog S hdet p hp i))).mul
-      (contMDiffAt_angular S hdet hδ p hp i)
+  exact contMDiffAt_const.mul
+    ((((PrimitiveCutoffs.radial_smooth ε κ).comp_contMDiffAt hi).mul
+      ((DominanceCutoff.contDiff_dominance S ε i).comp_contMDiffAt hA) |>.mul
+      (PrimitiveCutoffs.rho_smooth.comp_contMDiffAt (contMDiffAt_rowLog S hdet p hp i))).mul
+        (contMDiffAt_angular S hdet hδ p hp i))
 
 /-- The corrected native one-form, using the constructed manuscript correction. -/
 def alpha (ε κ δ : ℝ) : (SmoothAtlas.presentation S hdet).manifold.Form 1 :=
@@ -168,8 +174,8 @@ def alpha (ε κ δ : ℝ) : (SmoothAtlas.presentation S hdet).manifold.Form 1 :
 theorem evalOne_alpha (ε κ δ : ℝ) (p : S.Point)
     (v : (SmoothAtlas.presentation S hdet).manifold.Tangent p) :
     SmoothManifold.evalOne (alpha S hdet ε κ δ) p v =
-      (∑ i : Fin d, ∑ j : Fin d, (S.B i j : ℝ) * Real.log ‖p.a i‖ *
-        ((SmoothAtlas.presentation S hdet).coordinateDifferential j p v / p.a j).im) -
+      (∑ i : Fin d, ∑ j : Fin d, (S.K i j : ℝ) * Real.log ‖p.a i‖ *
+        ((SmoothAtlas.presentation S hdet).coordinateDifferential j p v / p.a j).im) +
       differentialCovector (SmoothAtlas.presentation S hdet).manifold (H S ε κ δ) p v := by
   rw [alpha, TorusPrimitive.evalOne_alpha, TorusPrimitive.evalOne_beta]
 

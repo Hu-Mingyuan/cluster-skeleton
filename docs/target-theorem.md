@@ -1,9 +1,10 @@
-> Scope: this guide records the **weighted (skew-symmetrizable)** library at source
-> commit `114d63939d72cfb5c81d6bd22dd0811e053805a3`, whose root `ClusterSkeleton`
-> builds. The superseded `D = I` baseline is kept only in the explicit
+> Scope: this guide records the **weighted (skew-symmetrizable)** library at
+> accepted source commit `a575aa236b485672f0606bba6ebc80571671f8a9`. The
+> superseded `D = I` baseline is kept only in the explicit
 > baseline-versus-weighted comparisons of
-> [`skeleton-audit.md`](skeleton-audit.md) and in its recovery section §1.11. The accepted-source manifest, the verifier run and the receipts for this
-> source are **not yet produced**; see *Verification status* below.
+> [`skeleton-audit.md`](skeleton-audit.md) and in its recovery section §1.11. The
+> accepted-source manifest, the verifier run and the receipts for this source
+> exist; see *Verification status* below.
 
 # Definitions, formulation, and the proved target
 
@@ -198,13 +199,11 @@ together with the statement review's own citation list.
   identification is `SkewSeed.pointHomeomorph`, with
   `SkewSeed.pointHomeomorph_val` by `rfl`. The old loci on the old carrier, their
   image/preimage identifications and the flow conjugation are
-  `ClusterSkeleton/SkewSeedRecovery.lean` at commit
-  `e7a6d9637ac0acec71639a71731f1d6ca27e2e0c`, described in
+  `ClusterSkeleton/SkewSeedRecovery.lean`, described in
   [`weighted-recovery-plan.md`](weighted-recovery-plan.md); the packaged statement
-  `SkewSeedSkeleton.skeleton_recovery` is
-  `ClusterSkeleton/SkewSeedSkeleton.lean` at commit
-  `07132a64143f7525e13b9b5f3a540f4602fd0319`, a publication of the
-  **still-running** final-assembly mission. The [audit](skeleton-audit.md) §1.11
+  `SkewSeed.skeleton_recovery` is `ClusterSkeleton/SkewSeedSkeleton.lean`. Both are
+  in the accepted source commit `a575aa236b485672f0606bba6ebc80571671f8a9` and are
+  audit roots of the receipt. The [audit](skeleton-audit.md) §1.11
   gives the clause-by-clause breakdown, the elaboration evidence, and the recorded
   decision **not** to claim a transported smooth structure or a term identity of
   the recovered flow with the baseline's.
@@ -214,15 +213,14 @@ together with the statement review's own citation list.
   `nonSkewSeed_not_skew`, `nonSkewSeed_entries`, `nonSkewSeed_weights_ne`,
   `nonSkewSeed_K_transpose` and `nonSkewSeed_det_K` all **proved**, not assumed.
   Applying the final theorem to it is the single line
-  `FullSkeleton.firstGeometricTarget 4 Examples.nonSkewSeed Examples.nonSkewSeed_unimodular`;
-  it typechecks at this commit but is not a declaration in the tree at `114d639`.
-  The consumers `Examples.nonSkewSeed_liouvilleSkeletonTarget`,
+  `FullSkeleton.firstGeometricTarget 4 Examples.nonSkewSeed Examples.nonSkewSeed_unimodular`,
+  which is the definition of `nonSkewSeed_target_of_firstGeometricTarget`. The
+  consumers `Examples.nonSkewSeed_liouvilleSkeletonTarget`,
   `nonSkewSeed_target_of_firstGeometricTarget`, `nonSkewSeed_side_checks`,
   `nonSkewSeed_trappedSet` and `nonSkewSeed_trappedSet_iUnion` are
-  `ClusterSkeleton/Examples/NonSkewSkeleton.lean` at commit
-  `07132a64143f7525e13b9b5f3a540f4602fd0319`, a publication of the still-running
-  final-assembly mission (finding **R4** of the audit records the status). This
-  consumer supplements, and never replaces, the universal theorem.
+  `ClusterSkeleton/Examples/NonSkewSkeleton.lean` in the accepted source commit
+  `a575aa236b485672f0606bba6ebc80571671f8a9`, and all five are audit roots of the
+  receipt. This consumer supplements, and never replaces, the universal theorem.
 
 ## Scope and trust boundary
 
@@ -239,29 +237,33 @@ semantic reviews of the weighted stages.
 
 ## Verification status
 
-The weighted library builds at source commit
-`114d63939d72cfb5c81d6bd22dd0811e053805a3`: `lake build ClusterSkeleton`
-completes with the pinned toolchain (Lean 4.34.1 / Lake 5.0.0) and the root
-import closure contains the whole library. Only the foundational axioms
-`propext`, `Classical.choice`, and `Quot.sound` are permitted; no additional
-geometric axioms are permitted.
+The weighted library is verified at accepted source commit
+`a575aa236b485672f0606bba6ebc80571671f8a9`, receipts of 10 November 2026. A
+managed `horizon-lean-check ClusterSkeleton` passed (9029 jobs, Lean 4.34.1 /
+Lake 5.0.0, snapshot verified) and `python3 scripts/verify.py` then ended with
+`FULL_GEOMETRIC_TARGET_VERIFIED`. The root import closure contains the whole
+library. Only the foundational axioms `propext`, `Classical.choice` and
+`Quot.sound` are permitted, and every audited root reports exactly those three.
 
-The following are **not yet produced for this source** and must not be read as
-done:
+What now exists for this source:
 
-* the accepted-source manifest — [`../verification/accepted-library.json`](../verification/accepted-library.json)
-  still binds the superseded baseline commit `4c02c1e5bbc68907552632344ae04017d82a30b4`;
-* a verifier run over the weighted source, its module and declaration counts, and
-  its `FULL_GEOMETRIC_TARGET_VERIFIED` line;
-* the transitive axiom log, the build log and the final-consumer log for this
-  source — [`../verification/README.md`](../verification/README.md),
-  [`../verification/axioms.log`](../verification/axioms.log),
-  [`../verification/build.log`](../verification/build.log) and
-  [`../verification/final-consumer.log`](../verification/final-consumer.log) all
-  still describe the baseline;
-* receipts tied to the new accepted source.
+* the accepted-source manifest —
+  [`../verification/accepted-library.json`](../verification/accepted-library.json)
+  binds the 65 library files of commit `a575aa2…` by SHA-256;
+* the receipt —
+  [`../verification/publication-check.json`](../verification/publication-check.json)
+  with `status: passed`, `dependency_worktrees_clean: true` and
+  `source_stability_verified: true`: 65 modules, 1811 audited declarations, 72
+  `#print axioms` roots, 73 hashed inputs;
+* the four logs for this source —
+  [`../verification/toolchain.log`](../verification/toolchain.log),
+  [`../verification/build.log`](../verification/build.log),
+  [`../verification/final-consumer.log`](../verification/final-consumer.log) and
+  [`../verification/axioms.log`](../verification/axioms.log);
+* the weighted statement review —
+  [`../verification/statement-review.md`](../verification/statement-review.md),
+  which also lists the residual notes (R4 and the one-place consumer, the node
+  chart being a homeomorphism, R-N1 on the two carriers of the recovery, R5–R7).
 
-The closing verification mission produces them and finalizes this section, the
-scope line at the top of this file, and the corresponding lines of
-[`skeleton-audit.md`](skeleton-audit.md) and
-[`proof-blueprint.md`](proof-blueprint.md).
+This is a verified result, not an acceptance decision: accepting the phase and
+the objective is the maintainer's call.

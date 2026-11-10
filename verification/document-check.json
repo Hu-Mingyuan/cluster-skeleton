@@ -1,6 +1,6 @@
 {
   "status": "passed",
-  "scope": "Weighted skew-symmetrizable target and proof blueprint; formal Lean generalization pending",
+  "scope": "Weighted skew-symmetrizable target and proof blueprint; the Lean generalization they state is verified at accepted source commit a575aa236b485672f0606bba6ebc80571671f8a9",
   "pages": {
     "target-theorem.pdf": 3,
     "proof-blueprint.pdf": 7
@@ -10,7 +10,7 @@
     "Both PDFs use the weighted hypotheses and no visible document date",
     "No overfull boxes, undefined references, or missing characters",
     "All 10 rendered pages visually inspected; no clipping or overlap",
-    "Document check only; generalized Lean theorem remains pending"
+    "Document check only; the generalized Lean theorem is verified by verification/publication-check.json, not by this file"
   ],
   "source_and_output_sha256": {
     "docs/tex/preamble.tex": "f6db2a72071b953d5e04947ad1402bc439089610368b63a991375f65a73efce7",

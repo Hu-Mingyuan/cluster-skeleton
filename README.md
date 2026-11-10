@@ -2,15 +2,22 @@
 
 Lean formalization of the Liouville geometry of unimodular acyclic cluster models. On the actual space of complex exchange points, the project constructs a smooth exact symplectic structure, a complete two-sided Liouville flow, and proves that its full dynamical skeleton is the coordinate cap, equivalently the union `⋃_{I independent} Λ_I` of the reference strata.
 
-Frozen coordinates remain variable elements of `ℂ*`. The full skew-symmetric integer matrix has determinant one; only the mutable quiver must be acyclic.
+The input is **skew-symmetrizable**: an integral exchange matrix `E` with `det E = 1`, an arbitrary positive rational diagonal symmetrizer `D`, and the requirement that `K = E D` be skew-symmetric. The exchange equations use the **columns of E**: `P_i^± = ∏_j z_j^{[±E_ji]_+}`. Frozen coordinates remain variable elements of `ℂ*`; only the mutable quiver must be acyclic. The skew-symmetric case is `D = I`, and it is recovered as a theorem.
 
-## Current target: skew-symmetrizable generalization
+## Verified result: the skew-symmetrizable theorem
 
-The current PDFs state the general target for integral unimodular `E` and an arbitrary positive rational diagonal `D` with `E D` skew-symmetric. The exchange equations use the **columns of E**. This generalization is in progress; the existing Lean code and receipts still certify only the `D = I` baseline. See [the current objective](docs/roadmap.md).
+`ClusterSkeleton.FullSkeleton.firstGeometricTarget : FirstGeometricTarget` is universally quantified over every dimension `d` and every weighted seed `S : Seed d`, with `S.Unimodular` (`det E = 1`) as its only hypothesis. The logarithmic form in the target has coefficient `K = E D` with the manuscript's factor `1/2` and sign. The formalized skeleton is the coordinate cap and the union of the independent-set strata `Λ_I`; independent node charts have torus exponent `d - 2|I|`.
 
-## Verified baseline: skew-symmetric case
+The complete library, the final theorem consumers and the transitive axiom audit pass: **65 modules and 1,811 audited declarations, 72 `#print axioms` roots, 73 hashed inputs**, using only `propext`, `Classical.choice`, and `Quot.sound`. Verified at accepted source commit `a575aa236b485672f0606bba6ebc80571671f8a9`, receipts of 10 November 2026.
 
-The formalized skeleton is the coordinate cap and the union of the independent-set strata `Λ_I`. Independent node charts have torus exponent `d - 2|I|`. The complete library, final theorem consumers, and transitive axiom audit pass: 58 modules and 1,492 declarations, using only `propext`, `Classical.choice`, and `Quot.sound`.
+Two consumers sit beside the universal theorem and never replace it:
+
+- **The `D = I` recovery is a theorem.** `ClusterSkeleton.SkewSeed.skeleton_recovery` is quantified over every skew-symmetric integral seed `S : SkewSeed d` with `det B = 1` as its only hypothesis. Because `SkewSeed.toSeed` reads it with `E := B` and `D = 1`, the weighted form matrix is `K = B` itself — no transpose, no sign change, no time reversal. On the **old** carrier it gives density of the old initial torus, the forward-orbit skeleton identity `Skel = C_B` in both the cap form and the stratified form `⋃_I Λ_I` over the old independence predicate, and compactness of the old cap and of each old stratum. The smooth presentation, primitive, two-form, field and flow enter existentially through `LiouvilleSkeletonTarget S.toSeed`, exactly as the manuscript quantifies them; see [the statement review](verification/statement-review.md) for the exact boundary.
+- **A genuinely non-skew input is covered by the same theorem.** `ClusterSkeleton.Examples.nonSkewSeed` is the manuscript's seed with `E = [[0,1,−1,0],[−2,0,0,−1],[1,0,0,0],[0,1,0,0]]`, `D = diag(1,2,1,2)` and mutable set `{0,1}`; `E 0 1 = 1` while `E 1 0 = −2`, so no rescaling makes `E` skew and the `D = I` library cannot express it. `Examples.nonSkewSeed_target_of_firstGeometricTarget` obtains its geometry by instantiating the universal theorem, not by a separate argument.
+
+`FullSkeletonConsumer.PdfTargetConsumer.pdf_target` states every clause of the published theorem — density, the presentation and Liouville datum, `Skel(Φ) = C_E`, the stratified form for the same flow, compactness of every stratum, and the node-chart rank facts — in one Lean type for an arbitrary unimodular seed.
+
+This records a verified result; it is not a statement that the objective has been accepted, which is a maintainer's decision. See [the current objective](docs/roadmap.md).
 
 ## Read the mathematics
 
@@ -54,7 +61,7 @@ FullSkeleton.trappedSet_eq_iUnion_lambdaStratum :
 
 The independent node charts carry the explicit torus exponent `d - 2|I|`: `IndependentNodeChart.complementRank_eq_sub_two_mul_card` proves `SplitIntegerRows.complementRank (independentRowRightInverse S I) = d - 2 * I.card`, with `IndependentNodeChart.two_mul_card_le : 2 * I.card ≤ d` ([`IndependentNodeSmooth.lean`](ClusterSkeleton/IndependentNodeSmooth.lean)).
 
-These restatements close gaps **G1** and **G2** of [`docs/skeleton-audit.md`](docs/skeleton-audit.md). They add no hypothesis and change no existing statement; the scope remains skew-symmetric unimodular with mutable acyclicity and variable frozen coordinates, and no weighted or principal-coefficient claim is made.
+These restatements close gaps **G1** and **G2** of [`docs/skeleton-audit.md`](docs/skeleton-audit.md). They add no hypothesis and change no existing statement. The scope is skew-symmetrizable unimodular with mutable acyclicity and variable frozen coordinates; no principal-coefficient claim is made.
 
 ## Reproduce the checks
 

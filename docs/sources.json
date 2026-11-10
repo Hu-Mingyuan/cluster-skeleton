@@ -16,14 +16,14 @@
   "lean": "leanprover/lean4:v4.34.1",
   "mathlib": "d13f23b723b8a846827a245b89c10fc7d3f11612",
   "accepted_horizon_source": {
-    "commit": "4c02c1e5bbc68907552632344ae04017d82a30b4",
-    "tree": "421e0f101ffceedc9370ae9df37e51ad8983deeb",
-    "note": "Accepted Lean source for the coordinate-cap and stratified skeleton statements, with the explicit independent node-chart torus rank."
+    "commit": "a575aa236b485672f0606bba6ebc80571671f8a9",
+    "tree": "962112eafe558787a4fbb07190963c59b28a305f",
+    "note": "Accepted Lean source for the skew-symmetrizable (weighted) skeleton statements: integral E with det E = 1, an arbitrary positive rational diagonal D with K = E D skew-symmetric, column exchange exponents, the coordinate-cap and stratified skeleton identities, the explicit independent node-chart torus rank, the proved D = I recovery and a genuinely non-skew instance. 65 library files hashed in verification/accepted-library.json; reviewed by docs/reviews/final-statement-review.md and docs/reviews/recovery-nonskew-review.md before the manifest was bound to it."
   },
   "current_skeleton_reference": {
     "title": "Skeleton in the acyclic case",
     "sha256": "074e17d348cc533b3d0f23c2dd048942953aba05a356cefa1bf244bb1efac137",
-    "scope": "Skeleton section only; formalized skew-symmetric unimodular specialization with mutable acyclicity and variable frozen coordinates; no categorical HMS.",
+    "scope": "Skeleton section only; formalized skew-symmetrizable unimodular generalization with an arbitrary positive rational diagonal symmetrizer, mutable acyclicity and variable frozen coordinates; the skew-symmetric D = I case is recovered as a theorem; no categorical HMS.",
     "local_pdf": "proof-blueprint.pdf",
     "local_tex": "docs/tex/proof-blueprint.tex",
     "unimodularity_and_acyclicity": "retained"

@@ -1,10 +1,10 @@
-> Scope: this guide records the **weighted (skew-symmetrizable)** library at source
-> commit `114d63939d72cfb5c81d6bd22dd0811e053805a3`, whose root `ClusterSkeleton`
-> builds. The superseded `D = I` baseline survives only in the explicit
+> Scope: this guide records the **weighted (skew-symmetrizable)** library at
+> accepted source commit `a575aa236b485672f0606bba6ebc80571671f8a9`. The
+> superseded `D = I` baseline survives only in the explicit
 > baseline-versus-weighted comparisons of
-> [`skeleton-audit.md`](skeleton-audit.md). The accepted-source manifest,
-> the verifier run and the receipts for this source are **not yet produced**; see
-> *Verification status* in [`target-theorem.md`](target-theorem.md).
+> [`skeleton-audit.md`](skeleton-audit.md). The accepted-source manifest, the
+> verifier run and the receipts for this source exist; see *Verification status*
+> below and in [`target-theorem.md`](target-theorem.md).
 
 # Geometric proof-to-code map
 
@@ -32,8 +32,8 @@ skew-symmetric, acyclic mutable block, variable frozen coordinates,
 | Trapped points lie in cap | Radial escape, interior partner rigidity, zero-stratum partner escape | `CompactInteriorRigidity`, `ZeroStratumEscape`, `ConstructedFlowReverseInclusion` |
 | Stratified cap | The cap as the union of the reference strata `Λ_I` over independent `I`; closedness and per-stratum compactness | `CapStrata` |
 | Final existence | Same-flow set equality, its stratified form, and constructed witnesses, for every weighted seed | `FullSkeleton` |
-| `D = I` recovery | The old skew-symmetric input, its weighted reading `E := B`, `D := 1` (so `K = B`), the carrier identity, the old loci on the old carrier, and the packaged recovery statement | `SkewSeed`; `SkewSeedRecovery` (at `e7a6d963…`) and `SkewSeedSkeleton` (at `07132a64…`), see below |
-| Inputs the theorem must accept | The weighted `A_2` seed with `D = 1`, the reference's non-skew `4 × 4` input, and its instantiation of the final theorem | `Examples.A2`, `Examples.NonSkew`; `Examples.NonSkewSkeleton` (at `07132a64…`) |
+| `D = I` recovery | The old skew-symmetric input, its weighted reading `E := B`, `D := 1` (so `K = B`), the carrier identity, the old loci on the old carrier, and the packaged recovery statement | `SkewSeed`, `SkewSeedRecovery`, `SkewSeedSkeleton`, see below |
+| Inputs the theorem must accept | The weighted `A_2` seed with `D = 1`, the reference's non-skew `4 × 4` input, and its instantiation of the final theorem | `Examples.A2`, `Examples.NonSkew`, `Examples.NonSkewSkeleton` |
 
 The final theorem is `ClusterSkeleton.FullSkeleton.firstGeometricTarget`:
 
@@ -180,31 +180,36 @@ The scaffolding of recovery — the old loci `SkewSeed.initialTorus`,
 `SkewSeed.coordinateCap`, `SkewSeed.lambdaStratum` on the old carrier, their
 image/preimage identifications, the flow conjugation `SkewSeed.conjFlow` and
 `SkewSeed.trappedSet_conjFlow_eq_coordinateCap` — is the module
-`ClusterSkeleton/SkewSeedRecovery.lean` at commit
-`e7a6d9637ac0acec71639a71731f1d6ca27e2e0c`, documented in
+`ClusterSkeleton/SkewSeedRecovery.lean`, documented in
 [`weighted-recovery-plan.md`](weighted-recovery-plan.md); the packaged statement
-`SkewSeedSkeleton.skeleton_recovery` (with
+`SkewSeed.skeleton_recovery` (with
 `skeleton_recovery_of_parameters`, `liouvilleSkeletonTarget`,
 `dense_initialTorus`, `liouvilleData_torus_anchor_old_matrix` and
 `liouvilleData_trappedSet_conjFlow`/`_iUnion`) is
-`ClusterSkeleton/SkewSeedSkeleton.lean` at commit
-`07132a64143f7525e13b9b5f3a540f4602fd0319`. Neither module is part of the tree at
-`114d639`, and `07132a64` is a publication of a **still-running** mission. Audit
-§1.11 records the clause-by-clause status, the elaboration evidence, and the
-recorded decision not to claim a transported smooth structure.
+`ClusterSkeleton/SkewSeedSkeleton.lean`. Both modules are part of the accepted
+source commit `a575aa236b485672f0606bba6ebc80571671f8a9` and their statements are
+audit roots of the receipt. Audit §1.11 records the clause-by-clause status, the
+elaboration evidence, and the recorded decision not to claim a transported
+smooth structure.
 
 ## Verification status
 
 [`FullSkeletonConsumer.lean`](../verification/FullSkeletonConsumer.lean) and the
-rest of [`verification/`](../verification) still bind the superseded baseline
-commit `4c02c1e5bbc68907552632344ae04017d82a30b4`. The weighted library builds at
-`114d63939d72cfb5c81d6bd22dd0811e053805a3` with the pinned toolchain
-(Lean 4.34.1 / Lake 5.0.0). The accepted-source manifest, the weighted verifier
-run with its module and declaration counts, the transitive axiom log and the
-receipts for this source are **not yet produced**; the closing verification
-mission produces them and finalizes this section together with the
+rest of [`verification/`](../verification) are bound to the accepted source
+commit `a575aa236b485672f0606bba6ebc80571671f8a9`, whose 65 library files are
+hashed in
+[`accepted-library.json`](../verification/accepted-library.json). A managed
+`horizon-lean-check ClusterSkeleton` passed with the pinned toolchain
+(Lean 4.34.1 / Lake 5.0.0) and `python3 scripts/verify.py` then ended with
+`FULL_GEOMETRIC_TARGET_VERIFIED`, writing
+[`publication-check.json`](../verification/publication-check.json) with
+`status: passed`: 65 modules, 1811 audited declarations, 72 `#print axioms`
+roots each depending on exactly `propext`, `Classical.choice`, `Quot.sound`, and
+73 hashed inputs. Receipts of 10 November 2026. Verifying the statements is not
+accepting the objective, which is the maintainer's decision; the residual notes
+are in [`statement-review.md`](../verification/statement-review.md), and the
 corresponding sections of [`target-theorem.md`](target-theorem.md) and
-[`skeleton-audit.md`](skeleton-audit.md).
+[`skeleton-audit.md`](skeleton-audit.md) carry the same counts.
 
 The rewritten PDFs contain only the relevant weighted geometry. They prove a
 real smooth extension of the imaginary weighted logarithmic form; later

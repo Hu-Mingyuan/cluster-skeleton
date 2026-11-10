@@ -10,8 +10,10 @@ original coordinates. Its actual `mfderiv`, together with the accepted immersion
 and equality of finite dimensions, gives tangent coordinates. Dividing by the
 nonzero coordinates then gives the logarithmic equivalence.
 
-Full integer skew symmetry and determinant one prove nondegeneracy of the exact
-normalized imaginary pairing. The final consumers use the constructed atlas.
+Skewness of the weighted matrix `K = E * D` together with its nonvanishing
+determinant `∏ d_i` prove nondegeneracy of the exact normalized imaginary
+pairing; the coefficient is `K`, not `E`. The final consumers use the
+constructed atlas.
 These are torus-only results: no extension, closedness, primitive, flow, or
 skeleton statement is asserted.
 -/
@@ -141,31 +143,47 @@ def logarithmicTangentEquiv (p : S.Point) (hp : p ∈ initialTorus S) :
   change originalTangentEquiv S P p hp v j / p.a j = _
   rw [originalTangentEquiv_apply]
 
-/-- The full integer matrix, extended to the complex numbers. -/
-def complexMatrix : Matrix (Fin d) (Fin d) ℂ := fun i j => (S.B i j : ℂ)
+/-- The weighted form matrix `K = E * D`, extended to the complex numbers.
+This is the coefficient matrix of `SmoothPresentation.logarithmicImaginaryValue`;
+with a nontrivial symmetrizer it is **not** the integral exchange matrix. -/
+def complexMatrix : Matrix (Fin d) (Fin d) ℂ := fun i j => (S.K i j : ℂ)
 
-theorem complexMatrix_det (hdet : S.Unimodular) : (complexMatrix S).det = 1 := by
-  have h := (Int.castRingHom ℂ).map_det S.B
-  change (S.B.det : ℂ) = (complexMatrix S).det at h
-  rw [hdet, Int.cast_one] at h
-  exact h.symm
+theorem complexMatrix_map :
+    complexMatrix S = (Rat.castHom ℂ).mapMatrix S.K := rfl
 
-/-- Skew symmetry removes exactly the factor one half in the antisymmetrization. -/
+/-- The weighted determinant: unimodularity of `E` gives `det K = ∏ d_i`, which
+is nonzero but no longer equal to one. -/
+theorem complexMatrix_det (hdet : S.Unimodular) :
+    (complexMatrix S).det = ∏ i, (S.D i : ℂ) := by
+  rw [complexMatrix_map, ← RingHom.map_det, S.det_K_of_unimodular hdet]
+  exact map_prod (Rat.castHom ℂ) _ _
+
+theorem complexMatrix_det_ne_zero (hdet : S.Unimodular) :
+    (complexMatrix S).det ≠ 0 := by
+  rw [complexMatrix_det S hdet]
+  exact Finset.prod_ne_zero_iff.mpr fun i _ => Rat.cast_ne_zero.mpr (S.D_ne_zero i)
+
+theorem isUnit_complexMatrix_det (hdet : S.Unimodular) :
+    IsUnit (complexMatrix S).det :=
+  isUnit_iff_ne_zero.mpr (complexMatrix_det_ne_zero S hdet)
+
+/-- Skewness of the weighted matrix `K` removes exactly the factor one half in
+the antisymmetrization. Only `K_skew` is used; no integrality is needed. -/
 theorem normalized_pairing (u w : Fin d → ℂ) :
-    (1 / 2 : ℂ) * ∑ i, ∑ j, (S.B i j : ℂ) * (u i * w j - w i * u j) =
-      ∑ j, (∑ i, (S.B i j : ℂ) * u i) * w j := by
-  have hs : (∑ i, ∑ j, (S.B i j : ℂ) * (w i * u j)) =
-      -(∑ i, ∑ j, (S.B i j : ℂ) * (u i * w j)) := by
+    (1 / 2 : ℂ) * ∑ i, ∑ j, (S.K i j : ℂ) * (u i * w j - w i * u j) =
+      ∑ j, (∑ i, (S.K i j : ℂ) * u i) * w j := by
+  have hs : (∑ i, ∑ j, (S.K i j : ℂ) * (w i * u j)) =
+      -(∑ i, ∑ j, (S.K i j : ℂ) * (u i * w j)) := by
     rw [Finset.sum_comm]
     simp only [← Finset.sum_neg_distrib]
     apply Finset.sum_congr rfl
     intro i _
     apply Finset.sum_congr rfl
     intro j _
-    rw [S.skew j i, Int.cast_neg]
+    rw [S.K_skew j i, Rat.cast_neg]
     ring
-  have ht : (∑ i, ∑ j, (S.B i j : ℂ) * (u i * w j)) =
-      ∑ j, (∑ i, (S.B i j : ℂ) * u i) * w j := by
+  have ht : (∑ i, ∑ j, (S.K i j : ℂ) * (u i * w j)) =
+      ∑ j, (∑ i, (S.K i j : ℂ) * u i) * w j := by
     rw [Finset.sum_comm]
     simp only [Finset.sum_mul, mul_assoc]
   simp only [mul_sub, Finset.sum_sub_distrib]
@@ -175,10 +193,10 @@ theorem normalized_pairing (u w : Fin d → ℂ) :
 /-- The imaginary part of the normalized complex pairing is real nondegenerate. -/
 theorem normalized_pairing_nondegenerate (hdet : S.Unimodular) (u : Fin d → ℂ)
     (h : ∀ w : Fin d → ℂ,
-      ((1 / 2 : ℂ) * ∑ i, ∑ j, (S.B i j : ℂ) * (u i * w j - w i * u j)).im = 0) :
+      ((1 / 2 : ℂ) * ∑ i, ∑ j, (S.K i j : ℂ) * (u i * w j - w i * u j)).im = 0) :
     u = 0 := by
   classical
-  have hz : ∀ j, (∑ i, (S.B i j : ℂ) * u i) = 0 := by
+  have hz : ∀ j, (∑ i, (S.K i j : ℂ) * u i) = 0 := by
     intro j
     have hi := h (Pi.single j 1)
     have hr := h (Pi.single j Complex.I)
@@ -192,7 +210,7 @@ theorem normalized_pairing_nondegenerate (hdet : S.Unimodular) (u : Fin d → �
     funext j
     simpa [Matrix.vecMul, dotProduct, complexMatrix, mul_comm] using hz j
   apply Matrix.vecMul_injective_of_isUnit
-    ((Matrix.isUnit_iff_isUnit_det _).mpr (by rw [complexMatrix_det S hdet]; exact isUnit_one))
+    ((Matrix.isUnit_iff_isUnit_det _).mpr (isUnit_complexMatrix_det S hdet))
   simpa using hu
 
 /-- Torus-only nondegeneracy for any compatible smooth presentation. -/

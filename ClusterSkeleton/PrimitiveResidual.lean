@@ -21,38 +21,41 @@ def tau (i : Fin d) (p : S.Point) :
 def logRow (i : Fin d) (p : S.Point) : ℝ :=
   ∑ j : Fin d, (S.B i j : ℝ) * Real.log ‖p.a j‖
 
-/-- Both indices lie outside I. This totalized form is smooth on its stated locus. -/
+/-- Both indices lie outside I. This totalized form is smooth on its stated locus.
+The coefficient is the weighted form matrix `K = E * D`, as in
+`TorusPrimitive.beta`; only the exponent rows `tau` and `logRow` keep `B = Eᵀ`. -/
 def residual (I : Finset (Fin d)) : (SmoothAtlas.presentation S hdet).manifold.Form 1 :=
   covectorForm _ (fun p => ∑ i ∈ Iᶜ, ∑ j ∈ Iᶜ,
-    ((S.B i j : ℝ) * Real.log ‖p.a i‖) • TorusPrimitive.angleCovector S hdet j p)
+    ((S.K i j : ℝ) * Real.log ‖p.a i‖) • TorusPrimitive.angleCovector S hdet j p)
 
-/-- A finite matrix identity, requiring no nonvanishing coordinates. -/
+/-- A finite matrix identity, requiring no nonvanishing coordinates. Only
+skewness of `K` and the vanishing of its `I × I` block are used. -/
 theorem split_sum (I : Finset (Fin d)) (hI : S.Independent I)
     (A T : Fin d → ℝ) :
-    (∑ i, ∑ j, (S.B i j : ℝ) * A i * T j) =
-      (∑ i ∈ Iᶜ, ∑ j ∈ Iᶜ, (S.B i j : ℝ) * A i * T j) +
-      ∑ i ∈ I, ((A i * ∑ j, (S.B i j : ℝ) * T j) -
-        (∑ j, (S.B i j : ℝ) * A j) * T i) := by
-  let f := fun i j => (S.B i j : ℝ) * A i * T j
+    (∑ i, ∑ j, (S.K i j : ℝ) * A i * T j) =
+      (∑ i ∈ Iᶜ, ∑ j ∈ Iᶜ, (S.K i j : ℝ) * A i * T j) +
+      ∑ i ∈ I, ((A i * ∑ j, (S.K i j : ℝ) * T j) -
+        (∑ j, (S.K i j : ℝ) * A j) * T i) := by
+  let f := fun i j => (S.K i j : ℝ) * A i * T j
   have hs (g : Fin d → ℝ) : (∑ i, g i) = (∑ i ∈ I, g i) + ∑ i ∈ Iᶜ, g i :=
     (Finset.sum_add_sum_compl I g).symm
   have ht : (∑ i ∈ Iᶜ, ∑ j ∈ I, f i j) =
-      -(∑ i ∈ I, (∑ j, (S.B i j : ℝ) * A j) * T i) := by
+      -(∑ i ∈ I, (∑ j, (S.K i j : ℝ) * A j) * T i) := by
     rw [Finset.sum_comm]
     simp only [← Finset.sum_neg_distrib]
     apply Finset.sum_congr rfl
     intro i hi
-    rw [hs (fun j => (S.B i j : ℝ) * A j)]
-    have hzero : (∑ j ∈ I, (S.B i j : ℝ) * A j) = 0 := by
+    rw [hs (fun j => (S.K i j : ℝ) * A j)]
+    have hzero : (∑ j ∈ I, (S.K i j : ℝ) * A j) = 0 := by
       apply Finset.sum_eq_zero
       intro j hj
-      simp [hI.2 i hi j hj]
+      simp [Seed.K_apply, hI.2 i hi j hj]
     rw [hzero, zero_add, Finset.sum_mul, ← Finset.sum_neg_distrib]
     apply Finset.sum_congr rfl
     intro j _
-    simp only [f, S.skew j i, Int.cast_neg]
+    simp only [f, S.K_skew j i, Rat.cast_neg]
     ring
-  have hr : (∑ i ∈ I, A i * ∑ j, (S.B i j : ℝ) * T j) =
+  have hr : (∑ i ∈ I, A i * ∑ j, (S.K i j : ℝ) * T j) =
       ∑ i ∈ I, ∑ j, f i j := by
     simp only [Finset.mul_sum]
     apply Finset.sum_congr rfl
@@ -70,17 +73,46 @@ theorem split_sum (I : Finset (Fin d)) (hI : S.Independent I)
   dsimp [f]
   ring
 
-/-- Exact equality of native forms at every actual exchange point. -/
+/-- The weighted form of the two reference identities
+`∑_l K_il dθ_l = -d_i dη_i` and `∑_j K_ij u_j = -d_i v_i`: a `K`-row is `-d_i`
+times the corresponding integral exponent row. -/
+theorem sum_K_row_real (i : Fin d) (x : Fin d → ℝ) :
+    (∑ j, (S.K i j : ℝ) * x j) = -(S.D i : ℝ) * ∑ j, (S.B i j : ℝ) * x j := by
+  rw [Finset.mul_sum]
+  refine Finset.sum_congr rfl fun j _ => ?_
+  rw [show ((S.K i j : ℚ) : ℝ) = ((-(S.D i) * (S.B i j : ℚ) : ℚ) : ℝ) from
+    congrArg _ (S.K_eq_neg_D_mul_B i j)]
+  push_cast
+  ring
+
+/-- Exact equality of native forms at every actual exchange point.
+This is `eq:acyclic-ltor-split` of `proof-blueprint.tex`. The baseline bracket
+`u_i dη_i - v_i dθ_i` is kept verbatim and scaled by `-(d_i)`, so the block is
+`∑_{i∈I} d_i (v_i dθ_i - u_i dη_i)` with `logRow = v_i` and `tau = dη_i`. Both
+the weight and the sign come from `∑_j K_ij x_j = -d_i ∑_j B_ij x_j`
+(`sum_K_row_real`, i.e. `Seed.K_eq_neg_D_mul_B`). -/
 theorem beta_decomposition (I : Finset (Fin d)) (hI : S.Independent I) :
     TorusPrimitive.beta S hdet = residual S hdet I +
-      covectorForm _ (fun p : S.Point => ∑ i ∈ I,
+      covectorForm _ (fun p : S.Point => ∑ i ∈ I, (-(S.D i : ℝ)) •
         (Real.log ‖p.a i‖ • tau S hdet i p -
           logRow S i p • TorusPrimitive.angleCovector S hdet i p)) := by
   funext p
   ext v
-  simpa [TorusPrimitive.beta, residual, covectorForm, tau, logRow,
-    smul_eq_mul] using split_sum S I hI (fun i => Real.log ‖p.a i‖)
-      (fun j => TorusPrimitive.angleCovector S hdet j p (v 0))
+  have hsplit := split_sum S I hI (fun i => Real.log ‖p.a i‖)
+    (fun j => TorusPrimitive.angleCovector S hdet j p (v 0))
+  have hrow (i : Fin d) :
+      (∑ j, (S.K i j : ℝ) * TorusPrimitive.angleCovector S hdet j p (v 0)) =
+        -(S.D i : ℝ) * tau S hdet i p (v 0) := by
+    rw [sum_K_row_real S i]
+    congr 1
+    simp [tau, smul_eq_mul]
+  have hlog (i : Fin d) : (∑ j, (S.K i j : ℝ) * Real.log ‖p.a j‖) =
+      -(S.D i : ℝ) * logRow S i p := by
+    rw [sum_K_row_real S i]; rfl
+  simp only [hrow, hlog] at hsplit
+  simpa [TorusPrimitive.beta, residual, covectorForm, smul_eq_mul,
+    Finset.sum_sub_distrib, sub_eq_add_neg, mul_comm, mul_assoc,
+    mul_left_comm] using hsplit
 
 /-- Complementary coefficients are smooth even when coordinates in I vanish. -/
 theorem contDiffAt_residual_inChart (I : Finset (Fin d)) :
@@ -102,7 +134,7 @@ theorem contDiffAt_residual_inChart (I : Finset (Fin d)) :
   have hqy := hq.contDiffAt (c.open_target.mem_nhds hy)
   let F := fun z => ContinuousAlternatingMap.ofSubsingleton ℝ _ ℝ (0 : Fin 1)
     (∑ i ∈ Iᶜ, ∑ j ∈ Iᶜ,
-      ((S.B i j : ℝ) * Real.log ‖q z i‖) •
+      ((S.K i j : ℝ) * Real.log ‖q z i‖) •
         (Complex.imCLM.comp ((q z j)⁻¹ •
           ((ContinuousLinearMap.proj j).comp (fderiv ℝ q z)))))
   have hF : ContDiffAt ℝ ∞ F y := by
@@ -125,11 +157,11 @@ theorem contDiffAt_residual_inChart (I : Finset (Fin d)) :
       (by simp)) a hz
   ext v
   change (∑ i ∈ Iᶜ, ∑ j ∈ Iᶜ,
-    ((S.B i j : ℝ) * Real.log ‖(c.symm z).a i‖) •
+    ((S.K i j : ℝ) * Real.log ‖(c.symm z).a i‖) •
       TorusPrimitive.angleCovector S hdet j (c.symm z))
         (M.inverseChartTangentMap a z (v 0)) =
     (∑ i ∈ Iᶜ, ∑ j ∈ Iᶜ,
-      ((S.B i j : ℝ) * Real.log ‖q z i‖) •
+      ((S.K i j : ℝ) * Real.log ‖q z i‖) •
         (Complex.imCLM.comp ((q z j)⁻¹ •
           ((ContinuousLinearMap.proj j).comp (fderiv ℝ q z))))) (v 0)
   simp only [ContinuousLinearMap.sum_apply, ContinuousLinearMap.smul_apply, smul_eq_mul]
@@ -145,7 +177,7 @@ theorem contDiffAt_residual_inChart (I : Finset (Fin d)) :
   simp only [ContinuousLinearMap.comp_apply, ContinuousLinearMap.smul_apply,
     Complex.imCLM_apply, ContinuousLinearMap.proj_apply]
   rw [TorusPrimitive.angleCovector_apply, hdj]
-  change (S.B i j : ℝ) * Real.log ‖q z i‖ *
+  change (S.K i j : ℝ) * Real.log ‖q z i‖ *
     ((fderiv ℝ q z (v 0)) j / q z j).im = _
   rw [div_eq_mul_inv, mul_comm ((fderiv ℝ q z (v 0)) j)]
   rfl
@@ -188,6 +220,7 @@ theorem node_argument (i : S.Mutable) (p : S.Point) (hp : p ∈ initialTorus S) 
     unfold normalizedPartner exchangeCharacter
     rw [← mul_div_assoc, p.exchange i, add_div, div_self hQ, add_comm]
   rw [he, exchangeCharacter_eq_zpow_product]
+  simp only [Seed.B_apply]
   ring
 
 /-- The full angular row is the actual native differential of the node logarithm. -/

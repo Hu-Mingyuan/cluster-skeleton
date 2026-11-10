@@ -49,8 +49,8 @@ def mutableNeighbors (i : Fin d) : Finset (Fin d) :=
   S.mutable.filter (fun j => S.B i j ≠ 0)
 
 @[simp] theorem mem_mutableNeighbors (i j : Fin d) :
-    j ∈ mutableNeighbors S i ↔ j ∈ S.mutable ∧ S.B i j ≠ 0 := by
-  simp [mutableNeighbors]
+    j ∈ mutableNeighbors S i ↔ j ∈ S.mutable ∧ S.B i j ≠ 0 :=
+  Finset.mem_filter
 
 /-- Exactly the product in equation (2.5), with original real coordinates. -/
 def dominance (ε : ℝ) (i : Fin d) (A : Fin d → ℝ) : ℝ :=
@@ -87,10 +87,9 @@ theorem dominance_eq_zero_iff {ε : ℝ} (hε : 0 < ε) (i : Fin d) (A : Fin d �
 theorem adjacent_exclusion {ε : ℝ} (hε : 0 < ε) (i j : Fin d)
     (hi : i ∈ S.mutable) (hj : j ∈ S.mutable) (hij : S.B i j ≠ 0)
     (A : Fin d → ℝ) : dominance S ε i A = 0 ∨ dominance S ε j A = 0 := by
-  have hji : S.B j i ≠ 0 := by
-    intro h
-    apply hij
-    rw [S.skew i j, h, neg_zero]
+  -- The exponent matrix is not skew-symmetric when `D ≠ 1`, but vanishing of an
+  -- entry is still a symmetric condition.
+  have hji : S.B j i ≠ 0 := fun h => hij ((S.B_eq_zero_iff j i).mp h)
   by_cases h : -ε / 2 ≤ A i - A j
   · exact Or.inl ((dominance_eq_zero_iff S hε i A).2
       ⟨j, (mem_mutableNeighbors S i j).2 ⟨hj, hij⟩, h⟩)
@@ -122,7 +121,8 @@ theorem mem_localizationNeighborhood (ε : ℝ) (p : S.Point) :
   have hj0 : p.a j ≠ 0 := by
     intro hj0
     have hjI := (p.mem_zeroSet j).2 ⟨((mem_mutableNeighbors S i j).1 hj).1, hj0⟩
-    exact ((mem_mutableNeighbors S i j).1 hj).2 (p.zeroSet_independent.2 i hi j hjI)
+    exact ((mem_mutableNeighbors S i j).1 hj).2
+      (p.zeroSet_independent.exponent_eq_zero hi hjI)
   rw [hi0, norm_zero]
   exact mul_pos (Real.exp_pos _) (norm_pos_iff.mpr hj0)
 

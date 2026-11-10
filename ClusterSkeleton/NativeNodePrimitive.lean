@@ -69,10 +69,13 @@ def lambda (κ : ℝ) (i : S.Mutable) (q : S.Point) :
     (SmoothAtlas.presentation S hdet).manifold.Tangent q →L[ℝ] ℝ :=
   (NodePrimitiveCancellation.lambda κ (nodeMap S i q)).comp (nodeDifferential S hdet i q)
 
-/-- The simultaneous regular singular block as a native alternating one-form. -/
+/-- The simultaneous regular singular block as a native alternating one-form.
+Each node summand carries the common symmetrizer factor `d_i`, exactly as the
+`I`-block of `eq:acyclic-ltor-split` and of the weighted correction do. -/
 def block (κ : ℝ) (I : Finset (Fin d)) (hI : S.Independent I) :
     (SmoothAtlas.presentation S hdet).manifold.Form 1 :=
-  covectorForm _ (fun q => ∑ i : I, lambda S hdet κ ⟨i.val, hI.1 i.property⟩ q)
+  covectorForm _ (fun q => ∑ i : I,
+    (S.D i.val : ℝ) • lambda S hdet κ ⟨i.val, hI.1 i.property⟩ q)
 
 /-- Tangent transport uses the native chain rule in every chart. -/
 theorem nodeDifferential_inChart {I : Finset (Fin d)} (hI : S.Independent I)
@@ -106,7 +109,7 @@ theorem contDiffAt_block_inChart (κ : ℝ) (I : Finset (Fin d)) (hI : S.Indepen
   intro a y hy hp
   let c := chartAt (Model (2*d)) a
   let F := fun z => ContinuousAlternatingMap.ofSubsingleton ℝ _ ℝ (0 : Fin 1)
-    (∑ i : I, (NodePrimitiveCancellation.lambda κ
+    (∑ i : I, (S.D i.val : ℝ) • (NodePrimitiveCancellation.lambda κ
       (nodeMap S ⟨i.val, hI.1 i.property⟩ (c.symm z))).comp
       (fderiv ℝ (nodeMap S ⟨i.val, hI.1 i.property⟩ ∘ c.symm) z))
   have hF : ContDiffAt ℝ ∞ F y := by
@@ -118,6 +121,7 @@ theorem contDiffAt_block_inChart (κ : ℝ) (I : Finset (Fin d)) (hI : S.Indepen
       (contMDiffOn_chart_symm (I := 𝓘(ℝ, Model (2*d))) (x := a)).contMDiffAt
         (c.open_target.mem_nhds hy)
     have hf := ((nodeMap_smooth S hdet hI ⟨i.val, hI.1 i.property⟩ i.property _ hp.1).comp y hc).contDiffAt
+    refine ContDiffAt.const_smul (S.D i.val : ℝ) ?_
     exact ((NodePrimitiveCancellation.contDiffAt_lambda κ (hp.2 _ i.property)).comp y hf).clm_comp
       (hf.fderiv_right (by simp))
   apply hF.congr_of_eventuallyEq
@@ -125,19 +129,20 @@ theorem contDiffAt_block_inChart (κ : ℝ) (I : Finset (Fin d)) (hI : S.Indepen
     ((isOpen_candidateChartLocus S I).mem_nhds hp.1)
   filter_upwards [c.open_target.mem_nhds hy, hn] with z hz hzp
   ext v
-  change (∑ i : I, lambda S hdet κ ⟨i.val, hI.1 i.property⟩ (c.symm z))
+  change (∑ i : I, (S.D i.val : ℝ) • lambda S hdet κ ⟨i.val, hI.1 i.property⟩ (c.symm z))
     ((SmoothAtlas.presentation S hdet).manifold.inverseChartTangentMap a z (v 0)) = _
-  change (∑ i : I, lambda S hdet κ ⟨i.val, hI.1 i.property⟩ (c.symm z))
+  change (∑ i : I, (S.D i.val : ℝ) • lambda S hdet κ ⟨i.val, hI.1 i.property⟩ (c.symm z))
     ((SmoothAtlas.presentation S hdet).manifold.inverseChartTangentMap a z (v 0)) =
-    (∑ i : I, (NodePrimitiveCancellation.lambda κ
+    (∑ i : I, (S.D i.val : ℝ) • (NodePrimitiveCancellation.lambda κ
       (nodeMap S ⟨i.val, hI.1 i.property⟩ (c.symm z))).comp
       (fderiv ℝ (nodeMap S ⟨i.val, hI.1 i.property⟩ ∘ c.symm) z)) (v 0)
-  simp only [ContinuousLinearMap.sum_apply]
+  simp only [ContinuousLinearMap.sum_apply, ContinuousLinearMap.smul_apply, smul_eq_mul]
   apply Finset.sum_congr rfl
   intro i _
   have hd := nodeDifferential_inChart S hdet hI ⟨i.val, hI.1 i.property⟩ i.property a z hz hzp
-  exact congrArg (fun D => NodePrimitiveCancellation.lambda κ
-    (nodeMap S ⟨i.val, hI.1 i.property⟩ (c.symm z)) (D (v 0))) hd
+  exact congrArg (fun x : ℝ => (S.D i.val : ℝ) * x)
+    (congrArg (fun D => NodePrimitiveCancellation.lambda κ
+      (nodeMap S ⟨i.val, hI.1 i.property⟩ (c.symm z)) (D (v 0))) hd)
 
 /-- The first component of the derivative is the original coordinate differential. -/
 theorem nodeDifferential_fst {I : Finset (Fin d)} (hI : S.Independent I)
@@ -236,7 +241,7 @@ theorem block_torus (κ : ℝ) (I : Finset (Fin d)) (hI : S.Independent I)
     (q : S.Point) (hq : q ∈ locus S I) (ht : q ∈ initialTorus S) :
     block S hdet κ I hI q =
       covectorForm (SmoothAtlas.presentation S hdet).manifold
-        (fun p => ∑ i : I,
+        (fun p => ∑ i : I, (S.D i.val : ℝ) •
           (Real.log ‖p.a i.val‖ • PrimitiveResidual.tau S hdet i.val p -
           PrimitiveResidual.logRow S i.val p • TorusPrimitive.angleCovector S hdet i.val p -
           differentialCovector (SmoothAtlas.presentation S hdet).manifold
@@ -246,7 +251,8 @@ theorem block_torus (κ : ℝ) (I : Finset (Fin d)) (hI : S.Independent I)
   congr 1
   apply Finset.sum_congr rfl
   intro i _
-  exact lambda_torus S hdet κ hI ⟨i.val, hI.1 i.property⟩ i.property q hq ht
+  exact congrArg (fun L => (S.D i.val : ℝ) • L)
+    (lambda_torus S hdet κ hI ⟨i.val, hI.1 i.property⟩ i.property q hq ht)
 
 @[simp] theorem block_empty (κ : ℝ) (hI : S.Independent ∅) :
     block S hdet κ ∅ hI = 0 := by

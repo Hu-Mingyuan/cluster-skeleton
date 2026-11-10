@@ -214,7 +214,7 @@ theorem angularRhs_eq_radial {ε κ δ : ℝ} (hε : 0 < ε) (hκ : 2*ε+1 ≤ �
           fun hr => hs ((RegularCorrection.mem_surviving S p.zeroSet i).mpr ⟨hi, hr⟩)
         push Not at hr
         obtain ⟨k, hk, hki⟩ := hr
-        exact ⟨k, hk, fun he => hki (by rw [S.skew i k, he, neg_zero])⟩
+        exact ⟨k, hk, fun he => hki ((S.B_eq_zero_iff k i).mp he)⟩
       rw [BoundaryTangency.amplitude_partial_adjacent S hdet hε hq ht j i hn, mul_zero]
 
 /-- Inverting the actual full matrix identifies the smooth formula on the torus. -/

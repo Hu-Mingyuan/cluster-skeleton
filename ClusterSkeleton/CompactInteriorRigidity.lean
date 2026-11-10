@@ -121,7 +121,7 @@ variable {d : ℕ} (S : Seed d)
 theorem row_single (i : Fin d) (a : ℝ) :
     (∑ j : Fin d, (S.B i j : ℝ) * (Pi.single i a : Fin d → ℝ) j) = 0 := by
   classical
-  have hdiag : S.B i i = 0 := by have hh := S.skew i i; omega
+  have hdiag : S.B i i = 0 := S.B_diag_zero i
   rw [Finset.sum_eq_single i]
   · simp [hdiag]
   · intro j _ hji
@@ -135,7 +135,7 @@ theorem amplitude_single_deep {ε κ a : ℝ}
     (ha : a ≤ -PrimitiveCutoffs.radialLength ε κ - 2 * ε) :
     TorusLiouvilleDynamics.amplitude S ε κ i (Pi.single i a) = a + κ := by
   classical
-  have hdiag : S.B i i = 0 := by have hh := S.skew i i; omega
+  have hdiag : S.B i i = 0 := S.B_diag_zero i
   have hL := PrimitiveCutoffs.radial_length_pos hκ
   have hdom : DominanceCutoff.dominance S ε i (Pi.single i a) = 1 := by
     apply DominanceCutoff.dominance_eq_one_of S hε

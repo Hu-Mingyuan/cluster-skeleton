@@ -141,6 +141,20 @@ theorem angular_equation (ε κ : ℝ) {δ : ℝ} (hδ : 0 < δ)
   simp [logarithmic_radialTangent, Pi.single_apply, logarithmicComponents, apply_ite] at h ⊢
   linarith
 
+/-- The angular equation in the exponent (character) orientation. The weight
+`d_i` appears **here**, not in the radial equation: this is the blueprint's
+`eq:acyclic-angle-flow`, `η̇_i = (1/d_i) ∂_{u_i} H`, obtained from the form
+equation by `SeedAlgebra.sum_K_row` (`∑_j K_{ij} x_j = -d_i ∑_j B_{ij} x_j`). -/
+theorem angular_equation_row (ε κ : ℝ) {δ : ℝ} (hδ : 0 < δ)
+    (p : S.Point) (hp : p ∈ initialTorus S) (i : Fin d) :
+    (S.D i : ℝ) *
+      (∑ j : Fin d, (S.B i j : ℝ) * (logarithmicComponents S hdet ε κ δ p j).im) =
+      differentialCovector (SmoothAtlas.presentation S hdet).manifold
+        (TorusCorrection.H S ε κ δ) p (radialTangent S hdet p hp i) := by
+  have h := angular_equation S hdet ε κ hδ p hp i
+  rw [SeedAlgebra.sum_K_row S _ i] at h
+  linarith
+
 /-- Normalization puts every nonzero base point at 1 in the logarithm's slit
 plane. This is a derivative of a genuine smooth local logarithm. -/
 theorem hasFDerivAt_normalized_log {b : ℂ} (hb : b ≠ 0) :

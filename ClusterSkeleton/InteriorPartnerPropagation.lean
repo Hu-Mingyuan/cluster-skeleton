@@ -179,7 +179,7 @@ theorem angularRhs_eq_self_of_unit_neighbors {ε κ : ℝ}
     by_contra hB
     have hu := hrow j hB
     simp [((p.mem_zeroSet j).mp hj).2] at hu
-  have hdiag : S.B i i = 0 := by have hh := S.skew i i; omega
+  have hdiag : S.B i i = 0 := S.B_diag_zero i
   have hf : fderiv ℝ (amplitude S ε κ i) (maskedLogs S p.zeroSet p) (Pi.single i 1) =
       fderiv ℝ (amplitude S ε κ i) (Pi.single i (GlobalLiouvilleField.A S p i))
         (Pi.single i 1) := by
@@ -200,7 +200,7 @@ theorem angularRhs_eq_self_of_unit_neighbors {ε κ : ℝ}
     · have hB' : S.B i j ≠ 0 := by
         intro he
         apply hB
-        rw [S.skew j i, he, neg_zero]
+        exact (S.B_eq_zero_iff i j).mp he
       rw [CapAngularTangency.amplitude_fderiv_zero_of_unit S hε hκ p j (hrow j hB')]
       split_ifs <;> simp
   · simp

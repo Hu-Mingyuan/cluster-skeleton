@@ -28,24 +28,35 @@ theorem angleCovector_apply (j : Fin d) (p : S.Point)
 /-- Totalized expression; smoothness is claimed only on the initial torus. -/
 def beta : (SmoothAtlas.presentation S hdet).manifold.Form 1 :=
   covectorForm _ (fun p => ∑ i : Fin d, ∑ j : Fin d,
-    ((S.B i j : ℝ) * Real.log ‖p.a i‖) • angleCovector S hdet j p)
+    ((S.K i j : ℝ) * Real.log ‖p.a i‖) • angleCovector S hdet j p)
 
 /-- There is no factor one half, minus sign, or inverse matrix in beta. -/
 theorem evalOne_beta (p : S.Point)
     (v : (SmoothAtlas.presentation S hdet).manifold.Tangent p) :
     SmoothManifold.evalOne (beta S hdet) p v =
-      ∑ i : Fin d, ∑ j : Fin d, (S.B i j : ℝ) * Real.log ‖p.a i‖ *
+      ∑ i : Fin d, ∑ j : Fin d, (S.K i j : ℝ) * Real.log ‖p.a i‖ *
         ((SmoothAtlas.presentation S hdet).coordinateDifferential j p v / p.a j).im := by
   simp [beta, angleCovector_apply]
 
-/-- Subtract the actual manifold differential of an ordinary real function. -/
+/-- Add the actual manifold differential of an ordinary real function.
+
+**Sign convention (stage B2).** The reference primitive is
+`λ_ac = λ_tor + dH` with `H = ∑_{i∈M} d_i h(u_i) χ_i ρ(v_i) β(η_i)`
+(`proof-blueprint.tex`, section "Skeleton in the acyclic case"). With the literal
+column exponents of the weighted seed the Lean character is the reference
+character, `exchangeCharacter p i = t_i`, hence
+`TorusCorrection.rowLog p i = v_i` and
+`arg (-exchangeCharacter p i) = η_i - π`, so the Lean `H` is the reference `H`
+itself, not its negative. The correction is therefore **added**: the two sign
+flips that cancelled the subtraction in the skew-symmetric baseline
+(`rowLog = -v_i`, `arg(-exchangeCharacter) = -(η_i-π)`) are both absent here. -/
 def alpha (H : S.Point → ℝ) : (SmoothAtlas.presentation S hdet).manifold.Form 1 :=
-  beta S hdet - covectorForm _ (differentialCovector _ H)
+  beta S hdet + covectorForm _ (differentialCovector _ H)
 
 theorem evalOne_alpha (H : S.Point → ℝ) (p : S.Point)
     (v : (SmoothAtlas.presentation S hdet).manifold.Tangent p) :
     SmoothManifold.evalOne (alpha S hdet H) p v =
-      SmoothManifold.evalOne (beta S hdet) p v -
+      SmoothManifold.evalOne (beta S hdet) p v +
         differentialCovector (SmoothAtlas.presentation S hdet).manifold H p v := by
   simp [alpha, SmoothManifold.evalOne, covectorForm]
 
@@ -58,13 +69,13 @@ theorem alpha_zero : alpha S hdet (fun _ => 0) = beta S hdet := by
 def logarithmicPrimitive (b z : Fin d → ℂ) : (Fin d → ℂ) [⋀^Fin 1]→L[ℝ] ℝ :=
   ContinuousAlternatingMap.ofSubsingleton ℝ _ ℝ (0 : Fin 1)
     (∑ i : Fin d, ∑ j : Fin d,
-      ((S.B i j : ℝ) * (Real.log ‖b i‖ + (z i).re)) •
+      ((S.K i j : ℝ) * (Real.log ‖b i‖ + (z i).re)) •
         (Complex.imCLM.comp (ContinuousLinearMap.proj j)))
 
 theorem logarithmicPrimitive_apply (b z : Fin d → ℂ)
     (v : Fin 1 → (Fin d → ℂ)) :
     logarithmicPrimitive S b z v = ∑ i : Fin d, ∑ j : Fin d,
-      (S.B i j : ℝ) * (Real.log ‖b i‖ + (z i).re) * (v 0 j).im := by
+      (S.K i j : ℝ) * (Real.log ‖b i‖ + (z i).re) * (v 0 j).im := by
   simp [logarithmicPrimitive]
 
 theorem contDiff_logarithmicPrimitive (b : Fin d → ℂ) :
@@ -74,7 +85,7 @@ theorem contDiff_logarithmicPrimitive (b : Fin d → ℂ) :
   apply ContDiff.sum; intro i _
   apply ContDiff.sum; intro j _
   exact (show ContDiff ℝ ∞ (fun z : Fin d → ℂ =>
-      (S.B i j : ℝ) * (Real.log ‖b i‖ + (z i).re)) from
+      (S.K i j : ℝ) * (Real.log ‖b i‖ + (z i).re)) from
     contDiff_const.mul (contDiff_const.add
       (Complex.reCLM.contDiff.comp (contDiff_apply ℝ ℂ i)))).smul_const
         (Complex.imCLM.comp (ContinuousLinearMap.proj j : (Fin d → ℂ) →L[ℝ] ℂ))
@@ -83,11 +94,11 @@ theorem fderiv_logarithmicPrimitive_eval (b z : Fin d → ℂ)
     (v : Fin 1 → (Fin d → ℂ)) :
     fderiv ℝ (fun x => logarithmicPrimitive S b x v) z =
       ∑ i : Fin d, ∑ j : Fin d,
-        ((S.B i j : ℝ) * (v 0 j).im) •
+        ((S.K i j : ℝ) * (v 0 j).im) •
           (Complex.reCLM.comp (ContinuousLinearMap.proj i)) := by
   have he : (fun x => logarithmicPrimitive S b x v) =
       (fun x => ∑ i : Fin d, ∑ j : Fin d,
-        ((S.B i j : ℝ) * (v 0 j).im) * (Real.log ‖b i‖ + (x i).re)) := by
+        ((S.K i j : ℝ) * (v 0 j).im) * (Real.log ‖b i‖ + (x i).re)) := by
     funext x
     simp only [logarithmicPrimitive_apply]
     congr 1; funext i; congr 1; funext j; ring
@@ -96,31 +107,31 @@ theorem fderiv_logarithmicPrimitive_eval (b z : Fin d → ℂ)
   apply HasFDerivAt.fun_sum; intro i _
   apply HasFDerivAt.fun_sum; intro j _
   convert ((Complex.reCLM.comp (ContinuousLinearMap.proj i : (Fin d → ℂ) →L[ℝ] ℂ)).hasFDerivAt.const_add
-    (Real.log ‖b i‖)).const_mul ((S.B i j : ℝ) * (v 0 j).im) using 1
+    (Real.log ‖b i‖)).const_mul ((S.K i j : ℝ) * (v 0 j).im) using 1
   rfl
 
 /-- Real-coordinate expression of the accepted normalized matrix form. -/
 theorem matrixForm_real (v w : Fin d → ℂ) :
     GlobalTwoForm.matrixForm S ![v, w] =
-      (∑ i : Fin d, ∑ j : Fin d, (S.B i j : ℝ) * (v i).re * (w j).im) -
-      (∑ i : Fin d, ∑ j : Fin d, (S.B i j : ℝ) * (w i).re * (v j).im) := by
+      (∑ i : Fin d, ∑ j : Fin d, (S.K i j : ℝ) * (v i).re * (w j).im) -
+      (∑ i : Fin d, ∑ j : Fin d, (S.K i j : ℝ) * (w i).re * (v j).im) := by
   rw [GlobalTwoForm.matrixForm_apply, TorusNondegeneracy.normalized_pairing]
   simp only [Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val_fin_one,
     Finset.sum_mul, Complex.im_sum, Complex.mul_im, Complex.mul_re,
-    Complex.intCast_re, Complex.intCast_im, zero_mul, sub_zero, zero_add, add_zero,
+    Complex.ratCast_re, Complex.ratCast_im, zero_mul, sub_zero, zero_add, add_zero,
     Finset.sum_add_distrib]
   rw [Finset.sum_comm]
-  have hs : (∑ i : Fin d, ∑ j : Fin d, (S.B i j : ℝ) * (v i).im * (w j).re) =
-      -(∑ i : Fin d, ∑ j : Fin d, (S.B i j : ℝ) * (w i).re * (v j).im) := by
+  have hs : (∑ i : Fin d, ∑ j : Fin d, (S.K i j : ℝ) * (v i).im * (w j).re) =
+      -(∑ i : Fin d, ∑ j : Fin d, (S.K i j : ℝ) * (w i).re * (v j).im) := by
     rw [Finset.sum_comm]
     simp only [← Finset.sum_neg_distrib]
     apply Finset.sum_congr rfl
     intro i _
     apply Finset.sum_congr rfl
     intro j _
-    rw [S.skew j i, Int.cast_neg]
+    rw [S.K_skew j i, Rat.cast_neg]
     ring
-  rw [Finset.sum_comm (f := fun j i => (S.B i j : ℝ) * (v i).im * (w j).re), hs]
+  rw [Finset.sum_comm (f := fun j i => (S.K i j : ℝ) * (v i).im * (w j).re), hs]
   rfl
 
 theorem extDeriv_logarithmicPrimitive (b z : Fin d → ℂ) :
@@ -137,8 +148,8 @@ theorem extDeriv_logarithmicPrimitive (b z : Fin d → ℂ) :
   rw [hv, matrixForm_real]
   simp only [Fin.val_zero, Fin.val_one, pow_zero, pow_one, one_smul,
     neg_smul, Fin.removeNth, smul_eq_mul]
-  change (∑ i, ∑ j, ((S.B i j : ℝ) * (v 1 j).im) * (v 0 i).re) -
-    (∑ i, ∑ j, ((S.B i j : ℝ) * (v 0 j).im) * (v 1 i).re) = _
+  change (∑ i, ∑ j, ((S.K i j : ℝ) * (v 1 j).im) * (v 0 i).re) -
+    (∑ i, ∑ j, ((S.K i j : ℝ) * (v 0 j).im) * (v 1 i).re) = _
   congr 1 <;> apply Finset.sum_congr rfl <;> intro i _ <;>
     apply Finset.sum_congr rfl <;> intro j _ <;> ring
 
@@ -381,7 +392,7 @@ theorem contDiffAt_alpha_inChart (H : S.Point → ℝ) :
         ((SmoothAtlas.presentation S hdet).manifold.formInChart a (alpha S hdet H)) y := by
   letI := SmoothAtlas.charts S hdet
   intro hH a y hy hp
-  convert (contDiffAt_beta_inChart S hdet a y hy hp).sub
+  convert (contDiffAt_beta_inChart S hdet a y hy hp).add
     (contDiffAt_differential_inChart S hdet H hH a y hy hp) using 1
   funext z
   ext v
@@ -406,22 +417,14 @@ theorem exteriorDerivative_alpha (H : S.Point → ℝ) :
   have hD := (contDiffAt_differential_inChart S hdet H hH p (c p)
     (c.map_source hps) hp').differentiableAt (by simp)
   have he : M.exteriorDerivative (alpha S hdet H) p =
-      M.exteriorDerivative (beta S hdet) p -
+      M.exteriorDerivative (beta S hdet) p +
       M.exteriorDerivative (covectorForm _ (differentialCovector _ H)) p := by
-    change (extDeriv (fun z => M.formInChart p (beta S hdet) z -
+    change (extDeriv (fun z => M.formInChart p (beta S hdet) z +
       M.formInChart p (covectorForm _ (differentialCovector _ H)) z) (c p)).compContinuousLinearMap _ = _
-    have hneg : extDeriv (-M.formInChart p
-        (covectorForm _ (differentialCovector _ H))) (c p) =
-        -extDeriv (M.formInChart p (covectorForm _ (differentialCovector _ H))) (c p) := by
-      simpa only [neg_one_smul] using (extDeriv_fun_smul (x := c p) (-1 : ℝ)
-        (M.formInChart p (covectorForm _ (differentialCovector _ H))))
-    have hdsub := extDeriv_fun_add hb hD.neg
-    rw [hneg] at hdsub
-    simp only [Pi.neg_apply, ← sub_eq_add_neg] at hdsub
-    rw [hdsub]
+    rw [extDeriv_fun_add hb hD]
     ext v
     rfl
   rw [he, exteriorDerivative_beta S hdet p hp,
-    exteriorDerivative_differential S hdet H hH p hp, sub_zero]
+    exteriorDerivative_differential S hdet H hH p hp, add_zero]
 
 end ClusterSkeleton.TorusPrimitive

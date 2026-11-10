@@ -2,7 +2,14 @@ import ClusterSkeleton.ZeroSet
 import ClusterSkeleton.GeometryTarget
 import ClusterSkeleton.CapIndependence
 import ClusterSkeleton.CapStrata
+import ClusterSkeleton.SkewSeed
+import ClusterSkeleton.SkewSeedRecovery
+import ClusterSkeleton.SkewSeedSkeleton
+import ClusterSkeleton.SymmetrizerAlgebra
+import ClusterSkeleton.SeedAlgebra
 import ClusterSkeleton.Examples.A2
+import ClusterSkeleton.Examples.NonSkew
+import ClusterSkeleton.Examples.NonSkewSkeleton
 import ClusterSkeleton.TorusChart
 import ClusterSkeleton.NodeCoordinates
 import ClusterSkeleton.NodeLogExtension

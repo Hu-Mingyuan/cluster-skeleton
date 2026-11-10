@@ -19,13 +19,12 @@ variable {d : ℕ} (S : Seed d)
 open LocalAngularDynamics TorusLiouvilleDynamics
 
 /-- Outside the strict disk directions every original coordinate has modulus one,
-including the independently variable frozen coordinates. -/
+including the independently variable frozen coordinates. The proof now lives in
+`CapIndependence`, so that the stratified cap description does not import the
+flow modules; this is the same statement under its original name. -/
 theorem norm_eq_one_of_not_strict {p : S.Point} (hp : p ∈ coordinateCap S)
-    (j : Fin d) (hj : j ∉ p.strictCapIndices) : ‖p.a j‖ = 1 := by
-  by_cases hm : j ∈ S.mutable
-  · have hn : ¬ ‖p.a j‖ < 1 := fun h => hj ((p.mem_strictCapIndices j).mpr ⟨hm, h⟩)
-    exact le_antisymm (coordinateCap_norm_a_le hp j) (le_of_not_gt hn)
-  · exact hp.1 j hm
+    (j : Fin d) (hj : j ∉ p.strictCapIndices) : ‖p.a j‖ = 1 :=
+  ClusterSkeleton.norm_eq_one_of_not_strict S hp j hj
 
 /-- The independent locus selected by the cap contains its actual point. -/
 theorem mem_strict_locus {p : S.Point} (hp : p ∈ coordinateCap S) :
@@ -92,6 +91,8 @@ theorem angularRhs_eq_zero {ε κ : ℝ} (hε : 0 < ε) (hκ : 2 * ε < κ)
   rw [AllStrataGrowth.angularRhs_center S ε κ δ p j]
   apply Finset.sum_eq_zero
   intro i _
+  rw [mul_eq_zero]
+  refine Or.inr ?_
   split_ifs with hs
   · by_cases hi : ‖p.a i‖ < 1
     · rw [angular_eq_zero_of_interior S δ hp i hi, zero_mul]
@@ -106,7 +107,7 @@ theorem nu_eq_zero {ε κ : ℝ} (hε : 0 < ε) (hκ : 2 * ε < κ)
     nu S ε κ δ p p = 0 := by
   have he : angularRhs S ε κ δ p p = 0 :=
     funext (angularRhs_eq_zero S hε hκ δ hp)
-  simp [nu, he]
+  simp [nu, he, Matrix.mulVec_zero, show (fun _ : Fin d => (0 : ℝ)) = 0 from rfl]
 
 variable (hdet : S.Unimodular)
 

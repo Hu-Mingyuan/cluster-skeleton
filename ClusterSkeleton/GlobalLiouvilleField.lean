@@ -128,8 +128,8 @@ theorem frozen_radial_equation_torus {ε κ δ : ℝ} (hε : 0 < ε)
 theorem angular_equation_partial_deriv {ε κ δ : ℝ} (hε : 0 < ε)
     (hκ : 2 * ε + 1 ≤ κ) (hδ : 0 < δ) (p : S.Point) (hp : p ∈ initialTorus S)
     (i : Fin d) :
-    (∑ j : Fin d, (S.B i j : ℝ) * (logarithmicComponents S hdet ε κ hδ p j).im) =
-      deriv (fun t : ℝ => TorusLiouvilleDynamics.logarithmicHamiltonian S ε κ δ p
+    (∑ j : Fin d, (S.K i j : ℝ) * (logarithmicComponents S hdet ε κ hδ p j).im) =
+      -deriv (fun t : ℝ => TorusLiouvilleDynamics.logarithmicHamiltonian S ε κ δ p
         (t • (Pi.single i 1 : Fin d → ℂ))) 0 := by
   rw [logarithmicComponents_eq_torus S hdet hε hκ hδ p hp]
   exact TorusLiouvilleDynamics.angular_equation_partial_deriv S hdet ε κ hδ p hp i

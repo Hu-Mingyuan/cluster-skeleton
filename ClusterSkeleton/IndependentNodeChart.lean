@@ -36,13 +36,15 @@ variable {S I}
 /-- Independence deletes the inside factors, including at simultaneous zeroes. -/
 theorem row_product_eq_outside (hI : S.Independent I) (a : Fin d → ℂ)
     (i : {i : Fin d // i ∈ I}) :
-    (∏ j, a j ^ S.B i j) = ∏ j : {j : Fin d // j ∉ I}, a j ^ S.B i j := by
+    (∏ j, a j ^ S.E j (i : Fin d)) =
+      ∏ j : {j : Fin d // j ∉ I}, a j ^ S.E (j : Fin d) (i : Fin d) := by
   classical
   refine Finset.prod_congr_set {j : Fin d | j ∉ I}
-    (fun j => a j ^ S.B i j) (fun j => a j ^ S.B i j) (fun _ _ => rfl) ?_
+    (fun j => a j ^ S.E j (i : Fin d)) (fun j => a j ^ S.E j (i : Fin d))
+    (fun _ _ => rfl) ?_
   intro j hj
   have hjI : j ∈ I := by simpa using hj
-  simp [hI.2 i i.property j hjI]
+  simp [hI.2 j hjI i i.property]
 
 /-- The positive monomial depends only on the outside coordinates. -/
 theorem positiveMonomial_congr_outside (hI : S.Independent I)
@@ -51,7 +53,7 @@ theorem positiveMonomial_congr_outside (hI : S.Independent I)
   apply Finset.prod_congr rfl
   intro j _
   by_cases hj : j ∈ I
-  · simp [hI.2 i i.property j hj]
+  · simp [hI.2 j hj i i.property]
   · rw [h j hj]
 
 /-- The negative monomial depends only on the outside coordinates. -/
@@ -61,7 +63,7 @@ theorem negativeMonomial_congr_outside (hI : S.Independent I)
   apply Finset.prod_congr rfl
   intro j _
   by_cases hj : j ∈ I
-  · simp [hI.2 i i.property j hj]
+  · simp [hI.2 j hj i i.property]
   · rw [h j hj]
 
 variable (S I) (hdet : S.Unimodular) (hI : S.Independent I)
@@ -119,7 +121,7 @@ theorem negative_original_ne_zero (x : Model S I) (i : {i : Fin d // i ∈ I}) :
   apply Finset.prod_ne_zero_iff.mpr
   intro j _
   by_cases hj : j ∈ I
-  · simp [hI.2 i i.property j hj]
+  · simp [hI.2 j hj i i.property]
   · exact pow_ne_zero _ (original_ne_zero S I hdet hI x j hj)
 
 /-- The recovered monomial ratio equals precisely `uv-1`. -/
@@ -131,7 +133,7 @@ theorem recovered_ratio (x : Model S I) (i : {i : Fin d // i ∈ I}) :
     ((independentRowLaurentHomeomorph S I hdet hI).apply_symm_apply (parameters S I x))
   rw [independentRowLaurentHomeomorph_inl] at h
   change (∏ j : {j : Fin d // j ∉ I},
-    (recoveredOutside S I hdet hI x j).val ^ S.B i j) = _ at h
+    (recoveredOutside S I hdet hI x j).val ^ S.E (j : Fin d) (i : Fin d)) = _ at h
   unfold Seed.positiveMonomial Seed.negativeMonomial
   rw [← Finset.prod_div_distrib]
   simp_rw [pow_toNat_div_pow_neg_toNat]

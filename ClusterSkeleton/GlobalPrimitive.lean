@@ -80,8 +80,8 @@ theorem evalOne_alpha {ε κ δ : ℝ} (hε : 0 < ε) (hκ : 2 * ε + 1 ≤ κ)
     (hδ : 0 < δ) (p : S.Point) (hp : p ∈ initialTorus S)
     (v : (SmoothAtlas.presentation S hdet).manifold.Tangent p) :
     SmoothManifold.evalOne (alpha S hdet ε κ hδ) p v =
-      (∑ i : Fin d, ∑ j : Fin d, (S.B i j : ℝ) * Real.log ‖p.a i‖ *
-        ((SmoothAtlas.presentation S hdet).coordinateDifferential j p v / p.a j).im) -
+      (∑ i : Fin d, ∑ j : Fin d, (S.K i j : ℝ) * Real.log ‖p.a i‖ *
+        ((SmoothAtlas.presentation S hdet).coordinateDifferential j p v / p.a j).im) +
       differentialCovector (SmoothAtlas.presentation S hdet).manifold
         (TorusCorrection.H S ε κ δ) p v := by
   change alpha S hdet ε κ hδ p (fun _ => v) = _

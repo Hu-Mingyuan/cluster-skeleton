@@ -9,6 +9,12 @@ These are the first algebraic steps of Lemma 2.2. Both exchange monomials are
 units on an independent coordinate locus, so the normalization uses no undefined
 boundary ratios. An integral right inverse is proved below; completing the
 rows to an integral basis and constructing the final product chart remain separate.
+
+The monomials are the **column**-convention monomials of `Seed`, so
+`exchangeCharacter` is the reference character `t_i = z^{c_i}` itself and
+`normalizedPartner` is the reference's `y = z_i'/P_i^-`; neither is the
+reciprocal of its baseline counterpart. See
+`exchangeCharacter_eq_zpow_product`.
 -/
 
 open scoped BigOperators
@@ -24,7 +30,7 @@ theorem positiveMonomial_ne_zero_on_independent_locus
   apply Finset.prod_ne_zero_iff.mpr
   intro j _
   by_cases hj : j ∈ I
-  · simp [hI.2 i hi j hj]
+  · simp [hI.2 j hj i hi]
   · exact pow_ne_zero _ (hp j hj)
 
 theorem negativeMonomial_ne_zero_on_independent_locus
@@ -33,7 +39,7 @@ theorem negativeMonomial_ne_zero_on_independent_locus
   apply Finset.prod_ne_zero_iff.mpr
   intro j _
   by_cases hj : j ∈ I
-  · simp [hI.2 i hi j hj]
+  · simp [hI.2 j hj i hi]
   · exact pow_ne_zero _ (hp j hj)
 
 /-- This expression is used only where its negative monomial is proved nonzero. -/
@@ -52,14 +58,25 @@ theorem pow_toNat_div_pow_neg_toNat (z : ℂ) (n : ℤ) :
   | ofNat n => simp
   | negSucc n => simp
 
-/-- The exchange ratio is the Laurent monomial with the actual signed matrix row. -/
+/-- The exchange ratio is the Laurent monomial with the actual signed **column**
+of `E`, i.e. the reference character `t_i` itself, not its inverse. With the
+column convention of `Seed.positiveMonomial`/`Seed.negativeMonomial`,
+`exchangeCharacter p i = ∏ j, p.a j ^ (S.E j i) = ∏ j, p.a j ^ (S.B i j)`, which
+is the reference's `t_i = z^{c_i} = P_i^+/P_i^-` with `c_i = E e_i` the `i`-th
+column of `E`. The baseline's row-convention `exchangeCharacter` was the
+inverse character `1/t_i`; the column convention inverts it. Correspondingly
+`normalizedPartner p i = p.b i / negativeMonomial p.a i` is the reference's
+`y = z_i'/P_i^-` (baseline: `y/t_i`), so `normalized_node_equation` is the
+reference node equation `x y = 1 + t` on the nose rather than in reciprocal
+coordinates. Any sign derivation downstream (`TorusCorrection.H`,
+`TorusPrimitive.alpha`) must use this orientation, not the baseline's. -/
 theorem exchangeCharacter_eq_zpow_product (p : S.Point) (i : Fin d) :
-    exchangeCharacter p i = ∏ j, p.a j ^ (S.B i j) := by
+    exchangeCharacter p i = ∏ j, p.a j ^ (S.E j i) := by
   unfold exchangeCharacter Seed.positiveMonomial Seed.negativeMonomial
   rw [← Finset.prod_div_distrib]
   apply Finset.prod_congr rfl
   intro j _
-  exact pow_toNat_div_pow_neg_toNat (p.a j) (S.B i j)
+  exact pow_toNat_div_pow_neg_toNat (p.a j) (S.E j i)
 theorem exchangeCharacter_ne_zero_on_independent_locus
     (hI : S.Independent I) {p : S.Point} (hp : p ∈ candidateChartLocus S I)
     {i : Fin d} (hi : i ∈ I) : exchangeCharacter p i ≠ 0 :=
@@ -88,14 +105,15 @@ theorem normalized_node_product_ne_one
 
 /-- Restricting an independent row to the complementary coordinates retains
 an explicit integral right inverse from the inverse of the full unimodular
-matrix. This is the splitting identity behind primitive lattice extension. -/
+exponent matrix `Bexp = Eᵀ`, whose determinant is again `det E = 1`.
+This is the splitting identity behind primitive lattice extension. -/
 theorem independent_rows_inverse_pairing (hdet : S.Unimodular)
     (hI : S.Independent I) (i k : {i : Fin d // i ∈ I}) :
     (∑ j : {j : Fin d // j ∉ I}, S.B i j * S.B⁻¹ j k) =
       if i = k then 1 else 0 := by
   classical
   have hunit : IsUnit S.B.det := by
-    rw [show S.B.det = 1 from hdet]
+    rw [S.B_det hdet]
     exact isUnit_one
   have hsum :
       (∑ j : Fin d, S.B i j * S.B⁻¹ j k) =
@@ -105,7 +123,7 @@ theorem independent_rows_inverse_pairing (hdet : S.Unimodular)
       (fun j => S.B i j * S.B⁻¹ j k) (fun _ _ => rfl) ?_
     intro j hj
     have hjI : j ∈ I := by simpa using hj
-    rw [hI.2 i.val i.property j hjI, zero_mul]
+    rw [hI.exponent_eq_zero i.property hjI, zero_mul]
   have hfull := congrFun (congrFun (Matrix.mul_nonsing_inv S.B hunit) i.val) k.val
   rw [Matrix.mul_apply, hsum] at hfull
   simpa only [Matrix.one_apply, Subtype.coe_inj] using hfull

@@ -1,5 +1,4 @@
 import ClusterSkeleton.CapIndependence
-import ClusterSkeleton.CapAngularTangency
 import ClusterSkeleton.CoordinateLoci
 
 /-!
@@ -47,7 +46,7 @@ theorem coordinateCap_subset_lambdaStratum_strictCapIndices {d : ℕ} {S : Seed 
     {p : S.Point} (hp : p ∈ coordinateCap S) :
     p ∈ lambdaStratum S p.strictCapIndices := by
   refine ⟨fun i hi => ?_,
-    fun j hj => CapAngularTangency.norm_eq_one_of_not_strict S hp j hj⟩
+    fun j hj => norm_eq_one_of_not_strict S hp j hj⟩
   have hlt : ‖p.a i‖ < 1 := ((p.mem_strictCapIndices (i : Fin d)).mp hi).2
   exact ⟨hlt.le, coordinateCap_b_eq_zero hp i hlt⟩
 

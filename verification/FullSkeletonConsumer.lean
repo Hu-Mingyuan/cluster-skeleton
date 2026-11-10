@@ -168,3 +168,56 @@ theorem old_weighted_target : LiouvilleSkeletonTarget S.toSeed :=
   ClusterSkeleton.SkewSeed.liouvilleSkeletonTarget S hdet
 
 end RecoveryConsumer
+
+/-! ## The PDF statement of `thm:target` in one place
+
+One consumer that states every clause of the published theorem for an arbitrary
+weighted seed, so that a reader of a single Lean type sees the whole boxed
+identity rather than only `Skel(Φ) = C_E`. This closes RISK R4 of
+`docs/reviews/final-statement-review.md` at consumer level (its section 6
+recipe): the stratified form is obtained for the SAME presentation, Liouville
+datum and flow that the target's existential produces, because
+`coordinateCap_eq_iUnion_lambdaStratum` is flow-free. Nothing here is a new
+hypothesis, a new axiom or a restatement of a proof: every component is the
+universal theorem `FullSkeleton.firstGeometricTarget` or an already proved
+flow-free lemma. The quantified `original_general_target` above is not replaced. -/
+
+namespace PdfTargetConsumer
+
+variable {d : ℕ} (S : Seed d) (hdet : S.Unimodular)
+
+include hdet in
+/-- Every clause of `thm:target` of `target-theorem.pdf`, for one arbitrary
+unimodular weighted seed and one single witness pair `(P, L)`:
+
+* density of the initial torus;
+* a smooth presentation `P` and Liouville datum `L` whose exterior derivative
+  restricts on the torus to `Im Ω` written in `K = E D`;
+* `Skel(Φ) = C_E` for the flow of that same `L`;
+* `Skel(Φ) = ⋃_I Λ_I` over the independent index sets, for that same flow;
+* compactness of every `Λ_I` with `I ⊆ S.mutable`;
+* the node chart of every independent `I` as a homeomorphism onto
+  `N^I × (ℂ*)^{d-2|I|}`, with the torus exponent `d - 2|I|` and `2|I| ≤ d`. -/
+theorem pdf_target :
+    Dense (initialTorus S) ∧
+    (∃ (P : SmoothPresentation S) (L : LiouvilleData P),
+      (∀ p : S.Point, p ∈ initialTorus S → ∀ v w,
+          SmoothManifold.evalTwo (P.manifold.exteriorDerivative L.primitive) p v w =
+            P.logarithmicImaginaryValue p v w) ∧
+        trappedSet L.completeFlow.flow = coordinateCap S ∧
+        trappedSet L.completeFlow.flow =
+          ⋃ I : {I : Finset (Fin d) // S.Independent I}, lambdaStratum S I.val) ∧
+    (∀ I : Finset (Fin d), I ⊆ S.mutable → IsCompact (lambdaStratum S I)) ∧
+    (∀ I : Finset (Fin d), S.Independent I →
+      Nonempty (IndependentNodeChart.Locus S I ≃ₜ IndependentNodeChart.Model S I) ∧
+        SplitIntegerRows.complementRank (independentRowRightInverse S I) = d - 2 * I.card ∧
+        2 * I.card ≤ d) := by
+  obtain ⟨hdense, P, L, hanchor, hskel⟩ := FullSkeleton.firstGeometricTarget d S hdet
+  refine ⟨hdense, ⟨P, L, hanchor, hskel, ?_⟩, ?_, ?_⟩
+  · exact hskel.trans (coordinateCap_eq_iUnion_lambdaStratum S)
+  · exact fun I hI => isCompact_lambdaStratum S I hI
+  · refine fun I hI => ⟨⟨IndependentNodeChart.homeomorph S I hdet hI⟩, ?_, ?_⟩
+    · exact IndependentNodeChart.complementRank_eq_sub_two_mul_card S I hdet hI
+    · exact IndependentNodeChart.two_mul_card_le S I hdet hI
+
+end PdfTargetConsumer

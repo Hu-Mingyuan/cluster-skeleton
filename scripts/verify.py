@@ -21,6 +21,10 @@ ENV.setdefault('MATHLIB_NO_CACHE_ON_UPDATE', '1')
 ENV.setdefault('LEAN_NUM_THREADS', '2')
 ALLOWED = {'propext', 'Classical.choice', 'Quot.sound'}
 FINAL_TARGET = 'ClusterSkeleton.FullSkeleton.firstGeometricTarget'
+# Acceptance checks 2 and 3 must stay visible in the receipt: the recovery of the
+# old D = I theorem and the genuinely non-skew instance of the universal theorem.
+REQUIRED_ROOTS = ('ClusterSkeleton.SkewSeed.skeleton_recovery',
+                  'ClusterSkeleton.Examples.nonSkewSeed_target_of_firstGeometricTarget')
 
 
 def source_snapshot():
@@ -89,6 +93,9 @@ def main():
         reported = {name for name, _ in entries} | set(no_axioms)
         if set(expected) != reported or FINAL_TARGET not in reported:
             raise RuntimeError(f'Final axiom audit declaration mismatch: {set(expected) ^ reported}')
+        missing_required = [name for name in REQUIRED_ROOTS if name not in reported]
+        if missing_required:
+            raise RuntimeError(f'Required audit roots absent from the report: {missing_required}')
         for name, raw in entries:
             actual = {x.strip() for x in raw.split(',') if x.strip()}
             if actual - ALLOWED:
@@ -116,6 +123,7 @@ def main():
                       accepted_library_commit=accepted_library['accepted_commit'],
                       accepted_library_source_equality=f'all {len(sources)} library files are byte-identical',
                       allowed_axioms=sorted(ALLOWED), audited_final_declarations=expected,
+                      required_roots=list(REQUIRED_ROOTS),
                       audited_modules={k: int(v) for k, v in audited_modules.items()},
                       source_sha256=before,
                       evidence_sha256={name: hashlib.sha256((EVIDENCE / name).read_bytes()).hexdigest()

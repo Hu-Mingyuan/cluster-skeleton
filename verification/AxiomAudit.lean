@@ -36,6 +36,65 @@ Only Lean's standard foundational axioms are allowed. -/
 #print axioms ClusterSkeleton.Examples.nonSkewSeed_trappedSet
 #print axioms ClusterSkeleton.Examples.nonSkewSeed_trappedSet_iUnion
 
+-- The PDF clauses that `LiouvilleSkeletonTarget` does not itself contain
+-- (RISK R4): the stratified form of the cap, compactness of every stratum and
+-- the node chart. Proposed by section 8 of `docs/reviews/final-statement-review.md`
+-- and, for the two old-carrier compactness roots, by RISK R-N2 of
+-- `docs/reviews/recovery-nonskew-review.md`.
+#print axioms ClusterSkeleton.isCompact_coordinateCap
+#print axioms ClusterSkeleton.isCompact_lambdaStratum
+#print axioms ClusterSkeleton.isClosed_lambdaStratum
+#print axioms ClusterSkeleton.lambdaStratum_subset_coordinateCap
+#print axioms ClusterSkeleton.dense_initialTorus
+#print axioms ClusterSkeleton.initialTorus_nonempty
+#print axioms ClusterSkeleton.iUnion_independent_candidateChartLocus
+#print axioms ClusterSkeleton.Seed.Point.exists_independent_nonvanishing_locus
+#print axioms ClusterSkeleton.IndependentNodeChart.homeomorph
+#print axioms ClusterSkeleton.IndependentNodeChart.two_mul_card_le
+#print axioms ClusterSkeleton.IndependentNodeChart.vector_finrank_real
+#print axioms ClusterSkeleton.SkewSeed.isCompact_coordinateCap
+#print axioms ClusterSkeleton.SkewSeed.isCompact_lambdaStratum
+
+-- The constructed witnesses of the existentially quantified target, and the
+-- dynamics the blueprint's equations are checked against.
+#print axioms ClusterSkeleton.NativeCompleteFlow.completeFlow
+#print axioms ClusterSkeleton.NativeCompleteFlow.exists_completeLiouvilleFlow
+#print axioms ClusterSkeleton.SmoothAtlas.presentation
+#print axioms ClusterSkeleton.GlobalPrimitive.alpha
+#print axioms ClusterSkeleton.GlobalPrimitive.isSymplecticOn_exteriorDerivative_alpha
+#print axioms ClusterSkeleton.GlobalLiouvilleField.Z
+#print axioms ClusterSkeleton.GlobalLiouvilleField.contraction_exteriorDerivative
+#print axioms ClusterSkeleton.GlobalLiouvilleField.mutable_radial_equation
+#print axioms ClusterSkeleton.TorusLiouvilleDynamics.angular_equation
+#print axioms ClusterSkeleton.TorusLiouvilleDynamics.angular_equation_row
+#print axioms ClusterSkeleton.TorusLiouvilleDynamics.radial_matrix_equation
+#print axioms ClusterSkeleton.TorusLiouvilleDynamics.mutable_radial_equation
+#print axioms ClusterSkeleton.TorusLiouvilleDynamics.frozen_radial_equation
+#print axioms ClusterSkeleton.TorusLiouvilleDynamics.omega_real
+#print axioms ClusterSkeleton.TorusLiouvilleDynamics.full_matrix_inverse_bound
+#print axioms ClusterSkeleton.BoundaryTangency.local_H_radial
+#print axioms ClusterSkeleton.BoundaryTangency.nodeLog_drift_torus
+#print axioms ClusterSkeleton.LocalAngularDynamics.nu
+#print axioms ClusterSkeleton.AllStrataGrowth.row_nu_equation
+
+-- The weighted linear algebra that replaces the baseline's `det B = 1`
+-- cancellations: `K = E D`, `K` skew, `det K = ∏ d_i` with `IsUnit` only.
+#print axioms ClusterSkeleton.Seed.K_eq_neg_D_mul_B
+#print axioms ClusterSkeleton.Seed.sum_K_row_eq
+#print axioms ClusterSkeleton.Seed.K_transpose
+#print axioms ClusterSkeleton.Seed.det_K_of_unimodular
+#print axioms ClusterSkeleton.Seed.acyclic_exponent
+#print axioms ClusterSkeleton.SeedAlgebra.Kreal
+#print axioms ClusterSkeleton.SeedAlgebra.K_eq_neg_D_mul_B
+#print axioms ClusterSkeleton.SeedAlgebra.sum_K_row
+#print axioms ClusterSkeleton.SeedAlgebra.c_inv_K
+#print axioms ClusterSkeleton.SeedAlgebra.isUnit_det_Kreal
+#print axioms ClusterSkeleton.SeedAlgebra.det_Kreal_of_unimodular
+#print axioms ClusterSkeleton.SeedAlgebra.exists_inverse_bound_Kreal
+#print axioms ClusterSkeleton.SeedAlgebra.Kreal_vecMul_injective
+#print axioms ClusterSkeleton.SymmetrizerAlgebra.K_transpose
+#print axioms ClusterSkeleton.SymmetrizerAlgebra.isUnit_det_K
+
 open Lean Elab Command in
 run_cmd do
   let env ← getEnv
